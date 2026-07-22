@@ -1,0 +1,207 @@
+/* ─── Shared frame (card + modal inner both use this) ──────────────────── */
+
+.terminal-frame {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  /* background: var(--term-bg-panel); */
+  border: 1px solid var(--term-border);
+  border-radius: var(--term-radius);
+  box-shadow: var(--term-glow);
+  font-family: var(--term-font);
+  color: var(--term-text);
+}
+
+.terminal-frame__corner {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  z-index: 3;
+  pointer-events: none;
+  animation: term-corner-pulse 3s ease-in-out infinite;
+}
+
+.terminal-frame__corner--tl {
+  top: -1px;
+  left: -1px;
+  border-top: 2px solid var(--term-green);
+  border-left: 2px solid var(--term-green);
+}
+
+.terminal-frame__corner--tr {
+  top: -1px;
+  right: -1px;
+  border-top: 2px solid var(--term-green);
+  border-right: 2px solid var(--term-green);
+}
+
+.terminal-frame__corner--bl {
+  bottom: -1px;
+  left: -1px;
+  border-bottom: 2px solid var(--term-green);
+  border-left: 2px solid var(--term-green);
+}
+
+.terminal-frame__corner--br {
+  bottom: -1px;
+  right: -1px;
+  border-bottom: 2px solid var(--term-green);
+  border-right: 2px solid var(--term-green);
+}
+
+.terminal-frame__scanlines {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0) 0,
+    rgba(0, 0, 0, 0) 2px,
+    rgba(57, 255, 106, 0.035) 3px
+  );
+  mix-blend-mode: overlay;
+}
+
+.terminal-frame__beam {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(to right, transparent, var(--term-green), transparent);
+  animation: term-scan-sweep 6s linear infinite;
+}
+
+.terminal-frame__header {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--term-border);
+}
+
+.terminal-frame__prompt {
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+  color: var(--term-green-dim);
+  letter-spacing: 0.4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.terminal-frame__cursor {
+  margin-left: 4px;
+  color: var(--term-green);
+  animation: term-blink 1s steps(1) infinite;
+}
+
+.terminal-frame__title-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.terminal-frame__title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--term-green);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.terminal-frame__dots {
+  display: flex;
+  gap: 5px;
+  flex-shrink: 0;
+}
+
+.terminal-frame__dots span {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  border: 1px solid var(--term-green-dim);
+}
+
+.terminal-frame__close {
+  flex-shrink: 0;
+  font-family: var(--term-font);
+  font-size: 11px;
+  letter-spacing: 0.5px;
+  color: var(--term-green-dim);
+  background: transparent;
+  border: 1px solid var(--term-border);
+  border-radius: 4px;
+  padding: 3px 8px;
+  cursor: pointer;
+  transition:
+    color 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.terminal-frame__close:hover {
+  color: var(--term-green);
+  border-color: var(--term-border-strong);
+}
+
+.terminal-frame__body {
+  position: relative;
+  z-index: 2;
+  padding: 18px;
+  font-size: 13px;
+  line-height: 1.75;
+}
+
+.terminal-frame__footer {
+  position: relative;
+  z-index: 2;
+  border-top: 1px solid var(--term-border);
+  padding: 12px 18px;
+}
+
+/* ─── TerminalCard ───────────────────────────────────────────────────────── */
+
+.terminal-card {
+  width: 100%;
+  max-width: var(--term-card-max-width, 520px);
+}
+
+@media (max-width: 480px) {
+  .terminal-card .terminal-frame__header,
+  .terminal-card .terminal-frame__body,
+  .terminal-card .terminal-frame__footer {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+}
+
+/* ─── TerminalModal (antd Modal overrides) ──────────────────────────────── */
+
+.terminal-modal .ant-modal-content {
+  background: transparent;
+  box-shadow: none;
+  padding: 0;
+}
+
+.terminal-modal .ant-modal-body {
+  padding: 0;
+}
+
+.terminal-modal .ant-modal-mask {
+  background: rgba(1, 6, 3, 0.78);
+  backdrop-filter: blur(2px);
+}
+
+.terminal-modal__inner {
+  animation: term-fade-in 0.22s ease-out;
+}
