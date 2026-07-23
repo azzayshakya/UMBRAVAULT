@@ -1,9 +1,6 @@
-// components/HeaderUserProfile.jsx
 import { DownOutlined } from '@ant-design/icons'
 import { useSelector } from 'react-redux'
-
 import { Skeleton, SkeletonAvatar } from './Skelton/Skeleton'
-import useUserInfo from '@/pages/Dashboard/hooks/useUserInfo'
 
 const wrapStyle = {
   display: 'flex',
@@ -59,23 +56,11 @@ const chevronStyle = {
   marginLeft: 2,
 }
 
-/**
- * <HeaderUserProfile />
- *
- * Compact avatar + username + tagline chip used in the top-right of the
- * app header. Shows a skeleton placeholder (avatar + two text lines)
- * while user data is loading, then swaps in the real authenticated user's
- * photo, name and role once available.
- *
- * Not wired to open a dropdown yet — click is a visual affordance only.
- */
 const HeaderUserProfile = () => {
-  const { user, loading } = useUserInfo()
   const authenticUser = useSelector((state) => state.user.user)
-
   const avatarUrl = authenticUser?.avatar || '/images/global/my-profile.jpg'
-  // console.log()
-  if (loading) {
+
+  if (!authenticUser) {
     return (
       <div style={wrapStyle}>
         <SkeletonAvatar size={36} />
@@ -94,9 +79,9 @@ const HeaderUserProfile = () => {
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', minWidth: 0 }}>
-        <span style={nameStyle}>{authenticUser?.username || authenticUser?.name}</span>
+        <span style={nameStyle}>{authenticUser?.name ?? 'NA'}</span>
         <span style={taglineStyle}>
-          {authenticUser?.tagline || `# ${user?.role || authenticUser?.role || 'member'}`}
+          {authenticUser?.tagline || `# ${authenticUser?.role ?? 'NA'}`}
         </span>
       </div>
 

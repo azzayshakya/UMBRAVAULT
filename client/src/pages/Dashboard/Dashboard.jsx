@@ -62,7 +62,7 @@ const Dashboard = () => {
               overflow: 'hidden ',
             }}
           >
-            <img style={{ width: '100%' }} src={DashboardHeaderUrl} />
+            {/* <img style={{ width: '100%' }} src={DashboardHeaderUrl} /> */}
           </div>
           {/* <GlobeVisual /> */}
         </div>
@@ -71,9 +71,9 @@ const Dashboard = () => {
 
       {/* Row 2 — key metrics */}
       <div style={{ flexShrink: 0 }}>
-        <StatsRow stats={stats} loading={statusLoading} />
+        {/* <StatsRow stats={stats} loading={statusLoading} /> */}
       </div>
-      <ProjectsGrid />
+      {/* <ProjectsGrid /> */}
       {/* Row 3 — live feed, brand statement, shortcuts */}
       <div
         style={{
@@ -84,9 +84,9 @@ const Dashboard = () => {
           minHeight: 0,
         }}
       >
-        <LiveSystemFeed />
+        {/* <LiveSystemFeed />
         <CenterBrandText />
-        <QuickAccessPanel />
+        <QuickAccessPanel /> */}
       </div>
     </div>
   )

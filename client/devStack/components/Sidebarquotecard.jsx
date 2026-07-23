@@ -1,4 +1,3 @@
-// components/sidebar/components/SidebarQuoteCard.jsx
 import { useEffect, useState } from 'react'
 
 const DEFAULT_QUOTES = [
@@ -22,8 +21,23 @@ const wrapStyle = {
     'linear-gradient(180deg, rgba(57,255,106,0.05), rgba(3,9,5,0.92)), var(--color-bg-container)',
   overflow: 'hidden',
   flexShrink: 0,
+  minHeight: '225px',
 }
 
+const imageWrapStyle = {
+  display: 'flex',
+  justifyContent: 'center',
+  marginBottom: 12,
+}
+
+const imageStyle = {
+  width: 100,
+  height: 'auto',
+  filter: 'drop-shadow(0 0 10px rgba(57, 255, 106, 0.45))',
+  opacity: 0.92,
+  pointerEvents: 'none',
+  borderRadius: '40%',
+}
 const quoteTextStyle = {
   fontFamily: 'var(--term-font, "JetBrains Mono", monospace)',
   fontSize: 11,
@@ -42,37 +56,9 @@ const tagStyle = {
   transition: 'opacity 0.35s ease',
 }
 
-const imageWrapStyle = {
-  display: 'flex',
-  justifyContent: 'center',
-  marginTop: 12,
-}
-
-const imageStyle = {
-  width: 100,
-  height: 'auto',
-  filter: 'drop-shadow(0 0 10px rgba(57, 255, 106, 0.45))',
-  opacity: 0.92,
-  pointerEvents: 'none',
-}
-
-/**
- * <SidebarQuoteCard />
- *
- * Decorative sidebar card — a terminal-style quote that auto-rotates
- * through a list, with the glowing hooded-figure art underneath. Purely
- * presentational, no click behavior. Positioning (top vs bottom of the
- * menu) is decided by the parent — see SidebarNav.
- *
- * Props:
- *   quotes      Array<{ text, tag }>   default DEFAULT_QUOTES
- *   image       string                 path to the figure art, default '/images/global/umbra.png'
- *   intervalMs  number                 rotation interval, default 8000
- *   collapsed   bool                   when true, renders nothing (sidebar collapsed state)
- */
 const SidebarQuoteCard = ({
   quotes = DEFAULT_QUOTES,
-  image = '/images/global/umbra.png',
+  image = '/images/global/my-profile.jpg',
   intervalMs = 8000,
   collapsed = false,
 }) => {
@@ -99,12 +85,11 @@ const SidebarQuoteCard = ({
 
   return (
     <div style={wrapStyle}>
-      <p style={{ ...quoteTextStyle, opacity: visible ? 1 : 0 }}>&quot;{current.text}&quot;</p>
-      <p style={{ ...tagStyle, opacity: visible ? 1 : 0 }}>{current.tag}</p>
-
       <div style={imageWrapStyle}>
         <img src={image} alt="" style={imageStyle} draggable={false} />
       </div>
+      <p style={{ ...quoteTextStyle, opacity: visible ? 1 : 0 }}>&quot;{current.text}&quot;</p>
+      <p style={{ ...tagStyle, opacity: visible ? 1 : 0 }}>{current.tag}</p>
     </div>
   )
 }
