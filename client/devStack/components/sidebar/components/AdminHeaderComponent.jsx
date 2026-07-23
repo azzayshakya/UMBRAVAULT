@@ -1,4 +1,5 @@
 import { MenuFoldOutlined, MenuUnfoldOutlined, SunOutlined, MoonOutlined } from '@ant-design/icons'
+import HeaderUserProfile from '@devStack/components/HeaderUserProfile'
 import { ColorScheme } from '@devStack/constants/theme-constants'
 import { clearUserSession } from '@devStack/store/userSlice'
 import useThemeStore from '@devStack/store/useThemeStore'
@@ -131,7 +132,7 @@ export default function AdminHeaderComponent({
           >
             LOGOUT
           </button>
-
+          <HeaderUserProfile />
           <button
             onClick={toggleColorScheme}
             aria-label="Toggle theme"

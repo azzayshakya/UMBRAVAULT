@@ -4,6 +4,7 @@ import MENU_CONFIG from '@devStack/components/sidebar/control/MenuConfig'
 import useMenu from '@devStack/components/sidebar/hooks/UseMenu'
 import { buildBreadcrumbs } from '@devStack/components/sidebar/utilities/breadCrumbBuilder'
 import { buildMenuItems } from '@devStack/components/sidebar/utilities/MenuBuilder'
+import SidebarQuoteCard from '@devStack/components/Sidebarquotecard'
 import { App_Name } from '@devStack/constants'
 import useThemeStore from '@devStack/store/useThemeStore'
 import { Layout, Menu, Typography } from 'antd'
@@ -40,7 +41,8 @@ const MainLayout = ({ userRole, userData = null }) => {
         onCollapse={setCollapsed}
         width={250}
         style={{
-          overflow: 'auto',
+          display: 'flex',
+          flexDirection: 'column',
           height: '100vh',
           position: 'fixed',
           left: 0,
@@ -73,16 +75,19 @@ const MainLayout = ({ userRole, userData = null }) => {
           </Text>
         </div>
 
-        <Menu
-          theme={scheme === 'dark' ? 'dark' : 'light'}
-          mode="inline"
-          selectedKeys={selectedKeys}
-          openKeys={openKeys}
-          items={menuItems}
-          onClick={handleMenuClick}
-          onOpenChange={handleOpenChange}
-          style={{ background: 'transparent', borderInlineEnd: 'none' }}
-        />
+        <div style={{ flex: 1, overflow: 'auto' }}>
+          <Menu
+            theme={scheme === 'dark' ? 'dark' : 'light'}
+            mode="inline"
+            selectedKeys={selectedKeys}
+            openKeys={openKeys}
+            items={menuItems}
+            onClick={handleMenuClick}
+            onOpenChange={handleOpenChange}
+            style={{ background: 'transparent', borderInlineEnd: 'none' }}
+          />
+        </div>
+        <SidebarQuoteCard collapsed={collapsed} />
       </Sider>
 
       <Layout
