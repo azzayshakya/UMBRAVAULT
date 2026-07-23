@@ -9,12 +9,10 @@ import UserInfoPanel from './components/UserInfoPanel'
 import useSystemStatus from './hooks/useSystemStatus'
 
 const pageStyle = {
-  // height: 'auto',
-  // maxHeight: '100vh',
   display: 'flex',
   flexDirection: 'column',
   gap: 14,
-  padding: 'var(--page-padding, 24px)',
+  // padding: 'var(--page-padding, 24px)',
   // background: 'var(--term-bg, #05080a)',
   boxSizing: 'border-box',
   overflow: 'hidden',
@@ -29,20 +27,32 @@ const Dashboard = () => {
 
   return (
     <div style={pageStyle}>
-      {/* inline-css first everywhere; this tag only carries keyframes /
-          hover states that plain inline style objects can't express. */}
       <style>{DASH_ANIMATION_CSS}</style>
-
+      <div
+        style={{
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+          backgroundAttachment: 'fixed',
+          borderRadius: 'var(--radius)',
+          // padding: 'var(--page-padding)',
+          border: '1px solid var(--term-border)',
+          flex: 1,
+          overflow: 'hidden',
+        }}
+      >
+        <img style={{ width: '100%' }} src={DashboardHeaderUrl} />
+      </div>
       <div
         style={{
           display: 'grid',
-          // gridTemplateColumns: '360px 1fr 300px',
+          gridTemplateColumns: '360px 1fr 300px',
           gap: 14,
           // height: 220,
           flexShrink: 0,
         }}
       >
-        {/* <UserInfoPanel /> */}
+        <UserInfoPanel />
         <div
           style={{
             border: '1px solid var(--term-border, rgba(34, 224, 122, 0.2))',
@@ -50,28 +60,14 @@ const Dashboard = () => {
             background: 'rgba(6, 14, 9, 0.35)',
           }}
         >
-          <div
-            style={{
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              backgroundRepeat: 'no-repeat',
-              backgroundAttachment: 'fixed',
-              borderRadius: 'var(--radius)',
-              padding: 'var(--page-padding)',
-              flex: 1,
-              overflow: 'hidden ',
-            }}
-          >
-            {/* <img style={{ width: '100%' }} src={DashboardHeaderUrl} /> */}
-          </div>
           {/* <GlobeVisual /> */}
         </div>
-        {/* <SystemStatusPanel statusList={statusList} loading={statusLoading} /> */}
+        <SystemStatusPanel statusList={statusList} loading={statusLoading} />
       </div>
 
       {/* Row 2 — key metrics */}
       <div style={{ flexShrink: 0 }}>
-        {/* <StatsRow stats={stats} loading={statusLoading} /> */}
+        <StatsRow stats={stats} loading={statusLoading} />
       </div>
       <ProjectsGrid />
       {/* Row 3 — live feed, brand statement, shortcuts */}
@@ -84,9 +80,9 @@ const Dashboard = () => {
           minHeight: 0,
         }}
       >
-        {/* <LiveSystemFeed />
+        <LiveSystemFeed />
         <CenterBrandText />
-        <QuickAccessPanel /> */}
+        <QuickAccessPanel />
       </div>
     </div>
   )
