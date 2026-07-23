@@ -3,6 +3,7 @@ const RedisStore = require("rate-limit-redis");
 const redisClient = require("../services/redis.client");
 const ApiError = require("../utils/apiError");
 const logger = require("../utils/logger");
+const { ipKeyGenerator } = require("express-rate-limit");
 
 const buildLimiter = ({ windowMs, max, message, prefix, keyGenerator }) => {
   const redisReady = redisClient.status === "ready";
@@ -53,7 +54,8 @@ const authLimiter = buildLimiter({
   max: 5,
   prefix: "auth",
   message: "Too many login attempts, try again in 15 minutes",
-  keyGenerator: (req) => `${req.ip}:${req.body?.email || "unknown"}`,
+  keyGenerator: (req) =>
+    `${ipKeyGenerator(req.ip)}:${req.body?.email || "unknown"}`,
 });
 
 module.exports = { apiLimiter, authLimiter, buildLimiter };
