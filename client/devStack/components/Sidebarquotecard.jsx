@@ -22,6 +22,7 @@ const wrapStyle = {
   overflow: 'hidden',
   flexShrink: 0,
   minHeight: '225px',
+  // border: '2px red solid',
 }
 
 const imageWrapStyle = {

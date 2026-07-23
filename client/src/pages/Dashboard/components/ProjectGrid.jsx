@@ -1,3 +1,4 @@
+import { Tooltip } from 'antd'
 import {
   Radar,
   Mail,
@@ -8,6 +9,7 @@ import {
   //   Github,
   ExternalLink,
   ChevronsRight,
+  Link,
 } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
 
@@ -157,43 +159,134 @@ const THREAT_COLOR = {
    Skeleton card — shown while fetchProjects() is in flight. Mirrors the
    exact layout of the real card so there's no size jump on swap-in.
    ───────────────────────────────────────────────────────────────────────── */
-
 function ProjectCardSkeleton({ index }) {
   return (
-    <div className="terminal-frame" style={{ padding: 0, animationDelay: `${index * 70}ms` }}>
+    <div
+      className="terminal-frame"
+      style={{
+        padding: 0,
+        minHeight: 240,
+        animationDelay: `${index * 70}ms`,
+      }}
+    >
       <span className="terminal-frame__corner terminal-frame__corner--tl" />
       <span className="terminal-frame__corner terminal-frame__corner--tr" />
       <span className="terminal-frame__corner terminal-frame__corner--bl" />
       <span className="terminal-frame__corner terminal-frame__corner--br" />
       <span className="terminal-frame__scanlines" />
 
-      <div style={{ padding: '18px', display: 'flex', flexDirection: 'column', gap: 14 }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <div className="proj-shimmer" style={{ width: 36, height: 36, borderRadius: 8 }} />
-          <div className="proj-shimmer" style={{ width: 14, height: 14, borderRadius: 3 }} />
-        </div>
+      <div
+        style={{
+          minHeight: 240,
+          padding: 20,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+        }}
+      >
+        {/* Status */}
+        <div
+          className="proj-shimmer"
+          style={{
+            width: 50,
+            height: 10,
+            alignSelf: 'flex-end',
+          }}
+        />
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-          <div className="proj-shimmer" style={{ width: '70%', height: 13 }} />
-          <div className="proj-shimmer" style={{ width: '90%', height: 11 }} />
-        </div>
+        {/* Icon */}
+        <div
+          className="proj-shimmer"
+          style={{
+            width: 70,
+            height: 70,
+            borderRadius: '50%',
+          }}
+        />
 
-        <div style={{ display: 'flex', gap: 8 }}>
-          <div className="proj-shimmer" style={{ width: 56, height: 20, borderRadius: 4 }} />
-          <div className="proj-shimmer" style={{ width: 56, height: 20, borderRadius: 4 }} />
-        </div>
+        {/* Title */}
+        <div
+          className="proj-shimmer"
+          style={{
+            width: '70%',
+            height: 18,
+          }}
+        />
 
+        {/* Description */}
         <div
           style={{
             display: 'flex',
-            gap: 14,
-            paddingTop: 10,
+            flexDirection: 'column',
+            gap: 8,
+            width: '100%',
+            alignItems: 'center',
+          }}
+        >
+          <div className="proj-shimmer" style={{ width: '90%', height: 10 }} />
+          <div className="proj-shimmer" style={{ width: '75%', height: 10 }} />
+        </div>
+
+        {/* Tags */}
+        <div
+          style={{
+            display: 'flex',
+            gap: 8,
+          }}
+        >
+          <div
+            className="proj-shimmer"
+            style={{
+              width: 60,
+              height: 20,
+              borderRadius: 4,
+            }}
+          />
+
+          <div
+            className="proj-shimmer"
+            style={{
+              width: 60,
+              height: 20,
+              borderRadius: 4,
+            }}
+          />
+        </div>
+
+        {/* Footer */}
+        <div
+          style={{
+            width: '100%',
+            display: 'flex',
+            justifyContent: 'space-between',
+            paddingTop: 12,
             borderTop: '1px solid var(--term-border)',
           }}
         >
-          <div className="proj-shimmer" style={{ width: 16, height: 16, borderRadius: 3 }} />
-          <div className="proj-shimmer" style={{ width: 16, height: 16, borderRadius: 3 }} />
-          <div className="proj-shimmer" style={{ width: 16, height: 16, borderRadius: 3 }} />
+          <div
+            className="proj-shimmer"
+            style={{
+              width: 18,
+              height: 18,
+            }}
+          />
+
+          <div
+            className="proj-shimmer"
+            style={{
+              width: 18,
+              height: 18,
+            }}
+          />
+
+          <div
+            className="proj-shimmer"
+            style={{
+              width: 18,
+              height: 18,
+            }}
+          />
         </div>
       </div>
     </div>
@@ -211,7 +304,20 @@ function ProjectCard({ project, index }) {
   return (
     <div
       className="terminal-frame proj-card-in"
-      style={{ padding: 0, animationDelay: `${index * 70}ms` }}
+      style={{
+        padding: 0,
+        height: 240,
+        transition: 'all .3s ease',
+        animationDelay: `${index * 70}ms`,
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.transform = 'translateY(-5px)'
+        e.currentTarget.style.boxShadow = '0 0 30px rgba(57,255,106,.4)'
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.transform = 'translateY(0)'
+        e.currentTarget.style.boxShadow = 'var(--term-glow)'
+      }}
     >
       <span className="terminal-frame__corner terminal-frame__corner--tl" />
       <span className="terminal-frame__corner terminal-frame__corner--tr" />
@@ -222,23 +328,29 @@ function ProjectCard({ project, index }) {
 
       <div style={{ padding: '18px', display: 'flex', flexDirection: 'column', gap: 14 }}>
         {/* icon + menu + threat dot */}
-        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
+        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'center' }}>
           <div
             style={{
-              width: 36,
-              height: 36,
-              borderRadius: 8,
+              width: 70,
+              height: 70,
+              borderRadius: '50%',
+              border: '1px solid var(--term-border)',
+              background: 'rgba(57,255,106,.05)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              background: 'rgba(57,255,106,0.08)',
-              border: '1px solid var(--term-border)',
+              boxShadow: '0 0 20px rgba(57,255,106,.25)',
             }}
           >
-            <Icon size={18} color="var(--term-green)" strokeWidth={1.75} />
+            <Icon
+              size={40}
+              style={{
+                color: 'var(--term-green',
+              }}
+            />
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          {/* <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             <span
               title={`threat: ${project.threat}`}
               style={{
@@ -252,31 +364,43 @@ function ProjectCard({ project, index }) {
             <span style={{ color: 'var(--term-green-dim)', fontSize: 14, letterSpacing: 1 }}>
               ⋮
             </span>
-          </div>
+          </div> */}
         </div>
 
         {/* title + desc */}
         <div>
           <div
             style={{
-              fontSize: 13,
-              fontWeight: 600,
-              letterSpacing: '0.6px',
-              textTransform: 'uppercase',
+              fontSize: 18,
+              textAlign: 'center',
+              // fontWeight: 700,
               color: 'var(--term-green)',
-              textShadow: '0 0 8px rgba(57,255,106,0.35)',
-              marginBottom: 4,
+              textTransform: 'uppercase',
+              textShadow: '0 0 15px rgba(57,255,106,.5)',
             }}
           >
             {project.name}
           </div>
-          <div style={{ fontSize: 11.5, color: 'var(--term-text-muted)', lineHeight: 1.5 }}>
-            {project.desc}
-          </div>
+          <Tooltip title={project.desc}>
+            <div
+              style={{
+                textAlign: 'center',
+                fontSize: 12,
+                color: 'var(--term-text-muted)',
+                maxWidth: 180,
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+                cursor: 'pointer',
+              }}
+            >
+              {project.desc}
+            </div>
+          </Tooltip>
         </div>
 
         {/* tags */}
-        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', gap: 8, justifyContent: 'center' }}>
           {project.tags.map((tag) => (
             <span
               key={tag}
@@ -294,9 +418,21 @@ function ProjectCard({ project, index }) {
             </span>
           ))}
         </div>
-
-        {/* footer actions */}
         <div
+          style={{
+            width: '100%',
+            display: 'flex',
+            justifyContent: 'space-between',
+            paddingTop: 12,
+            borderTop: '1px solid var(--term-border)',
+          }}
+        >
+          <Link size={18} color="white" />
+          <ExternalLink size={18} color="white" />
+          <ChevronsRight size={18} color="white" />
+        </div>
+        {/* footer actions */}
+        {/* <div
           style={{
             display: 'flex',
             alignItems: 'center',
@@ -305,14 +441,13 @@ function ProjectCard({ project, index }) {
             borderTop: '1px solid var(--term-border)',
           }}
         >
-          {/* <Github size={15} color="var(--term-green-dim)" style={{ cursor: 'pointer' }} /> */}
           <ExternalLink size={15} color="var(--term-green-dim)" style={{ cursor: 'pointer' }} />
           <ChevronsRight
             size={15}
             color="var(--term-green-dim)"
             style={{ cursor: 'pointer', marginLeft: 'auto' }}
           />
-        </div>
+        </div> */}
       </div>
     </div>
   )
@@ -349,9 +484,17 @@ export default function ProjectsGrid() {
           marginBottom: 14,
         }}
       >
-        <span style={{ fontSize: 12, letterSpacing: 1, color: 'var(--term-green-dim)' }}>
-          ACTIVE PROJECTS
-        </span>
+        <div
+          style={{
+            position: 'absolute',
+            top: 15,
+            right: 15,
+            fontSize: 10,
+            color: '#39ff6a',
+          }}
+        >
+          ACTIVE
+        </div>
         <span
           style={{
             fontSize: 11,

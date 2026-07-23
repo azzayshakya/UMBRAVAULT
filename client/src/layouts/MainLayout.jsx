@@ -5,7 +5,7 @@ import useMenu from '@devStack/components/sidebar/hooks/UseMenu'
 import { buildBreadcrumbs } from '@devStack/components/sidebar/utilities/breadCrumbBuilder'
 import { buildMenuItems } from '@devStack/components/sidebar/utilities/MenuBuilder'
 import SidebarQuoteCard from '@devStack/components/Sidebarquotecard'
-import { App_Name } from '@devStack/constants'
+import { App_Name, App_ShortName } from '@devStack/constants'
 import useThemeStore from '@devStack/store/useThemeStore'
 import { Layout, Menu, Typography } from 'antd'
 import { useState, useMemo } from 'react'
@@ -36,13 +36,10 @@ const MainLayout = ({ userRole, userData = null }) => {
   return (
     <Layout style={{ minHeight: '100vh' }}>
       <Sider
-        // collapsible
         collapsed={collapsed}
         onCollapse={setCollapsed}
         width={250}
         style={{
-          display: 'flex',
-          flexDirection: 'column',
           height: '100vh',
           position: 'fixed',
           left: 0,
@@ -54,42 +51,69 @@ const MainLayout = ({ userRole, userData = null }) => {
       >
         <div
           style={{
-            height: 64,
             display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            background: 'var(--color-primary-light)',
-            margin: '16px',
-            borderRadius: 'var(--radius)',
+            flexDirection: 'column',
+            height: '100%',
           }}
         >
-          <Text
-            strong
+          <div
             style={{
-              color: 'var(--color-primary)',
-              fontSize: collapsed ? '16px' : '20px',
-              transition: 'font-size 0.3s',
+              height: 64,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              background: 'var(--color-primary-light)',
+              margin: '16px',
+              borderRadius: 'var(--radius)',
             }}
           >
-            {collapsed ? `${App_Name}` : `${App_Name}`}
-          </Text>
-        </div>
+            <Text
+              strong
+              style={{
+                color: 'var(--color-primary)',
+                fontSize: collapsed ? '16px' : '20px',
+                transition: 'font-size 0.3s',
+              }}
+            >
+              {collapsed ? App_ShortName : App_Name}
+            </Text>
+          </div>
 
-        <div style={{ flex: 1, overflow: 'auto' }}>
-          <Menu
-            theme={scheme === 'dark' ? 'dark' : 'light'}
-            mode="inline"
-            selectedKeys={selectedKeys}
-            openKeys={openKeys}
-            items={menuItems}
-            onClick={handleMenuClick}
-            onOpenChange={handleOpenChange}
-            style={{ background: 'transparent', borderInlineEnd: 'none' }}
-          />
+          <div
+            style={{
+              flex: 1,
+              display: 'flex',
+              flexDirection: 'column',
+              overflow: 'hidden',
+            }}
+          >
+            <div
+              style={{
+                flex: 1,
+                overflowY: 'auto',
+              }}
+            >
+              <Menu
+                theme={scheme === 'dark' ? 'dark' : 'light'}
+                mode="inline"
+                selectedKeys={selectedKeys}
+                openKeys={openKeys}
+                items={menuItems}
+                onClick={handleMenuClick}
+                onOpenChange={handleOpenChange}
+                style={{
+                  background: 'transparent',
+                  borderInlineEnd: 'none',
+                }}
+              />
+            </div>
+
+            <div style={{ marginTop: 'auto' }}>
+              <SidebarQuoteCard collapsed={collapsed} />
+            </div>
+          </div>
         </div>
-        <SidebarQuoteCard collapsed={collapsed} />
       </Sider>
-
       <Layout
         style={{
           marginLeft: collapsed ? 80 : 250,

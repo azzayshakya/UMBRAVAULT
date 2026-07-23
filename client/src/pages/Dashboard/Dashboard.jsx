@@ -73,7 +73,7 @@ const Dashboard = () => {
       <div style={{ flexShrink: 0 }}>
         {/* <StatsRow stats={stats} loading={statusLoading} /> */}
       </div>
-      {/* <ProjectsGrid /> */}
+      <ProjectsGrid />
       {/* Row 3 — live feed, brand statement, shortcuts */}
       <div
         style={{
