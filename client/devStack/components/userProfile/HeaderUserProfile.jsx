@@ -1,6 +1,8 @@
 import { DownOutlined } from '@ant-design/icons'
 import { useSelector } from 'react-redux'
-import { Skeleton, SkeletonAvatar } from './Skelton/Skeleton'
+import { Skeleton, SkeletonAvatar } from '../Skelton/Skeleton'
+import { ProfileTerminal } from './ProfileTerminal'
+import { Popover } from 'antd'
 
 const wrapStyle = {
   display: 'flex',
@@ -10,6 +12,7 @@ const wrapStyle = {
   borderRadius: 'var(--radius-sm, 6px)',
   cursor: 'pointer',
   userSelect: 'none',
+  // border: '1px red solid',
 }
 
 const avatarFrameStyle = {
@@ -43,7 +46,7 @@ const nameStyle = {
 
 const taglineStyle = {
   fontFamily: 'var(--term-font, "JetBrains Mono", monospace)',
-  fontSize: 10,
+  fontSize: 12,
   color: 'var(--term-text-muted, var(--color-text-muted))',
   letterSpacing: 0.3,
   lineHeight: 1.3,
@@ -59,7 +62,7 @@ const chevronStyle = {
 const HeaderUserProfile = () => {
   const authenticUser = useSelector((state) => state.user.user)
   const avatarUrl = authenticUser?.avatar || '/images/global/my-profile.jpg'
-
+  console.log(authenticUser)
   if (!authenticUser) {
     return (
       <div style={wrapStyle}>
@@ -73,20 +76,31 @@ const HeaderUserProfile = () => {
   }
 
   return (
-    <div style={wrapStyle} className="header-user-profile">
-      <div style={avatarFrameStyle}>
-        <img style={avatarImgStyle} src={avatarUrl} alt={authenticUser?.name || 'user avatar'} />
-      </div>
+    <Popover
+      trigger="click"
+      placement="bottomRight"
+      content={<ProfileTerminal user={authenticUser} />}
+      overlayInnerStyle={{
+        padding: 0,
+        background: 'transparent',
+        boxShadow: 'none',
+      }}
+    >
+      <div style={wrapStyle}>
+        <div style={avatarFrameStyle}>
+          <img style={avatarImgStyle} src={avatarUrl} alt={authenticUser?.name || 'user avatar'} />
+        </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', minWidth: 0 }}>
-        <span style={nameStyle}>{authenticUser?.name ?? 'NA'}</span>
-        <span style={taglineStyle}>
-          {authenticUser?.tagline || `# ${authenticUser?.role ?? 'NA'}`}
-        </span>
-      </div>
+        <div style={{ display: 'flex', flexDirection: 'column', minWidth: 0 }}>
+          <span style={nameStyle}>{authenticUser?.name ?? 'NA'}</span>
+          <span style={taglineStyle}>
+            {authenticUser?.tagline || `# ${authenticUser?.role ?? 'NA'}`}
+          </span>
+        </div>
 
-      <DownOutlined style={chevronStyle} />
-    </div>
+        <DownOutlined style={chevronStyle} />
+      </div>
+    </Popover>
   )
 }
 

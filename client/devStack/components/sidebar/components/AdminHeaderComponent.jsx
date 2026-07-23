@@ -1,12 +1,12 @@
 import { MenuFoldOutlined, MenuUnfoldOutlined, SunOutlined, MoonOutlined } from '@ant-design/icons'
-import HeaderUserProfile from '@devStack/components/HeaderUserProfile'
+import HeaderUserProfile from '@devStack/components/userProfile/HeaderUserProfile'
 import { ColorScheme } from '@devStack/constants/theme-constants'
 import { clearUserSession } from '@devStack/store/userSlice'
 import useThemeStore from '@devStack/store/useThemeStore'
 import { redirectToLoginUtil } from '@devStack/utils/redirect-utils'
 import { removeUserSessionLocally } from '@devStack/utils/user-session-utils'
 import { Breadcrumb, Layout } from 'antd'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router'
 
 const { Header } = Layout
@@ -35,6 +35,7 @@ export default function AdminHeaderComponent({
   const dispatch = useDispatch()
   const resolvedScheme = useThemeStore((s) => s.resolvedScheme)
   const toggleColorScheme = useThemeStore((s) => s.toggleColorScheme)
+  const authenticUser = useSelector((state) => state.user.user)
   const isDark = resolvedScheme === ColorScheme.DARK
   const handleLogout = () => {
     dispatch(clearUserSession())
@@ -54,6 +55,7 @@ export default function AdminHeaderComponent({
           position: 'sticky',
           top: 0,
           zIndex: 1,
+          // border: '2px red solid',
         }}
       >
         <div
@@ -68,6 +70,7 @@ export default function AdminHeaderComponent({
           {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
         </div>
 
+        <span style={{ color: 'var(--term-green, var(--color-primary))' }}>&nbsp;&nbsp;{'>_'}</span>
         <div style={{ display: 'flex', alignItems: 'center' }}>
           {breadcrumbItems.length > 0 && (
             <Breadcrumb items={breadcrumbItems} style={{ margin: 0 }} />
@@ -76,7 +79,7 @@ export default function AdminHeaderComponent({
 
         {/* pushes toggle + auth buttons to far right */}
         <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 10 }}>
-          <button
+          {/* <button
             onClick={() => navigate('/login')}
             style={{
               ...authBtnBase,
@@ -94,9 +97,9 @@ export default function AdminHeaderComponent({
             }}
           >
             LOGIN
-          </button>
+          </button> */}
 
-          <button
+          {/* <button
             onClick={() => navigate('/signup')}
             style={{
               ...authBtnBase,
@@ -113,8 +116,8 @@ export default function AdminHeaderComponent({
             }}
           >
             SIGN UP
-          </button>
-          <button
+          </button> */}
+          {/* <button
             onClick={handleLogout}
             style={{
               ...authBtnBase,
@@ -131,8 +134,7 @@ export default function AdminHeaderComponent({
             }}
           >
             LOGOUT
-          </button>
-          <HeaderUserProfile />
+          </button> */}
           <button
             onClick={toggleColorScheme}
             aria-label="Toggle theme"
@@ -155,6 +157,7 @@ export default function AdminHeaderComponent({
           >
             {isDark ? <SunOutlined /> : <MoonOutlined />}
           </button>
+          <HeaderUserProfile />
         </div>
       </Header>
     </div>

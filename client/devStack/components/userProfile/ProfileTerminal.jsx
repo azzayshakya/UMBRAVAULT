@@ -1,0 +1,263 @@
+import { DeleteOutlined, LaptopOutlined, LogoutOutlined } from '@ant-design/icons'
+import { clearUserSession } from '@devStack/store/userSlice'
+import { redirectToLoginUtil } from '@devStack/utils/redirect-utils'
+import { removeUserSessionLocally } from '@devStack/utils/user-session-utils'
+import { useDispatch, useSelector } from 'react-redux'
+
+export const ProfileTerminal = ({ user }) => {
+  const authenticUser = useSelector((state) => state.user.user)
+  const dispatch = useDispatch()
+  const handleLogout = () => {
+    dispatch(clearUserSession())
+    removeUserSessionLocally()
+    redirectToLoginUtil()
+  }
+  return (
+    <div
+      style={{
+        width: 420,
+        background: 'var(--term-bg-panel)',
+        border: '1px solid var(--term-border)',
+        borderRadius: 12,
+        padding: 20,
+        color: 'var(--term-text)',
+        fontFamily: 'var(--term-font)',
+        boxShadow: '0 0 25px rgba(57,255,106,.15), inset 0 0 20px rgba(57,255,106,.05)',
+        position: 'relative',
+        overflow: 'hidden',
+      }}
+    >
+      {/* Header */}
+
+      <div
+        style={{
+          color: 'var(--term-green)',
+          //   fontWeight: 700,
+          fontSize: 11,
+          marginBottom: 5,
+          letterSpacing: 1,
+        }}
+      >
+        // SESSION_INFO
+      </div>
+
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: 16,
+          marginBottom: 24,
+        }}
+      >
+        <img
+          src={user?.avatar || '/images/global/my-profile.jpg'}
+          alt=""
+          style={{
+            width: 72,
+            height: 72,
+            borderRadius: '50%',
+            border: '2px solid var(--term-green)',
+            boxShadow: 'var(--term-glow)',
+            objectFit: 'cover',
+          }}
+        />
+
+        <div>
+          <div
+            style={{
+              color: 'var(--term-green)',
+              fontSize: 16,
+              fontWeight: 700,
+            }}
+          >
+            {authenticUser?.name ?? 'NA'}
+          </div>
+
+          <div
+            style={{
+              color: 'var(--term-text-muted)',
+              fontSize: 12,
+            }}
+          >
+            {authenticUser?.username ?? 'NA'}
+          </div>
+
+          <div
+            style={{
+              marginTop: 8,
+              display: 'inline-block',
+              padding: '4px 10px',
+              border: '1px solid var(--term-border)',
+              borderRadius: 6,
+              color: 'var(--term-green)',
+              fontSize: 11,
+            }}
+          >
+            {authenticUser?.role ?? 'NA'}
+          </div>
+        </div>
+      </div>
+
+      <div
+        style={{
+          borderTop: '1px solid var(--term-border)',
+          borderBottom: '1px solid var(--term-border)',
+          padding: '18px 0',
+          display: 'grid',
+          rowGap: 9,
+        }}
+      >
+        {[
+          ['USERNAME', authenticUser?.username ?? 'NA'],
+          ['DEVICE ID', authenticUser?.deviceId ?? 'NA'],
+          ['ROLE', authenticUser?.role ?? 'NA'],
+          ['IP ADDRESS', '192.168.1.101'],
+          ['DEVICE', 'Chrome / Windows 11'],
+          ['LAST LOGIN', '23 Jul 2026'],
+        ].map(([label, value]) => (
+          <div
+            key={label}
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+            }}
+          >
+            <span
+              style={{
+                color: 'var(--term-text-muted)',
+                fontSize: 11,
+              }}
+            >
+              {label}
+            </span>
+
+            <span
+              style={{
+                color: 'var(--term-green)',
+                fontSize: 11,
+              }}
+            >
+              {value}
+            </span>
+          </div>
+        ))}
+      </div>
+
+      <div
+        style={{
+          marginTop: 20,
+          border: '1px solid var(--term-border)',
+          borderRadius: 10,
+          padding: '10px 15px',
+          display: 'flex',
+          alignItems: 'center',
+          gap: 14,
+        }}
+      >
+        <LaptopOutlined
+          style={{
+            color: 'var(--term-green)',
+            fontSize: 20,
+          }}
+        />
+
+        <div style={{ flex: 1 }}>
+          <div
+            style={{
+              color: 'var(--term-green)',
+              fontWeight: 600,
+            }}
+          >
+            THIS SESSION
+          </div>
+
+          <div
+            style={{
+              color: 'var(--term-text-muted)',
+              fontSize: 11,
+            }}
+          >
+            Chrome / Windows 11
+          </div>
+        </div>
+
+        <div
+          style={{
+            border: '1px solid var(--term-border)',
+            color: 'var(--term-green)',
+            padding: '4px 10px',
+            borderRadius: 6,
+            fontSize: 11,
+          }}
+        >
+          ACTIVE
+        </div>
+      </div>
+
+      {/* Buttons */}
+
+      <div
+        style={{
+          display: 'flex',
+          gap: 12,
+          marginTop: 22,
+        }}
+      >
+        <button
+          style={{
+            flex: 1,
+            height: 40,
+            background: 'transparent',
+            border: '1px solid var(--term-border)',
+            borderRadius: 8,
+            color: 'var(--term-green)',
+            display: 'flex',
+            gap: 10,
+            alignItems: 'center',
+            justifyContent: 'center',
+            cursor: 'pointer',
+            boxShadow: 'var(--term-glow)',
+          }}
+        >
+          <DeleteOutlined />
+          CLEAR SESSION
+        </button>
+
+        <button
+          onClick={handleLogout}
+          style={{
+            flex: 1,
+            height: 40,
+            background: 'transparent',
+            border: '1px solid rgba(255,77,79,.5)',
+            borderRadius: 8,
+            color: '#ff4d4f',
+            display: 'flex',
+            gap: 10,
+            alignItems: 'center',
+            justifyContent: 'center',
+            cursor: 'pointer',
+            boxShadow: '0 0 15px rgba(255,77,79,.15)',
+          }}
+        >
+          <LogoutOutlined />
+          LOGOUT
+        </button>
+      </div>
+
+      {/* Footer */}
+
+      <div
+        style={{
+          marginTop: 20,
+          color: 'var(--term-green)',
+          opacity: 0.7,
+          fontSize: 12,
+          letterSpacing: 0.5,
+        }}
+      >
+        &gt; Stay curious. Stay sharp. Stay in control.
+      </div>
+    </div>
+  )
+}
