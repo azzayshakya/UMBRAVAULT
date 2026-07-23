@@ -46,3 +46,12 @@
     filter: blur(0);
   }
 }
+
+@keyframes proj-shimmer-sweep {
+  0% {
+    background-position: -300px 0;
+  }
+  100% {
+    background-position: 300px 0;
+  }
+}
