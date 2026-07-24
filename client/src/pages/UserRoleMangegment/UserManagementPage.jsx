@@ -1,12 +1,12 @@
 import { EyeOutlined, MoreOutlined, SearchOutlined, FilterOutlined } from '@ant-design/icons'
 import CrudTable from '@devStack/components/table/CrudTable'
 import { Input } from 'antd'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 import { RoleBadge, StatusBadge } from './components/Badges'
-import ChangeRoleModal from './components/ChangeRoleModal'
-import { useUsers } from './utils/useUsers'
+
 import { useGetAllUsers } from './hooks/useUserManagementApi'
+import ChangeRoleModal from './components/ChangeRoleModal'
 
 const actionBtnStyle = {
   width: 28,
@@ -22,11 +22,32 @@ const actionBtnStyle = {
 }
 
 const UserManagementPage = () => {
-  const { users, loading, refetch } = useGetAllUsers()
+  const { users = [], loading, refetch } = useGetAllUsers()
   const [search, setSearch] = useState('')
-  const [paramObj, setParamObj] = useState({ limit: 10, offset: 0, total: 0 })
-  const [, setRefreshCounter] = useState(0)
   const [activeUser, setActiveUser] = useState(null)
+  console.log('babe', users)
+  // CrudTable is a shared component and always expects paramObj/setParamObj/
+  // setRefreshCounter to exist. Our API has no server-side pagination, so this
+  // stays purely local — it only drives CrudTable's UI, nothing is refetched.
+  const [paramObj, setParamObj] = useState({ limit: 10, offset: 0, total: 0 })
+
+  // 1. Client-side filtering based on search input
+  const filteredUsers = useMemo(() => {
+    if (!search.trim()) return users
+    const query = search.toLowerCase()
+    return users.filter(
+      (u) =>
+        u.username?.toLowerCase().includes(query) ||
+        u.email?.toLowerCase().includes(query) ||
+        u.id?.toString().toLowerCase().includes(query)
+    )
+  }, [users, search])
+
+  // Reset to page 1 whenever the filtered set changes size, so we don't get
+  // stuck on an offset that no longer has any rows.
+  useEffect(() => {
+    setParamObj((prev) => (prev.offset === 0 ? prev : { ...prev, offset: 0 }))
+  }, [search])
 
   const columns = [
     {
@@ -180,12 +201,12 @@ const UserManagementPage = () => {
 
         <div className="hacker-table">
           <CrudTable
-            tableData={users}
+            tableData={filteredUsers}
             columns={columns}
-            paramObj={{ ...paramObj, total: filtered.length }}
-            setParamObj={setParamObj}
-            setRefreshCounter={setRefreshCounter}
             loading={loading}
+            paramObj={paramObj}
+            setParamObj={setParamObj}
+            setRefreshCounter={() => {}}
           />
         </div>
       </div>
@@ -194,7 +215,7 @@ const UserManagementPage = () => {
         open={!!activeUser}
         user={activeUser}
         onClose={() => setActiveUser(null)}
-        onRoleChanged={{}}
+        onRoleChanged={refetch}
       />
     </div>
   )
