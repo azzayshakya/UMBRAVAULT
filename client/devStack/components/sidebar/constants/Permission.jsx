@@ -1,10 +1,12 @@
+import { USER_ROLES } from '@devStack/enums/user-role-enums'
+
 import { MENU_KEYS } from '../constants/MenuKeys'
 
-export const USER_ROLES = {
-  ADMIN: 'admin',
-  USER: 'user',
-  SUPER_ADMIN: 'superadmin',
-}
+// export const USER_ROLES = {
+//   ADMIN: 'admin',
+//   USER: 'user',
+//   SUPER_ADMIN: 'superadmin',
+// }
 
 export const MENU_PERMISSIONS = {
   [MENU_KEYS.HOME]: [USER_ROLES.ADMIN, USER_ROLES.USER, USER_ROLES.SUPER_ADMIN],

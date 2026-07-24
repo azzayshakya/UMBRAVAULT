@@ -1,5 +1,4 @@
 import AdminHeaderComponent from '@devStack/components/sidebar/components/AdminHeaderComponent'
-import { USER_ROLES } from '@devStack/components/sidebar/constants/Permission'
 import MENU_CONFIG from '@devStack/components/sidebar/control/MenuConfig'
 import useMenu from '@devStack/components/sidebar/hooks/UseMenu'
 import { buildBreadcrumbs } from '@devStack/components/sidebar/utilities/breadCrumbBuilder'

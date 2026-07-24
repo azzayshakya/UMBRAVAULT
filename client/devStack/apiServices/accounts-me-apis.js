@@ -1,9 +1,9 @@
+import { StorageKey } from '@devStack/enums/storage-key-enums'
 import { redirectToLoginUtil } from '@devStack/utils/redirect-utils'
 import { message } from 'antd'
 
 import { loginUser } from './accounts-auth-apis'
 import { axiosInstance } from './instance/axios-instance'
-import { StorageKey } from '@devStack/enums/storage-key-enums'
 
 const baseAPIURL = `${import.meta.env.VITE_ACCOUNTS_API_URL}`
 
@@ -49,7 +49,7 @@ const refreshSession = () => {
   const refreshToken = data?.refreshToken
   const deviceId = data?.deviceId
   return axiosInstance
-    .post(`${baseAPIURL}/refresh-token`, { refreshToken, deviceId })
+    .post(`${baseAPIURL}/auth/refresh-token`, { refreshToken, deviceId })
     .then((res) => res.data)
     .catch((error) => {
       message.error(error?.message || 'Session refresh failed. Please log in again.')
