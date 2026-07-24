@@ -2,11 +2,14 @@ import { axiosInstance } from './instance/axios-instance'
 
 const baseAPIURL = `${import.meta.env.VITE_ACCOUNTS_API_URL}`
 
-const getAllUserData = (postobj) => {
-  return axiosInstance.get(`${baseAPIURL}/user/all-users`, postobj).then((res) => res.data)
+const getAllUserData = () => {
+  return axiosInstance.get(`${baseAPIURL}/user/all-users`).then((res) => res.data)
 }
-const updateUserRole = (postobj) => {
-  return axiosInstance.get(`${baseAPIURL}/user/all-users`, postobj).then((res) => res.data)
+
+const updateUserRole = (userId, role) => {
+  return axiosInstance
+    .patch(`${baseAPIURL}/update-role/${userId}`, { role })
+    .then((res) => res.data)
 }
 
 export { getAllUserData, updateUserRole }

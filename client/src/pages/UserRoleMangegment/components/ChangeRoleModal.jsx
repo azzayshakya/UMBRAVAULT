@@ -3,7 +3,7 @@ import { useState } from 'react'
 import TerminalModal from '@devStack/components/Terminalmodal'
 import { updateUserRole } from '@devStack/apiServices/user-api'
 
-const ROLES = ['USER', 'MODERATOR', 'ADMIN', 'SUPER_ADMIN']
+const ROLES = ['user', 'admin', 'superadmin']
 const ROLE_RANK = { USER: 0, MODERATOR: 1, ADMIN: 2, SUPER_ADMIN: 3 }
 
 const ChangeRoleModal = ({ open, user, onClose, onRoleChanged }) => {

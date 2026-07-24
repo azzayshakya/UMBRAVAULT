@@ -13,7 +13,7 @@ const {
 
 router.get("/all-users", authenticateAccessToken, getAllUsers);
 router.patch(
-  "/users/:id/role",
+  "/update-role/:id",
   authenticateAccessToken,
   authorizeRoles("superadmin"),
   updateUserRole,
