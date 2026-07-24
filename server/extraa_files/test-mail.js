@@ -1,5 +1,5 @@
 require("dotenv").config();
-const { sendMail } = require("./services/mail.service");
+const { sendMail } = require("../services/mail.service");
 
 (async () => {
   try {

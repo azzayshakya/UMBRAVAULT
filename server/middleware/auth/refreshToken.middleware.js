@@ -1,9 +1,11 @@
-const { verifyRefreshTokenSignature } = require("../utils/tokenVerifier");
-const { extractToken } = require("../utils/tokenExtractor");
-const tokenService = require("../services/token.service");
-const ApiError = require("../utils/apiError");
-const asyncHandler = require("../utils/asyncHandler");
-const logger = require("../utils/logger");
+const {
+  verifyRefreshTokenSignature,
+} = require("../../utils/tokenUtils/tokenVerifier");
+const { extractToken } = require("../../utils/tokenUtils/tokenExtractor");
+const tokenService = require("../../services/token.service");
+const ApiError = require("../../utils/apiError");
+const asyncHandler = require("../../utils/asyncHandler");
+const logger = require("../../utils/logger");
 
 const verifyRefreshToken = asyncHandler(async (req, res, next) => {
   const token = extractToken(req, {

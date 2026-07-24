@@ -1,6 +1,6 @@
-const redisClient = require("../services/redis.client");
-const ApiError = require("../utils/apiError");
-const asyncHandler = require("../utils/asyncHandler");
+const redisClient = require("../../services/redis.client");
+const ApiError = require("../../utils/apiError");
+const asyncHandler = require("../../utils/asyncHandler");
 
 const checkTokenBlacklist = asyncHandler(async (req, res, next) => {
   const { jti } = req.user;

@@ -1,8 +1,8 @@
-const { verifyAccessToken } = require("../utils/tokenVerifier");
-const { extractToken } = require("../utils/tokenExtractor");
-const ApiError = require("../utils/apiError");
-const asyncHandler = require("../utils/asyncHandler");
-const logger = require("../utils/logger");
+const { verifyAccessToken } = require("../../utils/tokenUtils/tokenVerifier");
+const { extractToken } = require("../../utils/tokenUtils/tokenExtractor");
+const ApiError = require("../../utils/apiError");
+const asyncHandler = require("../../utils/asyncHandler");
+const logger = require("../../utils/logger");
 
 const authenticateAccessToken = asyncHandler(async (req, res, next) => {
   const token = extractToken(req, {

@@ -1,4 +1,4 @@
-const logger = require("./logger");
+const logger = require("../logger");
 
 const catchAsync = (fn, context = "unknown") => {
   return async (...args) => {

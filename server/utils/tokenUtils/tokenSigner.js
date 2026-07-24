@@ -1,8 +1,8 @@
 const jwt = require("jsonwebtoken");
 const { randomUUID } = require("crypto");
-const jwtConfig = require("../config/jwt.config");
-const tokenService = require("../services/token.service");
-const logger = require("./logger");
+const jwtConfig = require("../../config/jwt.config");
+const tokenService = require("../../services/token.service");
+const logger = require("../logger");
 
 function signAccessToken(user) {
   const jti = randomUUID();

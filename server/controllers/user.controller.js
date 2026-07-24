@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 
 const User = require("../models/user.model");
-const { generateTokenPair } = require("../utils/tokenSigner");
+const { generateTokenPair } = require("../utils/tokenUtils/tokenSigner");
 const tokenService = require("../services/token.service");
 const ApiError = require("../utils/ApiError");
 const ApiResponse = require("../utils/ApiResponse");

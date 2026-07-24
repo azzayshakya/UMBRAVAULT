@@ -1,6 +1,6 @@
-const redisClient = require("../services/redis.client");
-const ApiError = require("../utils/apiError");
-const asyncHandler = require("../utils/asyncHandler");
+const redisClient = require("../../services/redis.client");
+const ApiError = require("../../utils/apiError");
+const asyncHandler = require("../../utils/asyncHandler");
 
 const checkUserBlockedStatus = asyncHandler(async (req, res, next) => {
   const { id } = req.user;

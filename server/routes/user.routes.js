@@ -3,10 +3,14 @@ const router = express.Router();
 
 const { authLimiter } = require("../middleware/rate.limiter");
 const validateRequest = require("../middleware/validate.request.middleware");
-const { authenticateAccessToken } = require("../middleware/auth.middleware");
-const { verifyRefreshToken } = require("../middleware/refreshToken.middleware");
-const checkTokenBlacklist = require("../middleware/blackList.middleware");
-const checkUserBlockedStatus = require("../middleware/blockCheck.middleware");
+const {
+  authenticateAccessToken,
+} = require("../middleware/auth/auth.middleware");
+const {
+  verifyRefreshToken,
+} = require("../middleware/auth/refreshToken.middleware");
+const checkTokenBlacklist = require("../middleware/auth/blackList.middleware");
+const checkUserBlockedStatus = require("../middleware/auth/blockCheck.middleware");
 const authorizeRoles = require("../middleware/rbac.middleware");
 const { signupSchema, loginSchema } = require("../validator/auth.validate");
 
