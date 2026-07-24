@@ -15,7 +15,7 @@ const DotIndicator = ({ color }) => (
   />
 )
 
-export default function StatusTag({
+export default function ReusableAntdTag({
   status = '',
   config = {},
   size = 'medium', // Can be => small , medium , large

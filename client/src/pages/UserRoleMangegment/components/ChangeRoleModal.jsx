@@ -1,25 +1,25 @@
-import { updateUserRole } from '@devStack/apiServices/user-api'
 import TerminalModal from '@devStack/components/Terminalmodal'
+import { ASSIGNABLE_ROLES, ROLE_RANK, getRoleLabel } from '@devStack/enums/user-role-enums'
+import { message } from 'antd'
 import { useState } from 'react'
 
-const ROLES = ['user', 'admin', 'superadmin']
-const ROLE_RANK = { USER: 0, MODERATOR: 1, ADMIN: 2, SUPER_ADMIN: 3 }
+import { useUserManagementApi } from '../hooks/useUserManagementApi'
 
 const ChangeRoleModal = ({ open, user, onClose, onRoleChanged }) => {
-  const [selectedRole, setSelectedRole] = useState(user?.role)
-  const [submitting, setSubmitting] = useState(false)
+  const [selectedRole, setSelectedRole, updateError] = useState(user?.role)
+  const { changeUserRole, submitting } = useUserManagementApi()
 
   if (!user) return null
   const isEscalation = ROLE_RANK[selectedRole] > ROLE_RANK[user.role]
   const isUnchanged = selectedRole === user.role
 
   const handleConfirm = async () => {
-    setSubmitting(true)
-    const res = await updateUserRole(user._id, selectedRole)
-    setSubmitting(false)
-    if (res?.success !== false) {
+    const result = await changeUserRole(user._id, selectedRole)
+    if (result.success) {
       onRoleChanged?.(user._id, selectedRole)
       onClose()
+    } else {
+      message.error(result.message || 'Failed to update role. Please try again.')
     }
   }
 
@@ -95,11 +95,13 @@ const ChangeRoleModal = ({ open, user, onClose, onRoleChanged }) => {
           <span style={{ fontSize: 11, color: 'var(--term-text-muted)', letterSpacing: 1 }}>
             CURRENT ROLE
           </span>
-          <span style={{ fontSize: 12, color: 'var(--term-green-dim)' }}>{user.role}</span>
+          <span style={{ fontSize: 12, color: 'var(--term-green-dim)' }}>
+            {getRoleLabel(user.role)}
+          </span>
         </div>
 
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-          {ROLES.map((role) => {
+          {ASSIGNABLE_ROLES.map((role) => {
             const active = role === selectedRole
             return (
               <button
@@ -119,7 +121,7 @@ const ChangeRoleModal = ({ open, user, onClose, onRoleChanged }) => {
                   transition: 'all 0.15s ease',
                 }}
               >
-                {role}
+                {getRoleLabel(role)}
               </button>
             )
           })}
@@ -142,6 +144,25 @@ const ChangeRoleModal = ({ open, user, onClose, onRoleChanged }) => {
             </span>
             <span style={{ fontSize: 10.5, color: '#ff8080', letterSpacing: 0.3, lineHeight: 1.4 }}>
               PRIVILEGE ESCALATION — ACTION WILL BE LOGGED
+            </span>
+          </div>
+        )}
+
+        {updateError && (
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 10,
+              padding: '10px 12px',
+              border: '1px solid rgba(255, 59, 59, 0.5)',
+              background: 'rgba(255, 59, 59, 0.08)',
+              borderRadius: 6,
+            }}
+          >
+            <span style={{ fontSize: 16, color: '#ff3b3b' }}>✕</span>
+            <span style={{ fontSize: 10.5, color: '#ff8080', letterSpacing: 0.3, lineHeight: 1.4 }}>
+              {updateError}
             </span>
           </div>
         )}

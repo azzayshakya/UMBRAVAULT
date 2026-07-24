@@ -1,11 +1,12 @@
 import { EyeOutlined, MoreOutlined, SearchOutlined, FilterOutlined } from '@ant-design/icons'
+import ReusableAntdTag from '@devStack/components/AntdTag/ReusableAntdTag'
 import CrudTable from '@devStack/components/table/CrudTable'
+import { ROLE_BADGE_CONFIG } from '@devStack/enums/user-role-enums'
 import { Input } from 'antd'
 import { useEffect, useMemo, useState } from 'react'
 
-import { RoleBadge, StatusBadge } from './components/Badges'
 import ChangeRoleModal from './components/ChangeRoleModal'
-import { useGetAllUsers } from './hooks/useUserManagementApi'
+import { useUserManagementApi } from './hooks/useUserManagementApi'
 
 const actionBtnStyle = {
   width: 28,
@@ -21,15 +22,12 @@ const actionBtnStyle = {
 }
 
 const UserManagementPage = () => {
-  const { users = [], loading, refetch } = useGetAllUsers()
+  const { users = [], loading, refetch } = useUserManagementApi()
   const [search, setSearch] = useState('')
   const [activeUser, setActiveUser] = useState(null)
-  // CrudTable is a shared component and always expects paramObj/setParamObj/
-  // setRefreshCounter to exist. Our API has no server-side pagination, so this
-  // stays purely local — it only drives CrudTable's UI, nothing is refetched.
+
   const [paramObj, setParamObj] = useState({ limit: 10, offset: 0, total: 0 })
 
-  // 1. Client-side filtering based on search input
   const filteredUsers = useMemo(() => {
     if (!search.trim()) return users
     const query = search.toLowerCase()
@@ -41,8 +39,6 @@ const UserManagementPage = () => {
     )
   }, [users, search])
 
-  // Reset to page 1 whenever the filtered set changes size, so we don't get
-  // stuck on an offset that no longer has any rows.
   useEffect(() => {
     setParamObj((prev) => (prev.offset === 0 ? prev : { ...prev, offset: 0 }))
   }, [search])
@@ -50,8 +46,8 @@ const UserManagementPage = () => {
   const columns = [
     {
       title: 'USER ID',
-      dataIndex: 'id',
-      key: 'id',
+      dataIndex: '_id',
+      key: '_id',
       render: (v) => <span style={{ color: 'var(--term-text-muted)' }}>{v}</span>,
     },
     {
@@ -61,24 +57,29 @@ const UserManagementPage = () => {
       render: (v) => <span style={{ color: 'var(--term-green)' }}>{v}</span>,
     },
     {
+      title: ':NAME',
+      dataIndex: 'name',
+      key: 'name',
+      render: (v) => <span style={{ color: 'var(--term-green)' }}>{v}</span>,
+    },
+    {
       title: ':EMAIL',
       dataIndex: 'email',
       key: 'email',
       render: (v) => <span style={{ color: 'var(--term-text-muted)' }}>{v}</span>,
     },
-    { title: ':ROLE', dataIndex: 'role', key: 'role', render: (v) => <RoleBadge role={v} /> },
     {
-      title: ':STATUS',
-      dataIndex: 'status',
-      key: 'status',
-      render: (v) => <StatusBadge status={v} />,
+      title: ':ROLE',
+      dataIndex: 'role',
+      key: 'role',
+      render: (v) => <ReusableAntdTag config={ROLE_BADGE_CONFIG} status={v} />,
     },
-    {
-      title: ':LAST LOGIN',
-      dataIndex: 'lastLogin',
-      key: 'lastLogin',
-      render: (v) => <span style={{ color: 'var(--term-text-muted)' }}>{v}</span>,
-    },
+    // {
+    //   title: ':LAST LOGIN',
+    //   dataIndex: 'lastLogin',
+    //   key: 'lastLogin',
+    //   render: (v) => <span style={{ color: 'var(--term-text-muted)' }}>{v}</span>,
+    // },
     {
       title: 'ACTIONS',
       key: 'actions',
