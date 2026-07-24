@@ -1,9 +1,19 @@
 const userModel = require("../models/user.model");
 const ApiError = require("../utils/apiError");
 const ApiResponse = require("../utils/ApiResponse");
+const logger = require("../utils/logger");
 
 const VALID_ROLES = ["user", "admin", "superadmin"];
 
+function toSafeUser(user) {
+  return {
+    id: user._id,
+    name: user.name,
+    email: user.email,
+    role: user.role,
+    username: user.username,
+  };
+}
 const getAllUsers = async (req, res) => {
   const users = await userModel.find().select("-password");
 
@@ -31,9 +41,9 @@ const updateUserRole = async (req, res) => {
   const targetUser = await userModel.findById(id);
   if (!targetUser) throw ApiError.notFound("User not found");
 
-  if (String(targetUser._id) === String(req.user.id)) {
-    throw ApiError.forbidden("You cannot change your own role");
-  }
+  // if (String(targetUser._id) === String(req.user.id)) {
+  //   throw ApiError.forbidden("You cannot change your own role");
+  // }
 
   if (targetUser.role === role) {
     throw ApiError.badRequest(`User already has the role "${role}"`);

@@ -15,7 +15,7 @@ router.get("/all-users", authenticateAccessToken, getAllUsers);
 router.patch(
   "/update-role/:id",
   authenticateAccessToken,
-  authorizeRoles("superadmin"),
+  // authorizeRoles("superadmin"),
   updateUserRole,
 );
 

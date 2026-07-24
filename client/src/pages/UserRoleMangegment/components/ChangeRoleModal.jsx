@@ -1,7 +1,6 @@
-import { useState } from 'react'
-
-import TerminalModal from '@devStack/components/Terminalmodal'
 import { updateUserRole } from '@devStack/apiServices/user-api'
+import TerminalModal from '@devStack/components/Terminalmodal'
+import { useState } from 'react'
 
 const ROLES = ['user', 'admin', 'superadmin']
 const ROLE_RANK = { USER: 0, MODERATOR: 1, ADMIN: 2, SUPER_ADMIN: 3 }
@@ -11,16 +10,15 @@ const ChangeRoleModal = ({ open, user, onClose, onRoleChanged }) => {
   const [submitting, setSubmitting] = useState(false)
 
   if (!user) return null
-
   const isEscalation = ROLE_RANK[selectedRole] > ROLE_RANK[user.role]
   const isUnchanged = selectedRole === user.role
 
   const handleConfirm = async () => {
     setSubmitting(true)
-    const res = await updateUserRole(user.id, selectedRole)
+    const res = await updateUserRole(user._id, selectedRole)
     setSubmitting(false)
     if (res?.success !== false) {
-      onRoleChanged?.(user.id, selectedRole)
+      onRoleChanged?.(user._id, selectedRole)
       onClose()
     }
   }

@@ -4,9 +4,8 @@ import { Input } from 'antd'
 import { useEffect, useMemo, useState } from 'react'
 
 import { RoleBadge, StatusBadge } from './components/Badges'
-
-import { useGetAllUsers } from './hooks/useUserManagementApi'
 import ChangeRoleModal from './components/ChangeRoleModal'
+import { useGetAllUsers } from './hooks/useUserManagementApi'
 
 const actionBtnStyle = {
   width: 28,
@@ -25,7 +24,6 @@ const UserManagementPage = () => {
   const { users = [], loading, refetch } = useGetAllUsers()
   const [search, setSearch] = useState('')
   const [activeUser, setActiveUser] = useState(null)
-  console.log('babe', users)
   // CrudTable is a shared component and always expects paramObj/setParamObj/
   // setRefreshCounter to exist. Our API has no server-side pagination, so this
   // stays purely local — it only drives CrudTable's UI, nothing is refetched.

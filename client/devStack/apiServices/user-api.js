@@ -8,7 +8,7 @@ const getAllUserData = () => {
 
 const updateUserRole = (userId, role) => {
   return axiosInstance
-    .patch(`${baseAPIURL}/update-role/${userId}`, { role })
+    .patch(`${baseAPIURL}/user/update-role/${userId}`, { role })
     .then((res) => res.data)
 }
 

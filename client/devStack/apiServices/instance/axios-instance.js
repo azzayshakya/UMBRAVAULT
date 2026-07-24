@@ -132,6 +132,8 @@ export { axiosInstance }
 // MONGO_URI=mongodb+srv://ajayajay:ajayajay@cluster0.agfg3rb.mongodb.net/?appName=Cluster0
 // # MONGO_URI=mongodb://127.0.0.1:27017/assetflow
 
+// MONGO_URI=mongodb://ajayajay:ajayajay@ac-zbpkf2z-shard-00-00.agfg3rb.mongodb.net:27017,ac-zbpkf2z-shard-00-01.agfg3rb.mongodb.net:27017,ac-zbpkf2z-shard-00-02.agfg3rb.mongodb.net:27017/umbravault?ssl=true&replicaSet=atlas-pytax1-shard-0&authSource=admin&appName=Cluster0
+
 // JWT_ACCESS_SECRET=azx
 // JWT_REFRESH_SECRET=asd
 // JWT_ISSUER=lskjdf
