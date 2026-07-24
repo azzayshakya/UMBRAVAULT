@@ -14,15 +14,15 @@ const connectDB = require("./config/db");
 const redisClient = require("./services/redis.client");
 const mailService = require("./services/mail.service");
 const { apiLimiter, authLimiter } = require("./middleware/rate.limiter");
-
+const authRoutes = require("./routes/auth.routes");
 const userRoutes = require("./routes/user.routes");
 const aiRoutes = require("./routes/ai.routes");
 
 const app = express();
 
-app.set("trust proxy", 1);
+// app.set("trust proxy", 1);
 
-app.use(helmet());
+// app.use(helmet());
 app.use(compression());
 app.use(
   cors({
@@ -36,8 +36,12 @@ app.use(requestLogger);
 
 app.get("/health", (req, res) => res.status(200).json({ status: "ok" }));
 
-app.use("/", apiLimiter);
-app.use("/api/auth", authLimiter, userRoutes);
+// app.use("/", apiLimiter);
+app.use(
+  "/api/auth",
+  // authLimiter,
+  authRoutes,
+);
 app.use("/api/user", userRoutes);
 app.use("/api/ai", aiRoutes);
 

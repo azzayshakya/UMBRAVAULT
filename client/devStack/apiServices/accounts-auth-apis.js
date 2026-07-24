@@ -18,7 +18,20 @@ const checkVerificationCode = (postobj) => {
 }
 
 const loginUser = (postobj) => {
-  return axiosInstance.post(`${baseAPIURL}/login`, postobj).then((res) => res.data)
+  return axiosInstance.post(`${baseAPIURL}/auth/login`, postobj).then((res) => res.data)
+}
+const logOutUser = (postobj) => {
+  return axiosInstance.post(`${baseAPIURL}/auth/logout`, postobj).then((res) => res.data)
 }
 
-export { checkVerificationCode, createVerificationCode, isEmailAvailable, loginUser }
+const logOutAllSession = (postobj) => {
+  return axiosInstance.post(`${baseAPIURL}/auth/logout-all`, postobj).then((res) => res.data)
+}
+export {
+  checkVerificationCode,
+  createVerificationCode,
+  isEmailAvailable,
+  logOutAllSession,
+  logOutUser,
+  loginUser,
+}

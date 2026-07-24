@@ -1,4 +1,6 @@
 import { DeleteOutlined, LaptopOutlined, LogoutOutlined } from '@ant-design/icons'
+import { logOutAllSession, logOutUser } from '@devStack/apiServices/accounts-auth-apis'
+import { handleApiError } from '@devStack/apiServices/utils/handle-api-error'
 import { clearUserSession } from '@devStack/store/userSlice'
 import { redirectToLoginUtil } from '@devStack/utils/redirect-utils'
 import { removeUserSessionLocally } from '@devStack/utils/user-session-utils'
@@ -7,10 +9,37 @@ import { useDispatch, useSelector } from 'react-redux'
 export const ProfileTerminal = ({ user }) => {
   const authenticUser = useSelector((state) => state.user.user)
   const dispatch = useDispatch()
-  const handleLogout = () => {
-    dispatch(clearUserSession())
-    removeUserSessionLocally()
-    redirectToLoginUtil()
+  const handleLogout = async () => {
+    try {
+      await logOutUser()
+
+      dispatch(clearUserSession())
+      removeUserSessionLocally()
+
+      redirectToLoginUtil()
+    } catch (error) {
+      handleApiError(error)
+
+      dispatch(clearUserSession())
+      removeUserSessionLocally()
+      redirectToLoginUtil()
+    }
+  }
+  const handleLogoutAllSession = async () => {
+    try {
+      await logOutAllSession()
+
+      dispatch(clearUserSession())
+      removeUserSessionLocally()
+
+      redirectToLoginUtil()
+    } catch (error) {
+      handleApiError(error)
+
+      dispatch(clearUserSession())
+      removeUserSessionLocally()
+      redirectToLoginUtil()
+    }
   }
   return (
     <div
@@ -204,6 +233,7 @@ export const ProfileTerminal = ({ user }) => {
         }}
       >
         <button
+          onClick={handleLogoutAllSession}
           style={{
             flex: 1,
             height: 40,

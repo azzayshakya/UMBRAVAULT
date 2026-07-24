@@ -12,7 +12,7 @@ const terminateUserSessions = (postobj) => {
 }
 
 const getMySession = () => {
-  return axiosInstance.get(`${baseAPIURL}/my-session`).then((res) => res.data)
+  return axiosInstance.get(`${baseAPIURL}/auth/my-session`).then((res) => res.data)
 }
 
 const DUMMY_LOGIN_RESPONSE = {

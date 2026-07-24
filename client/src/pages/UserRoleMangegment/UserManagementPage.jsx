@@ -6,6 +6,7 @@ import { useMemo, useState } from 'react'
 import { RoleBadge, StatusBadge } from './components/Badges'
 import ChangeRoleModal from './components/ChangeRoleModal'
 import { useUsers } from './utils/useUsers'
+import { useGetAllUsers } from './hooks/useUserManagementApi'
 
 const actionBtnStyle = {
   width: 28,
@@ -21,24 +22,11 @@ const actionBtnStyle = {
 }
 
 const UserManagementPage = () => {
-  const { users, loading, patchUserRole } = useUsers()
+  const { users, loading, refetch } = useGetAllUsers()
   const [search, setSearch] = useState('')
   const [paramObj, setParamObj] = useState({ limit: 10, offset: 0, total: 0 })
   const [, setRefreshCounter] = useState(0)
   const [activeUser, setActiveUser] = useState(null)
-
-  const filtered = useMemo(() => {
-    if (!search.trim()) return users
-    const q = search.toLowerCase()
-    return users.filter(
-      (u) => u.username.toLowerCase().includes(q) || u.email.toLowerCase().includes(q)
-    )
-  }, [users, search])
-
-  const pageData = useMemo(() => {
-    const start = paramObj.offset * paramObj.limit
-    return filtered.slice(start, start + paramObj.limit)
-  }, [filtered, paramObj])
 
   const columns = [
     {
@@ -192,7 +180,7 @@ const UserManagementPage = () => {
 
         <div className="hacker-table">
           <CrudTable
-            tableData={pageData}
+            tableData={users}
             columns={columns}
             paramObj={{ ...paramObj, total: filtered.length }}
             setParamObj={setParamObj}
@@ -206,7 +194,7 @@ const UserManagementPage = () => {
         open={!!activeUser}
         user={activeUser}
         onClose={() => setActiveUser(null)}
-        onRoleChanged={patchUserRole}
+        onRoleChanged={{}}
       />
     </div>
   )

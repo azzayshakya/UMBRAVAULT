@@ -3,13 +3,13 @@ const { extractToken } = require("../../utils/tokenUtils/tokenExtractor");
 const ApiError = require("../../utils/apiError");
 const asyncHandler = require("../../utils/asyncHandler");
 const logger = require("../../utils/logger");
+const { accessToken } = require("../../config/jwt.config");
 
 const authenticateAccessToken = asyncHandler(async (req, res, next) => {
   const token = extractToken(req, {
     allowBearer: true,
     cookieKey: "accessToken",
   });
-
   if (!token) {
     throw ApiError.unauthorized("Access token missing");
   }
