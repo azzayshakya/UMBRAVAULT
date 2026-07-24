@@ -1,11 +1,10 @@
 import { UserOutlined, LockOutlined, MailFilled } from '@ant-design/icons'
-import { loginUser } from '@devStack/apiServices/accounts-auth-apis'
+import { CreateAccount } from '@devStack/apiServices/accounts-auth-apis'
 import { handleApiError } from '@devStack/apiServices/utils/handle-api-error'
 import Loader from '@devStack/components/spinners/Loader'
 import TerminalCard from '@devStack/components/Terminalcard'
-import { Form, Input, Button, Typography } from 'antd'
+import { Form, Input, Button, Typography, message } from 'antd'
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 
 const { Text } = Typography
 
@@ -29,21 +28,18 @@ const SignupPage = () => {
   const contentBgUrl = '/images/global/binary-bg.jpg'
   const [form] = Form.useForm()
   const [loading, setLoading] = useState(false)
-  const navigate = useNavigate()
 
   const onFinish = async (values) => {
     setLoading(true)
     try {
-      const res = await loginUser({
+      const res = await CreateAccount({
         email: values.email,
         password: values.password,
+        name: values.name,
       })
-
-      // Adjust to however your app persists the session, e.g.:
-      // localStorage.setItem('accessToken', res.accessToken)
-      navigate('/dashboard')
+      message.success(res?.message)
     } catch (err) {
-      handleApiError(err, 'Login failed. Check your credentials and try again.')
+      handleApiError(err, 'Account Creation failed. Check your credentials and try again.')
     } finally {
       setLoading(false)
     }
@@ -70,7 +66,7 @@ const SignupPage = () => {
       }}
     >
       <TerminalCard
-        title="Sign up"
+        title="Add User"
         prompt="root@auth:~#"
         maxWidth={420}
         footer={

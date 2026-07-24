@@ -16,6 +16,9 @@ const createVerificationCode = (postobj) => {
 const checkVerificationCode = (postobj) => {
   return axiosInstance.post(`${baseAPIURL}/verify-code`, postobj).then((res) => res.data)
 }
+const CreateAccount = (postobj) => {
+  return axiosInstance.post(`${baseAPIURL}/auth/signup`, postobj).then((res) => res.data)
+}
 
 const loginUser = (postobj) => {
   return axiosInstance.post(`${baseAPIURL}/auth/login`, postobj).then((res) => res.data)
@@ -34,4 +37,5 @@ export {
   logOutAllSession,
   logOutUser,
   loginUser,
+  CreateAccount,
 }
