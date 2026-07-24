@@ -11,6 +11,7 @@ const requestLogger = require("./middleware/request.logger");
 const errorHandler = require("./middleware/error.handler");
 const connectDB = require("./config/db");
 const redisClient = require("./services/redis.client");
+const mailService = require("./services/mail.service");
 connectDB();
 
 app.use(
