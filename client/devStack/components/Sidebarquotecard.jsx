@@ -21,7 +21,7 @@ const wrapStyle = {
     'linear-gradient(180deg, rgba(57,255,106,0.05), rgba(3,9,5,0.92)), var(--color-bg-container)',
   overflow: 'hidden',
   flexShrink: 0,
-  minHeight: '225px',
+  minHeight: '210px',
   // border: '2px red solid',
 }
 
@@ -33,7 +33,7 @@ const imageWrapStyle = {
 
 const imageStyle = {
   width: 100,
-  height: 'auto',
+  height: 89,
   filter: 'drop-shadow(0 0 10px rgba(57, 255, 106, 0.45))',
   opacity: 0.92,
   pointerEvents: 'none',
@@ -59,7 +59,7 @@ const tagStyle = {
 
 const SidebarQuoteCard = ({
   quotes = DEFAULT_QUOTES,
-  image = '/images/global/my-profile.jpg',
+  image = '/images/global/user_profile_2.png',
   intervalMs = 8000,
   collapsed = false,
 }) => {
