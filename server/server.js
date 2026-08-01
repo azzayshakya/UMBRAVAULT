@@ -23,7 +23,6 @@ app.use(express.json({ limit: "1mb" }));
 app.use(cookieParser());
 app.use(requestLogger);
 
-// make sure DB is connected before handling any request
 app.use(async (req, res, next) => {
   try {
     await connectDB();

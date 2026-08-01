@@ -3,9 +3,6 @@ const path = require("path");
 
 const { combine, timestamp, printf, colorize, errors, json } = winston.format;
 
-// ── Custom level styling ──────────────────────────────────────────────
-// Gives each level its own color + icon so you can scan logs by eye,
-// without reading the text.
 const LEVEL_STYLES = {
   error: { icon: "✖", color: "red" },
   warn: { icon: "⚠", color: "yellow" },
@@ -34,13 +31,10 @@ const devFormat = combine(
   timestamp({ format: "HH:mm:ss.SSS" }),
   errors({ stack: true }),
   printf(({ level, message, timestamp, stack, ...meta }) => {
-    // colorize() already wrapped `level` in ANSI codes, so strip it to
-    // get the plain name for icon/padding lookups.
     const plain = level.replace(/\x1b\[[0-9;]*m/g, "");
     const style = LEVEL_STYLES[plain] || { icon: "•" };
     const label = `${style.icon} ${plain.toUpperCase()}`.padEnd(PAD + 2);
 
-    // Re-colorize just the label so padding stays correct
     const colored = level
       .replace(plain.toUpperCase(), label)
       .replace(plain, label);
@@ -59,11 +53,12 @@ const devFormat = combine(
 
 const prodFormat = combine(timestamp(), errors({ stack: true }), json());
 
-const logger = winston.createLogger({
-  level: process.env.LOG_LEVEL || "http",
-  format: process.env.NODE_ENV === "production" ? prodFormat : devFormat,
-  transports: [
-    new winston.transports.Console(),
+const isVercel = !!process.env.VERCEL;
+
+const transports = [new winston.transports.Console()];
+
+if (!isVercel) {
+  transports.push(
     new winston.transports.File({
       filename: path.join(__dirname, "..", "logs", "error.log"),
       level: "error",
@@ -71,7 +66,13 @@ const logger = winston.createLogger({
     new winston.transports.File({
       filename: path.join(__dirname, "..", "logs", "combined.log"),
     }),
-  ],
+  );
+}
+
+const logger = winston.createLogger({
+  level: process.env.LOG_LEVEL || "http",
+  format: process.env.NODE_ENV === "production" ? prodFormat : devFormat,
+  transports,
   exitOnError: false,
 });
 
