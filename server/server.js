@@ -18,7 +18,25 @@ const aiRoutes = require("./routes/ai.routes");
 const app = express();
 
 app.use(compression());
-app.use(cors({ origin: true, credentials: true }));
+const allowedOrigins = [
+  "https://umbravault.vercel.app",
+  "http://localhost:3005",
+];
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true, // if you're sending cookies/auth headers
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  }),
+);
 app.use(express.json({ limit: "1mb" }));
 app.use(cookieParser());
 app.use(requestLogger);
