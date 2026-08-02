@@ -1,6 +1,6 @@
 const userModel = require("../models/user.model");
 const ApiError = require("../utils/apiError");
-const ApiResponse = require("../utils/ApiResponse");
+const ApiResponse = require("../utils/apiResponse");
 const logger = require("../utils/logger");
 
 const VALID_ROLES = ["user", "admin", "superadmin"];
