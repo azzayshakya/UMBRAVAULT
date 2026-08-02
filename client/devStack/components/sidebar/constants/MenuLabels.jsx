@@ -4,6 +4,7 @@ export const MENU_LABELS = {
   my_profile: 'My Profile',
   add_user: 'Add User',
   role_management: 'Role Management',
+  task_management: 'Task Management',
 }
 
 export const getMenuLabel = (key) => {

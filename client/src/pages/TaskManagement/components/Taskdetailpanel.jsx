@@ -1,0 +1,309 @@
+import {
+  ClockCircleOutlined,
+  CloseOutlined,
+  DeleteOutlined,
+  HistoryOutlined,
+  PlusOutlined,
+} from '@ant-design/icons'
+import ReusableAntdTag from '@devStack/components/AntdTag/ReusableAntdTag'
+import {
+  TASK_PRIORITY_BADGE_CONFIG,
+  TASK_PRIORITY_OPTIONS,
+  TASK_STATUS_BADGE_CONFIG,
+  TASK_STATUS_OPTIONS,
+} from '@devStack/enums/task-page-enums'
+import { DatePicker, Input, Select } from 'antd'
+import dayjs from 'dayjs'
+import { useEffect, useState } from 'react'
+
+const daysLeftLabel = (dueDate) => {
+  if (!dueDate) return '—'
+  const diff = dayjs(dueDate).startOf('day').diff(dayjs().startOf('day'), 'day')
+  if (diff < 0) return `${Math.abs(diff)}d overdue`
+  if (diff === 0) return 'due today'
+  return `${diff} days left`
+}
+
+const selectVarStyle = {
+  background: 'rgba(6, 18, 10, 0.6)',
+  border: '1px solid var(--term-border)',
+}
+
+const TaskDetailPanel = ({
+  task,
+  onClose,
+  onStatusChange,
+  onPriorityChange,
+  onDueDateChange,
+  onAddSubtask,
+  onToggleSubtask,
+  onDeleteSubtask,
+  fetchActivity,
+}) => {
+  const [activity, setActivity] = useState([])
+  const [activityLoading, setActivityLoading] = useState(false)
+  const [newSubtask, setNewSubtask] = useState('')
+
+  useEffect(() => {
+    if (!task?._id) return
+    let cancelled = false
+    setActivityLoading(true)
+    fetchActivity(task._id).then((log) => {
+      if (!cancelled) setActivity(log)
+      setActivityLoading(false)
+    })
+    return () => {
+      cancelled = true
+    }
+  }, [task?._id, fetchActivity])
+
+  if (!task) return null
+
+  const doneCount = task.subtasks?.filter((s) => s.isDone).length || 0
+  const totalCount = task.subtasks?.length || 0
+  const progressPct = totalCount ? Math.round((doneCount / totalCount) * 100) : 0
+
+  const handleAddSubtask = () => {
+    const title = newSubtask.trim()
+    if (!title) return
+    onAddSubtask(task._id, title)
+    setNewSubtask('')
+  }
+
+  return (
+    <div className="terminal-frame" style={{ width: 340, flexShrink: 0, alignSelf: 'flex-start' }}>
+      <span className="terminal-frame__corner terminal-frame__corner--tl" />
+      <span className="terminal-frame__corner terminal-frame__corner--tr" />
+      <span className="terminal-frame__corner terminal-frame__corner--bl" />
+      <span className="terminal-frame__corner terminal-frame__corner--br" />
+      <span className="terminal-frame__scanlines" />
+      <span className="terminal-frame__beam" />
+
+      <div className="terminal-frame__header">
+        <span
+          className="terminal-frame__prompt"
+          style={{ display: 'flex', alignItems: 'center', gap: 6 }}
+        >
+          <span style={{ color: 'var(--term-green)' }}>●</span>
+          {task.taskCode || task._id?.slice(-6).toUpperCase()}
+        </span>
+        <button type="button" className="terminal-frame__close" onClick={onClose}>
+          <CloseOutlined style={{ fontSize: 10 }} />
+        </button>
+      </div>
+
+      <div
+        className="terminal-frame__body"
+        style={{ display: 'flex', flexDirection: 'column', gap: 16 }}
+      >
+        <div>
+          <div
+            style={{
+              color: 'var(--term-text-muted)',
+              fontSize: 11,
+              letterSpacing: 1,
+              marginBottom: 4,
+            }}
+          >
+            {'>'} STATUS
+          </div>
+          <Select
+            value={task.status}
+            options={TASK_STATUS_OPTIONS}
+            style={{ width: '100%' }}
+            className="hacker-table"
+            onChange={(v) => onStatusChange(task._id, v)}
+            optionRender={(opt) => (
+              <ReusableAntdTag config={TASK_STATUS_BADGE_CONFIG} status={opt.value} />
+            )}
+            labelRender={() => (
+              <ReusableAntdTag config={TASK_STATUS_BADGE_CONFIG} status={task.status} />
+            )}
+          />
+        </div>
+
+        <div>
+          <div
+            style={{
+              color: 'var(--term-text-muted)',
+              fontSize: 11,
+              letterSpacing: 1,
+              marginBottom: 4,
+            }}
+          >
+            {'>'} PRIORITY
+          </div>
+          <Select
+            value={task.priority}
+            options={TASK_PRIORITY_OPTIONS}
+            style={{ width: '100%' }}
+            onChange={(v) => onPriorityChange(task._id, v)}
+            optionRender={(opt) => (
+              <ReusableAntdTag config={TASK_PRIORITY_BADGE_CONFIG} status={opt.value} />
+            )}
+            labelRender={() => (
+              <ReusableAntdTag config={TASK_PRIORITY_BADGE_CONFIG} status={task.priority} />
+            )}
+          />
+        </div>
+
+        <div>
+          <div
+            style={{
+              color: 'var(--term-text-muted)',
+              fontSize: 11,
+              letterSpacing: 1,
+              marginBottom: 4,
+            }}
+          >
+            <ClockCircleOutlined /> DUE DATE
+          </div>
+          <DatePicker
+            value={task.dueDate ? dayjs(task.dueDate) : null}
+            style={{ width: '100%', ...selectVarStyle }}
+            onChange={(d) => onDueDateChange(task._id, d ? d.toISOString() : null)}
+          />
+          <div style={{ color: 'var(--term-green-dim)', fontSize: 11, marginTop: 4 }}>
+            {daysLeftLabel(task.dueDate)}
+          </div>
+        </div>
+
+        <div>
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              color: 'var(--term-text-muted)',
+              fontSize: 11,
+              letterSpacing: 1,
+              marginBottom: 6,
+            }}
+          >
+            <span>{'>'} SUBTASKS</span>
+            <span style={{ color: 'var(--term-green)' }}>
+              {doneCount} / {totalCount}
+            </span>
+          </div>
+
+          <div
+            style={{
+              height: 4,
+              background: 'rgba(57,255,106,0.1)',
+              borderRadius: 2,
+              overflow: 'hidden',
+              marginBottom: 10,
+            }}
+          >
+            <div
+              style={{
+                height: '100%',
+                width: `${progressPct}%`,
+                background: 'var(--term-green)',
+                boxShadow: '0 0 8px var(--term-green)',
+                transition: 'width 0.3s ease',
+              }}
+            />
+          </div>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 6, marginBottom: 8 }}>
+            {task.subtasks?.map((s) => (
+              <div
+                key={s._id}
+                style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12.5 }}
+              >
+                <input
+                  type="checkbox"
+                  checked={s.isDone}
+                  onChange={(e) => onToggleSubtask(task._id, s._id, e.target.checked)}
+                  style={{ accentColor: 'var(--term-green)', cursor: 'pointer' }}
+                />
+                <span
+                  style={{
+                    flex: 1,
+                    color: s.isDone ? 'var(--term-text-muted)' : 'var(--term-text)',
+                    textDecoration: s.isDone ? 'line-through' : 'none',
+                  }}
+                >
+                  {s.title}
+                </span>
+                <DeleteOutlined
+                  style={{ color: 'var(--term-text-muted)', cursor: 'pointer', fontSize: 11 }}
+                  onClick={() => onDeleteSubtask(task._id, s._id)}
+                />
+              </div>
+            ))}
+          </div>
+
+          <div style={{ display: 'flex', gap: 6 }}>
+            <Input
+              size="small"
+              placeholder="add subtask..."
+              value={newSubtask}
+              onChange={(e) => setNewSubtask(e.target.value)}
+              onPressEnter={handleAddSubtask}
+            />
+            <button
+              type="button"
+              onClick={handleAddSubtask}
+              style={{
+                border: '1px solid var(--term-border)',
+                background: 'transparent',
+                color: 'var(--term-green)',
+                borderRadius: 5,
+                padding: '0 8px',
+                cursor: 'pointer',
+              }}
+            >
+              <PlusOutlined style={{ fontSize: 11 }} />
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div className="terminal-frame__footer">
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 6,
+            color: 'var(--term-green)',
+            fontSize: 11,
+            letterSpacing: 1,
+            marginBottom: 8,
+          }}
+        >
+          <HistoryOutlined /> ACTIVITY LOG
+        </div>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 10,
+            maxHeight: 180,
+            overflowY: 'auto',
+          }}
+        >
+          {activityLoading && (
+            <span style={{ color: 'var(--term-text-muted)', fontSize: 11 }}>reading log...</span>
+          )}
+          {!activityLoading && activity.length === 0 && (
+            <span style={{ color: 'var(--term-text-muted)', fontSize: 11 }}>no entries yet</span>
+          )}
+          {activity.map((entry) => (
+            <div key={entry._id} style={{ fontSize: 11, lineHeight: 1.5 }}>
+              <div style={{ color: 'var(--term-green-dim)' }}>
+                [{dayjs(entry.createdAt).format('YYYY-MM-DD HH:mm:ss')}]
+              </div>
+              <div style={{ color: 'var(--term-text)' }}>{entry.message}</div>
+              <div style={{ color: 'var(--term-text-muted)' }}>
+                by {entry.performedBy?.username || entry.performedBy?.name || 'system'}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export default TaskDetailPanel

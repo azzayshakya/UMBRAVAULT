@@ -5,7 +5,8 @@ export const ROUTES = {
   [MENU_KEYS.ABOUT]: '/about',
   [MENU_KEYS.MY_PROFILE]: '/profile',
   [MENU_KEYS.ADD_USER]: '/users/add',
-  [MENU_KEYS.ROLE_MANAGEMENT]: '/roles',
+  [MENU_KEYS.ROLE_MANAGEMENT]: '/roles-management',
+  [MENU_KEYS.TASK_MANAGEMENT]: '/task-management',
 }
 
 export const getRoute = (key) => {

@@ -11,6 +11,7 @@ export const ROUTE_ELEMENTS = {
   [MENU_KEYS.ADD_USER]: lazy(() => import('@/pages/Auth/Register')),
 
   [MENU_KEYS.ROLE_MANAGEMENT]: lazy(() => import('@/pages/UserRoleMangegment/UserManagementPage')),
+  [MENU_KEYS.TASK_MANAGEMENT]: lazy(() => import('@/pages/TaskManagement/Taskmanagementpage')),
 }
 
 export default ROUTE_ELEMENTS

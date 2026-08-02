@@ -4,6 +4,7 @@ export const MENU_KEYS = {
   MY_PROFILE: 'my_profile',
   ADD_USER: 'add_user',
   ROLE_MANAGEMENT: 'role_management',
+  TASK_MANAGEMENT: 'task_management',
 }
 
 export default MENU_KEYS

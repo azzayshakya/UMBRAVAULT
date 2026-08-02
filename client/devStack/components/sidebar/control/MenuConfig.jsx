@@ -35,6 +35,11 @@ export const MENU_CONFIG = [
     label: MENU_LABELS.role_management,
     icon: SafetyOutlined,
   },
+  {
+    key: MENU_KEYS.TASK_MANAGEMENT,
+    label: MENU_LABELS.task_management,
+    icon: SafetyOutlined,
+  },
 ]
 
 export default MENU_CONFIG
