@@ -87,35 +87,34 @@ axiosInstance.interceptors.response.use(
       }
     }
 
-    // ── Parse error message via shared util ──────────────────────────────
     const errorMessage = parseApiError(error)
 
-    // ── Per-status side effects ──────────────────────────────────────────
     switch (status) {
       case 400:
       case 409:
       case 429:
-        return Promise.reject(errorMessage)
+      case 422:
+        return Promise.reject(error)
 
       case 401:
         message.error(errorMessage)
         removeUserSessionLocally()
         redirectToLoginUtil()
-        return Promise.reject(errorMessage)
+        return Promise.reject(error)
 
       case 403:
         message.error(errorMessage)
-        return Promise.reject(errorMessage)
+        return Promise.reject(error)
 
       case 404:
         message.error(errorMessage)
-        // TODO: Route to 404 page
-        return Promise.reject(errorMessage)
+        return Promise.reject(error)
 
       case 500:
+      case 502:
+      case 503:
         message.error(errorMessage)
-        // TODO: Route to 500 page
-        return Promise.reject(errorMessage)
+        return Promise.reject(error)
 
       default:
         message.error(errorMessage)
