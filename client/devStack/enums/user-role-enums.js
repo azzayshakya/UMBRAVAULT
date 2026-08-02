@@ -25,8 +25,8 @@ export const ROLE_RANK = Object.freeze({
 export const ASSIGNABLE_ROLES = [USER_ROLES.USER, USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN]
 
 export const ROLE_BADGE_CONFIG = Object.freeze({
-  [USER_ROLES.ADMIN]: { label: USER_ROLE_LABELS[USER_ROLES.ADMIN], color: 'geekblue' },
-  [USER_ROLES.SUPER_ADMIN]: { label: USER_ROLE_LABELS[USER_ROLES.SUPER_ADMIN], color: 'volcano' },
-  [USER_ROLES.USER]: { label: USER_ROLE_LABELS[USER_ROLES.USER], color: 'default' },
-  [USER_ROLES.TESTER]: { label: USER_ROLE_LABELS[USER_ROLES.TESTER], color: 'purple' },
+  [USER_ROLES.ADMIN]: { label: USER_ROLE_LABELS[USER_ROLES.ADMIN], color: 'blue' },
+  [USER_ROLES.SUPER_ADMIN]: { label: USER_ROLE_LABELS[USER_ROLES.SUPER_ADMIN], color: 'red' },
+  [USER_ROLES.USER]: { label: USER_ROLE_LABELS[USER_ROLES.USER], color: 'purple' },
+  [USER_ROLES.TESTER]: { label: USER_ROLE_LABELS[USER_ROLES.TESTER], color: 'default' },
 })

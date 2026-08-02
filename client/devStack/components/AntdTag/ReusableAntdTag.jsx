@@ -42,12 +42,13 @@ export default function ReusableAntdTag({
     alignItems: 'center',
     justifyContent: 'center',
     textAlign: 'center',
-    border: bordered ? undefined : 'none',
+    border: bordered ? `1px solid ${FinalColor}` : 'none',
     textTransform: uppercase ? 'uppercase' : 'none',
     color: textColor,
     cursor: 'default',
     userSelect: 'none',
     minWidth: sizeStyle,
+    borderRadius: '5px',
     ...style,
   }
 

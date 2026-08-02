@@ -12,7 +12,7 @@ import {
   TASK_STATUS_BADGE_CONFIG,
   TASK_STATUS_OPTIONS,
 } from '@devStack/enums/task-page-enums'
-import { DatePicker, Input, Select } from 'antd'
+import { DatePicker, Input, Select, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 
@@ -217,17 +217,30 @@ const TaskDetailPanel = ({
                   onChange={(e) => onToggleSubtask(task._id, s._id, e.target.checked)}
                   style={{ accentColor: 'var(--term-green)', cursor: 'pointer' }}
                 />
-                <span
-                  style={{
-                    flex: 1,
-                    color: s.isDone ? 'var(--term-text-muted)' : 'var(--term-text)',
-                    textDecoration: s.isDone ? 'line-through' : 'none',
-                  }}
-                >
-                  {s.title}
-                </span>
+                <Tooltip title={s?.title}>
+                  <span
+                    style={{
+                      flex: 1,
+                      color: s.isDone ? 'var(--term-text-muted)' : 'var(--term-text)',
+                      textDecoration: s.isDone ? 'line-through' : 'none',
+                      overflow: 'hidden',
+                      whiteSpace: 'nowrap',
+                      textOverflow: 'ellipsis',
+                    }}
+                  >
+                    {s.title}
+                  </span>
+                </Tooltip>
                 <DeleteOutlined
-                  style={{ color: 'var(--term-text-muted)', cursor: 'pointer', fontSize: 11 }}
+                  style={{
+                    color: 'var(--primitive-red-500)',
+                    cursor: 'pointer',
+                    fontSize: 11,
+                    border: '1px var(--primitive-red-500) solid',
+                    padding: '5px',
+                    borderRadius: '5px',
+                    // fontWeight: '700',
+                  }}
                   onClick={() => onDeleteSubtask(task._id, s._id)}
                 />
               </div>
@@ -294,7 +307,16 @@ const TaskDetailPanel = ({
               <div style={{ color: 'var(--term-green-dim)' }}>
                 [{dayjs(entry.createdAt).format('YYYY-MM-DD HH:mm:ss')}]
               </div>
-              <div style={{ color: 'var(--term-text)' }}>{entry.message}</div>
+              <div
+                style={{
+                  color: 'var(--term-text)',
+                  overflow: 'hidden',
+                  whiteSpace: 'nowrap',
+                  textOverflow: 'ellipsis',
+                }}
+              >
+                {entry.message}
+              </div>
               <div style={{ color: 'var(--term-text-muted)' }}>
                 by {entry.performedBy?.username || entry.performedBy?.name || 'system'}
               </div>
