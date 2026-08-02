@@ -4,10 +4,9 @@ const {
 const { extractToken } = require("../../utils/tokenUtils/tokenExtractor");
 const tokenService = require("../../services/token.service");
 const ApiError = require("../../utils/apiError");
-const asyncHandler = require("../../utils/asyncHandler");
 const logger = require("../../utils/logger");
 
-const verifyRefreshToken = asyncHandler(async (req, res, next) => {
+const verifyRefreshToken = async (req, res, next) => {
   const token = extractToken(req, {
     cookieKey: "refreshToken",
     bodyKey: "refreshToken",
@@ -46,6 +45,6 @@ const verifyRefreshToken = asyncHandler(async (req, res, next) => {
 
   req.refreshPayload = { userId: decoded.sub, deviceId };
   next();
-});
+};
 
 module.exports = { verifyRefreshToken };

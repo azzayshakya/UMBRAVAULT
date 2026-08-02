@@ -1,8 +1,7 @@
 const redisClient = require("../../services/redis.client");
 const ApiError = require("../../utils/apiError");
-const asyncHandler = require("../../utils/asyncHandler");
 
-const checkTokenBlacklist = asyncHandler(async (req, res, next) => {
+const checkTokenBlacklist = async (req, res, next) => {
   const { jti } = req.user;
   const isBlacklisted = await redisClient.get(`blacklist:${jti}`);
 
@@ -11,6 +10,6 @@ const checkTokenBlacklist = asyncHandler(async (req, res, next) => {
   }
 
   next();
-});
+};
 
 module.exports = checkTokenBlacklist;

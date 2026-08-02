@@ -5,7 +5,6 @@ const { generateTokenPair } = require("../utils/tokenUtils/tokenSigner");
 const tokenService = require("../services/token.service");
 const ApiError = require("../utils/apiError");
 const ApiResponse = require("../utils/apiResponse");
-const asyncHandler = require("../utils/asyncHandler");
 const logger = require("../utils/logger");
 const generateUniqueUsername = require("../utils/generateUniqueUsername");
 
@@ -45,8 +44,7 @@ function getAccessTokenTtlSeconds(req) {
   return decoded?.exp ? decoded.exp - Math.floor(Date.now() / 1000) : 900;
 }
 
-// ── POST /signup ─────────────────────────────────────────────────────
-const signup = asyncHandler(async (req, res) => {
+const signup = async (req, res) => {
   const { name, email, password } = req.body;
 
   const existingUser = await User.findOne({ email });
@@ -77,9 +75,9 @@ const signup = asyncHandler(async (req, res) => {
         "Account created successfully",
       ),
     );
-});
+};
 
-const login = asyncHandler(async (req, res) => {
+const login = async (req, res) => {
   const { email, password, deviceId } = req.body;
 
   const user = await User.findOne({ email }).select("+password");
@@ -109,9 +107,9 @@ const login = asyncHandler(async (req, res) => {
       "Logged in successfully",
     ),
   );
-});
+};
 
-const refreshToken = asyncHandler(async (req, res) => {
+const refreshToken = async (req, res) => {
   const { userId, deviceId } = req.refreshPayload;
 
   const user = await User.findById(userId);
@@ -132,18 +130,18 @@ const refreshToken = asyncHandler(async (req, res) => {
         "Token refreshed",
       ),
     );
-});
+};
 
-const getMyProfile = asyncHandler(async (req, res) => {
+const getMyProfile = async (req, res) => {
   const user = await User.findById(req.user.id);
   if (!user) throw ApiError.notFound("User not found");
 
   return res
     .status(200)
     .json(ApiResponse(200, { user: toSafeUser(user) }, "Profile fetched"));
-});
+};
 
-const logout = asyncHandler(async (req, res) => {
+const logout = async (req, res) => {
   const { id, jti } = req.user;
   const deviceId = req.cookies?.deviceId || req.body?.deviceId || "default";
 
@@ -159,9 +157,9 @@ const logout = asyncHandler(async (req, res) => {
   return res
     .status(200)
     .json(ApiResponse(200, null, "Logged out successfully"));
-});
+};
 
-const logoutAllSessions = asyncHandler(async (req, res) => {
+const logoutAllSessions = async (req, res) => {
   const { id, jti } = req.user;
 
   const ttlSeconds = getAccessTokenTtlSeconds(req);
@@ -176,9 +174,9 @@ const logoutAllSessions = asyncHandler(async (req, res) => {
   return res
     .status(200)
     .json(ApiResponse(200, null, "Logged out from all devices"));
-});
+};
 
-const blockUser = asyncHandler(async (req, res) => {
+const blockUser = async (req, res) => {
   const { id } = req.params;
 
   const user = await User.findById(id);
@@ -195,9 +193,9 @@ const blockUser = asyncHandler(async (req, res) => {
   return res
     .status(200)
     .json(ApiResponse(200, null, "User blocked successfully"));
-});
+};
 
-const terminateSession = asyncHandler(async (req, res) => {
+const terminateSession = async (req, res) => {
   const { sessionId } = req.params;
   const { userId } = req.query;
 
@@ -214,7 +212,7 @@ const terminateSession = asyncHandler(async (req, res) => {
   return res
     .status(200)
     .json(ApiResponse(200, null, "Session terminated successfully"));
-});
+};
 
 module.exports = {
   signup,

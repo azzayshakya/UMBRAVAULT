@@ -3,7 +3,7 @@ require("dotenv").config();
 module.exports = {
   accessToken: {
     secret: process.env.JWT_ACCESS_SECRET,
-    expiresIn: process.env.JWT_ACCESS_EXPIRY || "1d", // short-lived by design
+    expiresIn: process.env.JWT_ACCESS_EXPIRY || "15m",
   },
   refreshToken: {
     secret: process.env.JWT_REFRESH_SECRET,

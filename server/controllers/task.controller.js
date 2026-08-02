@@ -1,7 +1,6 @@
 const Task = require("../models/task.model");
 const ApiError = require("../utils/apiError");
 const ApiResponse = require("../utils/apiResponse");
-const asyncHandler = require("../utils/asyncHandler");
 const logger = require("../utils/logger");
 
 const {
@@ -44,7 +43,7 @@ function assertValidPriority(priority) {
 }
 
 // ── GET /tasks ────────────────────────────────────────────────────────
-const getAllTasks = asyncHandler(async (req, res) => {
+const getAllTasks = async (req, res) => {
   const {
     status,
     priority,
@@ -132,10 +131,10 @@ const getAllTasks = asyncHandler(async (req, res) => {
       "Tasks fetched successfully",
     ),
   );
-});
+};
 
 // ── GET /tasks/stats ──────────────────────────────────────────────────
-const getTaskStats = asyncHandler(async (req, res) => {
+const getTaskStats = async (req, res) => {
   const now = new Date();
 
   const [total, statusCounts, overdue] = await Promise.all([
@@ -169,10 +168,10 @@ const getTaskStats = asyncHandler(async (req, res) => {
       "Task stats fetched successfully",
     ),
   );
-});
+};
 
 // ── GET /tasks/:id ────────────────────────────────────────────────────
-const getTaskById = asyncHandler(async (req, res) => {
+const getTaskById = async (req, res) => {
   const task = await Task.findById(req.params.id)
     .populate("createdBy", "name email username")
     .populate("activityLog.performedBy", "name email username");
@@ -182,10 +181,10 @@ const getTaskById = asyncHandler(async (req, res) => {
   return res
     .status(200)
     .json(ApiResponse(200, { task }, "Task fetched successfully"));
-});
+};
 
 // ── POST /tasks ───────────────────────────────────────────────────────
-const createTask = asyncHandler(async (req, res) => {
+const createTask = async (req, res) => {
   const { title, description, project, tags, status, priority, dueDate } =
     req.body;
 
@@ -211,10 +210,10 @@ const createTask = asyncHandler(async (req, res) => {
   return res
     .status(201)
     .json(ApiResponse(201, { task }, "Task created successfully"));
-});
+};
 
 // ── PATCH /tasks/:id ──────────────────────────────────────────────────
-const updateTask = asyncHandler(async (req, res) => {
+const updateTask = async (req, res) => {
   const task = await Task.findById(req.params.id);
   if (!task) throw ApiError.notFound("Task not found");
 
@@ -259,10 +258,10 @@ const updateTask = asyncHandler(async (req, res) => {
   return res
     .status(200)
     .json(ApiResponse(200, { task }, "Task updated successfully"));
-});
+};
 
 // ── DELETE /tasks/:id ─────────────────────────────────────────────────
-const deleteTask = asyncHandler(async (req, res) => {
+const deleteTask = async (req, res) => {
   const task = await Task.findByIdAndDelete(req.params.id);
   if (!task) throw ApiError.notFound("Task not found");
 
@@ -270,10 +269,10 @@ const deleteTask = asyncHandler(async (req, res) => {
   return res
     .status(200)
     .json(ApiResponse(200, null, "Task deleted successfully"));
-});
+};
 
 // ── POST /tasks/:id/subtasks ──────────────────────────────────────────
-const addSubtask = asyncHandler(async (req, res) => {
+const addSubtask = async (req, res) => {
   const { title } = req.body;
   if (!title) throw ApiError.badRequest("Subtask title is required");
 
@@ -292,10 +291,10 @@ const addSubtask = asyncHandler(async (req, res) => {
   return res
     .status(201)
     .json(ApiResponse(201, { task }, "Subtask added successfully"));
-});
+};
 
 // ── PATCH /tasks/:id/subtasks/:subtaskId ──────────────────────────────
-const updateSubtask = asyncHandler(async (req, res) => {
+const updateSubtask = async (req, res) => {
   const { id, subtaskId } = req.params;
   const { title, isDone } = req.body;
 
@@ -319,10 +318,10 @@ const updateSubtask = asyncHandler(async (req, res) => {
   return res
     .status(200)
     .json(ApiResponse(200, { task }, "Subtask updated successfully"));
-});
+};
 
 // ── DELETE /tasks/:id/subtasks/:subtaskId ─────────────────────────────
-const deleteSubtask = asyncHandler(async (req, res) => {
+const deleteSubtask = async (req, res) => {
   const { id, subtaskId } = req.params;
 
   const task = await Task.findById(id);
@@ -345,10 +344,10 @@ const deleteSubtask = asyncHandler(async (req, res) => {
   return res
     .status(200)
     .json(ApiResponse(200, { task }, "Subtask deleted successfully"));
-});
+};
 
 // ── GET /tasks/:id/activity ────────────────────────────────────────────
-const getTaskActivity = asyncHandler(async (req, res) => {
+const getTaskActivity = async (req, res) => {
   const task = await Task.findById(req.params.id)
     .select("activityLog")
     .populate("activityLog.performedBy", "name email username");
@@ -362,7 +361,7 @@ const getTaskActivity = asyncHandler(async (req, res) => {
   return res
     .status(200)
     .json(ApiResponse(200, { activity }, "Activity log fetched successfully"));
-});
+};
 
 module.exports = {
   getAllTasks,
