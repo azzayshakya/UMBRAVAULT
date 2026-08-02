@@ -21,6 +21,7 @@ export default function CrudTable({
 
   return (
     <ModeTable
+      className="hacker-table"
       size="small"
       dataSource={tableData}
       columns={columns}

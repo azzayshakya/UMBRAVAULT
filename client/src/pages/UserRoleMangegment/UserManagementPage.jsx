@@ -98,48 +98,6 @@ const UserManagementPage = () => {
 
   return (
     <div style={{ fontFamily: 'var(--term-font)' }}>
-      <style>{`
-        .hacker-table .ant-table {
-          background: transparent;
-        }
-        .hacker-table .ant-table-thead > tr > th {
-          background: rgba(57, 255, 106, 0.05) !important;
-          color: var(--term-green) !important;
-          border-bottom: 1px solid var(--term-border) !important;
-          font-family: var(--term-font);
-          font-size: 11px;
-          letter-spacing: 1px;
-          text-transform: uppercase;
-        }
-        .hacker-table .ant-table-tbody > tr > td {
-          background: transparent !important;
-          border-bottom: 1px solid var(--term-border) !important;
-          color: var(--term-text);
-          font-size: 12px;
-        }
-        .hacker-table .ant-table-tbody > tr:hover > td {
-          background: rgba(57, 255, 106, 0.06) !important;
-        }
-        .hacker-table .ant-pagination-item,
-        .hacker-table .ant-pagination-prev .ant-pagination-item-link,
-        .hacker-table .ant-pagination-next .ant-pagination-item-link {
-          background: transparent !important;
-          border: 1px solid var(--term-border) !important;
-          color: var(--term-text-muted) !important;
-        }
-        .hacker-table .ant-pagination-item-active {
-          border-color: var(--term-green) !important;
-        }
-        .hacker-table .ant-pagination-item-active a {
-          color: var(--term-green) !important;
-        }
-        .hacker-table .ant-select-selector {
-          background: transparent !important;
-          border: 1px solid var(--term-border) !important;
-          color: var(--term-text) !important;
-        }
-      `}</style>
-
       <div style={{ marginBottom: 20 }}>
         <h1
           style={{
@@ -198,7 +156,7 @@ const UserManagementPage = () => {
           </button>
         </div>
 
-        <div className="hacker-table">
+        <div>
           <CrudTable
             tableData={filteredUsers}
             columns={columns}

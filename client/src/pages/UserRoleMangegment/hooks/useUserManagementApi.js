@@ -1,24 +1,21 @@
 import { getAllUserData, updateUserRole } from '@devStack/apiServices/user-api'
+import { handleApiError } from '@devStack/apiServices/utils/handle-api-error'
 import { useCallback, useEffect, useState } from 'react'
 
 export const useUserManagementApi = () => {
   const [users, setUsers] = useState([])
   const [loading, setLoading] = useState(false)
-  const [error, setError] = useState(null)
-
   const [submitting, setSubmitting] = useState(false)
   const [updateError, setUpdateError] = useState(null)
 
   const fetchUsers = useCallback(async () => {
     try {
       setLoading(true)
-      setError(null)
       const response = await getAllUserData()
       setUsers(response?.data?.users || [])
     } catch (err) {
-      console.error(err)
       setUsers([])
-      setError(err?.response?.data?.message || err?.message || 'Failed to load users')
+      handleApiError(err)
     } finally {
       setLoading(false)
     }
@@ -36,7 +33,7 @@ export const useUserManagementApi = () => {
       }
       return { success: true, data: res }
     } catch (err) {
-      console.error(err)
+      handleApiError(err)
       const msg =
         err?.response?.data?.message ||
         err?.message ||
@@ -53,12 +50,9 @@ export const useUserManagementApi = () => {
   }, [fetchUsers])
 
   return {
-    // fetch
     users,
     loading,
-    error,
     refetch: fetchUsers,
-    // update
     changeUserRole,
     submitting,
     updateError,
