@@ -1,5 +1,5 @@
 const ai = require("../config/gemini.config");
-const ApiError = require("../utils/ApiError");
+const ApiError = require("../utils/apiError");
 const logger = require("../utils/logger");
 
 const DEFAULT_MODEL = process.env.GEMINI_MODEL || "gemini-3.5-flash";

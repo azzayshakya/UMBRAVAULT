@@ -1,7 +1,7 @@
 const nodemailer = require("nodemailer");
 const mailConfig = require("../config/mail.config");
 const logger = require("../utils/logger");
-const ApiError = require("../utils/ApiError");
+const ApiError = require("../utils/apiError");
 
 const FROM_ADDRESS = process.env.MAIL_FROM || "no-reply@yourapp.com";
 

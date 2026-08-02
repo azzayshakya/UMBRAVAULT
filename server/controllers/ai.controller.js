@@ -1,7 +1,7 @@
 const aiService = require("../services/ai.service");
 const logger = require("../utils/logger");
 const ApiResponse = require("../utils/ApiResponse");
-const ApiError = require("../utils/ApiError");
+const ApiError = require("../utils/apiError");
 
 const generateText = async (req, res, next) => {
   try {
