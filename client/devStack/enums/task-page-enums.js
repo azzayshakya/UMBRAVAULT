@@ -20,21 +20,46 @@ export const TASK_PRIORITY_VALUES = Object.values(TASK_PRIORITY)
 //    <ReusableAntdTag config={...} status={record.status} /> ────────────────
 
 export const TASK_STATUS_BADGE_CONFIG = {
-  [TASK_STATUS.BACKLOG]: { label: 'BACKLOG', color: '#4da3ff' },
-  [TASK_STATUS.IN_PROGRESS]: { label: 'IN PROGRESS', color: '#f5c542' },
-  [TASK_STATUS.REVIEW]: { label: 'REVIEW', color: '#a855f7' },
-  [TASK_STATUS.BLOCKED]: { label: 'BLOCKED', color: '#ef4444' },
-  [TASK_STATUS.DONE]: { label: 'DONE', color: '#39ff6a' },
+  [TASK_STATUS.BACKLOG]: {
+    label: 'BACKLOG',
+    color: 'blue',
+  },
+  [TASK_STATUS.IN_PROGRESS]: {
+    label: 'IN PROGRESS',
+    color: 'cyan',
+  },
+  [TASK_STATUS.REVIEW]: {
+    label: 'REVIEW',
+    color: 'gold',
+  },
+  [TASK_STATUS.BLOCKED]: {
+    label: 'BLOCKED',
+    color: 'volcano',
+  },
+  [TASK_STATUS.DONE]: {
+    label: 'DONE',
+    color: 'green',
+  },
 }
 
 export const TASK_PRIORITY_BADGE_CONFIG = {
-  [TASK_PRIORITY.LOW]: { label: 'LOW', color: '#64748b' },
-  [TASK_PRIORITY.MEDIUM]: { label: 'MEDIUM', color: '#f59e0b' },
-  [TASK_PRIORITY.HIGH]: { label: 'HIGH', color: '#f97316' },
-  [TASK_PRIORITY.URGENT]: { label: 'URGENT', color: '#ef4444' },
+  [TASK_PRIORITY.LOW]: {
+    label: 'LOW',
+    color: 'default',
+  },
+  [TASK_PRIORITY.MEDIUM]: {
+    label: 'MEDIUM',
+    color: 'gold',
+  },
+  [TASK_PRIORITY.HIGH]: {
+    label: 'HIGH',
+    color: 'orange',
+  },
+  [TASK_PRIORITY.URGENT]: {
+    label: 'URGENT',
+    color: 'red',
+  },
 }
-
-// Dropdown option lists — feed straight into <Select options={...} />
 export const TASK_STATUS_OPTIONS = TASK_STATUS_VALUES.map((v) => ({
   value: v,
   label: TASK_STATUS_BADGE_CONFIG[v].label,
