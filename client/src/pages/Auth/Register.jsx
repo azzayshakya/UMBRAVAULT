@@ -33,8 +33,8 @@ const SignupPage = () => {
     setLoading(true)
     try {
       const res = await CreateAccount({
-        email: values.email,
-        password: values.password,
+        email: values.userEmail,
+        password: values.userPassword,
         name: values.name,
       })
       message.success(res?.message)
@@ -48,7 +48,7 @@ const SignupPage = () => {
   return (
     <div
       style={{
-        minHeight: '100vh',
+        minHeight: '85vh',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -100,14 +100,14 @@ const SignupPage = () => {
           >
             <Input
               prefix={<UserOutlined style={{ color: 'var(--term-green-dim)' }} />}
-              placeholder="you@domain.com"
-              autoComplete="email"
+              placeholder="annonymous user"
+              autoComplete="new-user"
               style={inputStyle}
             />
           </Form.Item>
           <Form.Item
             label={<span style={fieldLabelStyle}>EMAIL</span>}
-            name="email"
+            name="userEmail"
             rules={[
               { required: true, message: 'Enter your email' },
               { type: 'email', message: 'Enter a valid email' },
@@ -116,20 +116,20 @@ const SignupPage = () => {
             <Input
               prefix={<MailFilled style={{ color: 'var(--term-green-dim)' }} />}
               placeholder="you@domain.com"
-              autoComplete="email"
+              aautoComplete="new-email"
               style={inputStyle}
             />
           </Form.Item>
 
           <Form.Item
             label={<span style={fieldLabelStyle}>PASSWORD</span>}
-            name="password"
+            name="userPassword"
             rules={[{ required: true, message: 'Enter your password' }]}
           >
             <Input.Password
               prefix={<LockOutlined style={{ color: 'var(--term-green-dim)' }} />}
               placeholder="********"
-              autoComplete="current-password"
+              autoComplete="new-password"
               style={inputStyle}
             />
           </Form.Item>

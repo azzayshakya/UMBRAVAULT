@@ -192,6 +192,9 @@
   box-shadow: none;
   padding: 0;
 }
+.terminal-modal .ant-modal-container {
+  background: transparent;
+}
 
 .terminal-modal .ant-modal-body {
   padding: 0;
