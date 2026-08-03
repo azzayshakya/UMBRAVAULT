@@ -39,7 +39,7 @@ const LoginPage = () => {
   const onFinish = async (values) => {
     setLoading(true)
     try {
-      const res = await loginUser({ email: values.email, password: values.password })
+      const res = await loginUser({ email: values.userEmail, password: values.userPassword })
       const sessionData = setUserSessionLocally(res.data)
       dispatch(
         setUserSession({
@@ -101,7 +101,7 @@ const LoginPage = () => {
         >
           <Form.Item
             label={<span style={fieldLabelStyle}>EMAIL</span>}
-            name="email"
+            name="userEmail"
             rules={[
               { required: true, message: 'Enter your email' },
               { type: 'email', message: 'Enter a valid email' },
@@ -110,20 +110,20 @@ const LoginPage = () => {
             <Input
               prefix={<UserOutlined style={{ color: 'var(--term-green-dim)' }} />}
               placeholder="you@domain.com"
-              autoComplete="email"
+              autoComplete="new-email"
               style={inputStyle}
             />
           </Form.Item>
 
           <Form.Item
             label={<span style={fieldLabelStyle}>PASSWORD</span>}
-            name="password"
+            name="userPassword"
             rules={[{ required: true, message: 'Enter your password' }]}
           >
             <Input.Password
               prefix={<LockOutlined style={{ color: 'var(--term-green-dim)' }} />}
               placeholder="********"
-              autoComplete="current-password"
+              autoComplete="new-password"
               style={inputStyle}
             />
           </Form.Item>

@@ -38,7 +38,6 @@ export const useTaskManagementApi = (filters = {}, paramObj = { limit: 10, offse
     } finally {
       setLoading(false)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [JSON.stringify(filters), paramObj.offset, paramObj.limit])
 
   const fetchStats = useCallback(async () => {
@@ -52,8 +51,6 @@ export const useTaskManagementApi = (filters = {}, paramObj = { limit: 10, offse
       setStatsLoading(false)
     }
   }, [])
-
-  // ── mutations — each returns { success, message } so callers can react ──
 
   const runMutation = async (fn) => {
     setSubmitting(true)

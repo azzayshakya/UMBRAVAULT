@@ -11,6 +11,7 @@ import {
   WarningOutlined,
 } from '@ant-design/icons'
 import ReusableAntdTag from '@devStack/components/AntdTag/ReusableAntdTag'
+import { Skeleton } from '@devStack/components/Skelton/Skeleton'
 import CrudTable from '@devStack/components/table/CrudTable'
 import {
   TASK_PRIORITY_BADGE_CONFIG,
@@ -26,7 +27,7 @@ import NewTaskModal from './components/Newtaskmodal'
 import TaskDetailPanel from './components/Taskdetailpanel'
 import { useTaskManagementApi } from './hooks/Usetaskmanagementapi'
 
-const StatCard = ({ icon, label, value, color }) => (
+const StatCard = ({ icon, label, value, color, loading }) => (
   <div
     style={{
       flex: 1,
@@ -54,9 +55,13 @@ const StatCard = ({ icon, label, value, color }) => (
     >
       {icon}
     </div>
-    <div>
+    <div style={{ flex: 1 }}>
       <div style={{ color: 'var(--term-text-muted)', fontSize: 11, letterSpacing: 1 }}>{label}</div>
-      <div style={{ color, fontSize: 22, fontWeight: 700 }}>{value ?? '—'}</div>
+      {loading ? (
+        <Skeleton height={22} width={48} borderRadius={4} style={{ marginTop: 4 }} />
+      ) : (
+        <div style={{ color, fontSize: 22, fontWeight: 700 }}>{value ?? '—'}</div>
+      )}
     </div>
   </div>
 )
@@ -239,20 +244,35 @@ const TaskManagementPage = () => {
           label="TOTAL TASKS"
           value={stats?.total}
           color="#d6ffe4"
+          loading={loading}
         />
         <StatCard
           icon={<ThunderboltOutlined />}
           label="IN PROGRESS"
           value={stats?.inProgress}
           color="#f5c542"
+          loading={loading}
         />
-        <StatCard icon={<LockOutlined />} label="BLOCKED" value={stats?.blocked} color="#ef4444" />
-        <StatCard icon={<CheckCircleOutlined />} label="DONE" value={stats?.done} color="#39ff6a" />
+        <StatCard
+          icon={<LockOutlined />}
+          label="BLOCKED"
+          value={stats?.blocked}
+          color="#ef4444"
+          loading={loading}
+        />
+        <StatCard
+          icon={<CheckCircleOutlined />}
+          label="DONE"
+          value={stats?.done}
+          color="#39ff6a"
+          loading={loading}
+        />
         <StatCard
           icon={<WarningOutlined />}
           label="OVERDUE"
           value={stats?.overdue}
           color="#f97316"
+          loading={loading}
         />
       </div>
 

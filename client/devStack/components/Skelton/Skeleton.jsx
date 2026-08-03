@@ -36,9 +36,10 @@ export function Skeleton({ width = '100%', height = 14, borderRadius = 6, style 
         width,
         height,
         borderRadius,
-        background: 'linear-gradient(90deg, #e0e0e0 25%, #f0f0f0 50%, #e0e0e0 75%)',
+        background:
+          'linear-gradient(90deg, rgba(255,255,255,0.06) 25%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0.06) 75%)',
         backgroundSize: '600px 100%',
-        animation: 'shimmer 1.4s infinite linear',
+        animation: 'shimmer 3s infinite linear',
         ...style,
       }}
     />
