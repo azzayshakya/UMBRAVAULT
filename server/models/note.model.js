@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const { NOTE_TYPE_VALUES } = require("../utils/note.constants");
+const { NOTE_TYPE_VALUES } = require("../utils/task.constants");
 
 const noteSchema = new mongoose.Schema(
   {

@@ -15,6 +15,8 @@ const authRoutes = require("./routes/auth.routes");
 const userRoutes = require("./routes/user.routes");
 const taskRoutes = require("./routes/task.routes");
 const aiRoutes = require("./routes/ai.routes");
+const noteRoutes = require("./routes/note.routes");
+const topicRoutes = require("./routes/topic.routes");
 
 const app = express();
 
@@ -57,6 +59,8 @@ app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/ai", aiRoutes);
 app.use("/api/task", taskRoutes);
+app.use("/api/note", noteRoutes);
+app.use("/api/topic", topicRoutes);
 
 app.use(notFoundHandler);
 app.use(errorHandler);
