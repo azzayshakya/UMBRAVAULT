@@ -2,7 +2,7 @@ import { CloseOutlined, DeleteOutlined, LoadingOutlined } from '@ant-design/icon
 import { NOTE_TYPE_OPTIONS } from '@devStack/enums/note-page-enum'
 import { Input, Select } from 'antd'
 
-import { useNoteEditorApi } from '../hooks/useNoteEditorApi'
+import { useNoteEditorApi } from '../hooks/Usenoteeditorapi'
 
 const SAVE_STATUS_LABEL = {
   idle: '',
