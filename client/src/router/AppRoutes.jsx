@@ -1,3 +1,4 @@
+import MENU_KEYS from '@devStack/components/sidebar/constants/MenuKeys'
 import MENU_CONFIG from '@devStack/components/sidebar/control/MenuConfig'
 import { ROUTES } from '@devStack/components/sidebar/control/RouteConfiguration'
 import PageLoader from '@devStack/components/spinners/PageLoader'
@@ -14,6 +15,7 @@ import UserManagementPage from '@/pages/UserRoleMangegment/UserManagementPage'
 
 import ProtectedRoute from './ProtectedRoute'
 import ROUTE_ELEMENTS from './RouteElements'
+// IMPORT MENU_KEYS HERE
 
 const flattenMenu = (items) =>
   items.reduce((acc, item) => {
@@ -27,6 +29,9 @@ const AppRoutes = () => {
 
   const flatMenu = flattenMenu(MENU_CONFIG)
 
+  // Grab the component for the dynamic note page
+  const NotePageElement = ROUTE_ELEMENTS[MENU_KEYS.KNOWLEDGE_VAULT_NOTE]
+
   return (
     <Suspense fallback={<PageLoader />}>
       <Routes>
@@ -35,7 +40,10 @@ const AppRoutes = () => {
         <Route path="/unauthorized" element={<Unauthorized />} />
 
         <Route path="/role" element={<UserManagementPage />} />
+
+        {/* Everything inside this Route shares the MainLayout */}
         <Route element={<MainLayout userRole={user?.role ?? undefined} />}>
+          {/* 1. Mapped sidebar routes */}
           {flatMenu.map((item) => {
             const path = ROUTES[item.key]
             const Element = ROUTE_ELEMENTS[item.key]
@@ -53,7 +61,20 @@ const AppRoutes = () => {
               />
             )
           })}
+
+          {/* 2. Hidden dynamic note route (shares MainLayout, but not in sidebar) */}
+          {NotePageElement && (
+            <Route
+              path={ROUTES[MENU_KEYS.KNOWLEDGE_VAULT_NOTE]}
+              element={
+                <ProtectedRoute menuKey={MENU_KEYS.KNOWLEDGE_VAULT_NOTE}>
+                  <NotePageElement />
+                </ProtectedRoute>
+              }
+            />
+          )}
         </Route>
+
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </Suspense>

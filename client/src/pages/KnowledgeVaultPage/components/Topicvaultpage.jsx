@@ -11,6 +11,7 @@ import { useTopicNotesApi } from '../hooks/Usetopicnotesapi'
 
 const TopicVaultPage = () => {
   const { topicId } = useParams()
+  console.log('yooo', topicId)
   const navigate = useNavigate()
 
   const [search, setSearch] = useState('')
