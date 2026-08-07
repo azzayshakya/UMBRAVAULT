@@ -5,6 +5,7 @@ import {
   FileTextOutlined,
   PlusOutlined,
 } from '@ant-design/icons'
+import PageHeader from '@devStack/components/PageHeader'
 import { Skeleton } from '@devStack/components/Skelton/Skeleton'
 import { Input, message, Modal } from 'antd'
 import { useMemo, useState } from 'react'
@@ -101,51 +102,31 @@ const KnowledgeVaultPage = () => {
 
   return (
     <div style={{ fontFamily: 'var(--term-font)' }}>
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'flex-start',
-          marginBottom: 20,
-        }}
-      >
-        <div>
-          <h1
+      <PageHeader
+        title="KNOWLEDGE VAULT"
+        subtitle="root@vault:~# ls ./topics"
+        extra={
+          <button
+            type="button"
+            onClick={() => setNewTopicOpen(true)}
             style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 6,
+              border: '1px solid var(--term-border-strong)',
+              background: 'rgba(57,255,106,0.08)',
               color: 'var(--term-green)',
-              fontSize: 24,
-              letterSpacing: 2,
-              margin: 0,
-              textShadow: '0 0 10px rgba(57,255,106,0.35)',
+              borderRadius: 6,
+              padding: '8px 16px',
+              fontSize: 12,
+              letterSpacing: 1,
+              cursor: 'pointer',
             }}
           >
-            KNOWLEDGE VAULT
-          </h1>
-          <p style={{ color: 'var(--term-text-muted)', fontSize: 12, marginTop: 4 }}>
-            root@vault:~# ls ./topics
-          </p>
-        </div>
-
-        <button
-          type="button"
-          onClick={() => setNewTopicOpen(true)}
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 6,
-            border: '1px solid var(--term-border-strong)',
-            background: 'rgba(57,255,106,0.08)',
-            color: 'var(--term-green)',
-            borderRadius: 6,
-            padding: '8px 16px',
-            fontSize: 12,
-            letterSpacing: 1,
-            cursor: 'pointer',
-          }}
-        >
-          <PlusOutlined /> NEW TOPIC
-        </button>
-      </div>
+            <PlusOutlined /> NEW TOPIC
+          </button>
+        }
+      />
 
       <div style={{ display: 'flex', gap: 14, marginBottom: 20 }}>
         <StatCard

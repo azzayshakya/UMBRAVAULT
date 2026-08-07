@@ -1,5 +1,6 @@
 import { EyeOutlined, MoreOutlined, SearchOutlined, FilterOutlined } from '@ant-design/icons'
 import ReusableAntdTag from '@devStack/components/AntdTag/ReusableAntdTag'
+import PageHeader from '@devStack/components/PageHeader'
 import CrudTable from '@devStack/components/table/CrudTable'
 import { ROLE_BADGE_CONFIG } from '@devStack/enums/user-role-enums'
 import { Input } from 'antd'
@@ -98,22 +99,11 @@ const UserManagementPage = () => {
 
   return (
     <div style={{ fontFamily: 'var(--term-font)' }}>
-      <div style={{ marginBottom: 20 }}>
-        <h1
-          style={{
-            color: 'var(--term-green)',
-            fontSize: 24,
-            letterSpacing: 2,
-            margin: 0,
-            textShadow: '0 0 10px rgba(57,255,106,0.35)',
-          }}
-        >
-          USER MANAGEMENT
-        </h1>
-        <p style={{ color: 'var(--term-text-muted)', fontSize: 12, marginTop: 4 }}>
-          Manage system users and their roles
-        </p>
-      </div>
+      <PageHeader
+        title="USER MANAGEMENT"
+        titleStyle={{ letterSpacing: 2 }}
+        subtitle="Manage system users and their roles"
+      />
 
       <div
         style={{

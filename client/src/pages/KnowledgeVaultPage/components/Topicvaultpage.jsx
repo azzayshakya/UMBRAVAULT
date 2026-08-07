@@ -1,4 +1,5 @@
 import { ArrowLeftOutlined, PlusOutlined, SearchOutlined } from '@ant-design/icons'
+import PageHeader from '@devStack/components/PageHeader'
 import { Skeleton } from '@devStack/components/Skelton/Skeleton'
 import { Input, message, Modal } from 'antd'
 import { useMemo, useState } from 'react'
@@ -11,7 +12,6 @@ import { useTopicNotesApi } from '../hooks/Usetopicnotesapi'
 
 const TopicVaultPage = () => {
   const { topicId } = useParams()
-  console.log('yooo', topicId)
   const navigate = useNavigate()
 
   const [search, setSearch] = useState('')
@@ -55,55 +55,11 @@ const TopicVaultPage = () => {
 
   return (
     <div style={{ fontFamily: 'var(--term-font)' }}>
-      <div style={{ marginBottom: 20 }}>
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 8,
-            color: 'var(--term-text-muted)',
-            fontSize: 12,
-            marginBottom: 8,
-          }}
-        >
-          <button
-            type="button"
-            onClick={() => navigate('/knowledge-vault')}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              border: 'none',
-              background: 'transparent',
-              color: 'var(--term-text-muted)',
-              cursor: 'pointer',
-              padding: 0,
-            }}
-          >
-            <ArrowLeftOutlined style={{ marginRight: 6 }} />
-            Knowledge Vault
-          </button>
-          <span>/</span>
-          <span style={{ color: 'var(--term-green)' }}>{topic?.name || '...'}</span>
-        </div>
-
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-          <div>
-            <h1
-              style={{
-                color: 'var(--term-green)',
-                fontSize: 22,
-                letterSpacing: 1,
-                margin: 0,
-                textShadow: '0 0 10px rgba(57,255,106,0.35)',
-              }}
-            >
-              {topic?.name || 'LOADING...'}
-            </h1>
-            <p style={{ color: 'var(--term-text-muted)', fontSize: 12, marginTop: 4 }}>
-              {notes.length} notes
-            </p>
-          </div>
-
+      <PageHeader
+        title={topic?.name || 'LOADING...'}
+        titleStyle={{ fontSize: 22, letterSpacing: 1 }}
+        subtitle={`${notes.length} notes`}
+        extra={
           <button
             type="button"
             onClick={() => setNewNoteOpen(true)}
@@ -123,8 +79,8 @@ const TopicVaultPage = () => {
           >
             <PlusOutlined /> NEW NOTE
           </button>
-        </div>
-      </div>
+        }
+      />
 
       <div style={{ marginBottom: 16 }}>
         <Input
