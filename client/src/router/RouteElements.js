@@ -12,6 +12,7 @@ export const ROUTE_ELEMENTS = {
 
   [MENU_KEYS.ROLE_MANAGEMENT]: lazy(() => import('@/pages/UserRoleMangegment/UserManagementPage')),
   [MENU_KEYS.TASK_MANAGEMENT]: lazy(() => import('@/pages/TaskManagement/Taskmanagementpage')),
+  [MENU_KEYS.KNOWLEDGE_VAULT]: lazy(() => import('@/pages/KnowledgeVaultPage/Knowledgevaultpage')),
 }
 
 export default ROUTE_ELEMENTS

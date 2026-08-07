@@ -5,6 +5,7 @@ export const MENU_KEYS = {
   ADD_USER: 'add_user',
   ROLE_MANAGEMENT: 'role_management',
   TASK_MANAGEMENT: 'task_management',
+  KNOWLEDGE_VAULT: 'knowledge_vault',
 }
 
 export default MENU_KEYS

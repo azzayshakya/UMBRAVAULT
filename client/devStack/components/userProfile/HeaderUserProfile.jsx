@@ -1,8 +1,10 @@
 import { DownOutlined } from '@ant-design/icons'
-import { useSelector } from 'react-redux'
-import { Skeleton, SkeletonAvatar } from '../Skelton/Skeleton'
-import { ProfileTerminal } from './ProfileTerminal'
 import { Popover } from 'antd'
+import { useSelector } from 'react-redux'
+
+import { Skeleton, SkeletonAvatar } from '../Skelton/Skeleton'
+
+import { ProfileTerminal } from './ProfileTerminal'
 
 const wrapStyle = {
   display: 'flex',

@@ -40,6 +40,11 @@ export const MENU_CONFIG = [
     label: MENU_LABELS.task_management,
     icon: SafetyOutlined,
   },
+  {
+    key: MENU_KEYS.KNOWLEDGE_VAULT,
+    label: MENU_LABELS.Knowledge_vault,
+    icon: SafetyOutlined,
+  },
 ]
 
 export default MENU_CONFIG
