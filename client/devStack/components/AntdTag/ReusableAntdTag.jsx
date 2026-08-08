@@ -48,7 +48,8 @@ export default function ReusableAntdTag({
     cursor: 'default',
     userSelect: 'none',
     minWidth: sizeStyle,
-    borderRadius: '5px',
+    borderRadius: '9px',
+    padding: '5px 0px',
     ...style,
   }
 
