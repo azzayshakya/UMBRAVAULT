@@ -12,7 +12,7 @@ import {
 } from '@ant-design/icons'
 import ReusableAntdTag from '@devStack/components/AntdTag/ReusableAntdTag'
 import PageHeader from '@devStack/components/PageHeader'
-import { Skeleton } from '@devStack/components/Skelton/Skeleton'
+import { StatCard } from '@devStack/components/StateCard'
 import CrudTable from '@devStack/components/table/CrudTable'
 import {
   TASK_PRIORITY_BADGE_CONFIG,
@@ -27,45 +27,6 @@ import { useMemo, useState } from 'react'
 import NewTaskModal from './components/Newtaskmodal'
 import TaskDetailPanel from './components/Taskdetailpanel'
 import { useTaskManagementApi } from './hooks/Usetaskmanagementapi'
-
-const StatCard = ({ icon, label, value, color, loading }) => (
-  <div
-    style={{
-      flex: 1,
-      display: 'flex',
-      alignItems: 'center',
-      gap: 12,
-      border: '1px solid var(--term-border)',
-      borderRadius: 10,
-      padding: '14px 16px',
-      background: 'rgba(6, 18, 10, 0.4)',
-    }}
-  >
-    <div
-      style={{
-        width: 40,
-        height: 40,
-        borderRadius: 8,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        background: `${color}22`,
-        color,
-        fontSize: 18,
-      }}
-    >
-      {icon}
-    </div>
-    <div style={{ flex: 1 }}>
-      <div style={{ color: 'var(--term-text-muted)', fontSize: 11, letterSpacing: 1 }}>{label}</div>
-      {loading ? (
-        <Skeleton height={22} width={48} borderRadius={4} style={{ marginTop: 4 }} />
-      ) : (
-        <div style={{ color, fontSize: 22, fontWeight: 700 }}>{value ?? '—'}</div>
-      )}
-    </div>
-  </div>
-)
 
 const actionBtnStyle = {
   width: 28,
@@ -228,7 +189,14 @@ const TaskManagementPage = () => {
         subtitle="root@mission-control:~# tail -f ./tasks"
       />
 
-      <div style={{ display: 'flex', gap: 14, marginBottom: 20 }}>
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+          gap: 14,
+          marginBottom: 20,
+        }}
+      >
         <StatCard
           icon={<UnorderedListOutlined />}
           label="TOTAL TASKS"
