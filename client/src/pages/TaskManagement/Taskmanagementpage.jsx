@@ -234,147 +234,130 @@ const TaskManagementPage = () => {
         />
       </div>
 
-      <div style={{ display: 'flex', gap: 16, alignItems: 'flex-start' }}>
+      {/* Main Table Container - Split Layout Removed */}
+      <div
+        style={{
+          border: '1px solid var(--term-border)',
+          borderRadius: 10,
+          padding: 20,
+          background: 'rgba(6, 18, 10, 0.4)',
+        }}
+      >
         <div
           style={{
-            flex: 1,
-            border: '1px solid var(--term-border)',
-            borderRadius: 10,
-            padding: 20,
-            background: 'rgba(6, 18, 10, 0.4)',
-            minWidth: 0,
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: 16,
           }}
         >
-          <div
+          <span style={{ color: 'var(--term-text-muted)', fontSize: 12, letterSpacing: 1 }}>
+            TASKS // TABLE VIEW
+          </span>
+          <button
+            type="button"
+            onClick={() => setNewTaskOpen(true)}
             style={{
               display: 'flex',
-              justifyContent: 'space-between',
               alignItems: 'center',
-              marginBottom: 16,
-              // border: '2px red solid',
+              gap: 6,
+              border: '1px solid var(--term-border-strong)',
+              background: 'rgba(57,255,106,0.08)',
+              color: 'var(--term-green)',
+              borderRadius: 6,
+              padding: '6px 14px',
+              fontSize: 12,
+              letterSpacing: 1,
+              cursor: 'pointer',
             }}
           >
-            <span style={{ color: 'var(--term-text-muted)', fontSize: 12, letterSpacing: 1 }}>
-              TASKS // TABLE VIEW
-            </span>
-            <button
-              type="button"
-              onClick={() => setNewTaskOpen(true)}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 6,
-                border: '1px solid var(--term-border-strong)',
-                background: 'rgba(57,255,106,0.08)',
-                color: 'var(--term-green)',
-                borderRadius: 6,
-                padding: '6px 14px',
-                fontSize: 12,
-                letterSpacing: 1,
-                cursor: 'pointer',
-              }}
-            >
-              <PlusOutlined /> NEW TASK
-            </button>
-          </div>
-
-          <div
-            style={{
-              display: 'flex',
-              gap: 10,
-              marginBottom: 16,
-              flexWrap: 'wrap',
-              // alignItems: 'flex-end'
-              justifyContent: 'flex-end',
-              // border: '2px green solid',
-            }}
-          >
-            <Input
-              prefix={<SearchOutlined style={{ color: 'var(--term-green-dim)' }} />}
-              placeholder="Search tasks..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              style={{ width: 200, border: '2px var(--term-border) solid' }}
-            />
-            <Select
-              placeholder="ALL STATUS"
-              allowClear
-              value={status}
-              options={TASK_STATUS_OPTIONS}
-              onChange={setStatus}
-              style={{ width: 150, border: '2px var(--term-border) solid' }}
-            />
-            <Select
-              placeholder="ALL PRIORITY"
-              allowClear
-              value={priority}
-              options={TASK_PRIORITY_OPTIONS}
-              onChange={setPriority}
-              style={{ width: 150, border: '2px var(--term-border) solid' }}
-            />
-            <Input
-              placeholder="Project..."
-              allowClear
-              value={project}
-              onChange={(e) => setProject(e.target.value || undefined)}
-              style={{ width: 150, border: '2px var(--term-border) solid' }}
-            />
-            <button
-              type="button"
-              onClick={clearFilters}
-              style={{
-                // display: 'flex',
-                // alignItems: 'center',
-                // gap: 6,
-                // border: '1px solid var(--term-border)',
-                // background: 'transparent',
-                // color: 'var(--term-green)',
-                // borderRadius: 6,
-                // padding: '0 12px',
-                // fontSize: 12,
-                // cursor: 'pointer',
-
-                display: 'flex',
-                alignItems: 'center',
-                gap: 6,
-                border: '1px solid var(--term-border-strong)',
-                background: 'rgba(57,255,106,0.08)',
-                color: 'var(--term-green)',
-                borderRadius: 6,
-                padding: '6px 25px',
-                fontSize: 12,
-                letterSpacing: 1,
-                cursor: 'pointer',
-              }}
-            >
-              <ClearOutlined /> CLEAR
-            </button>
-          </div>
-
-          <CrudTable
-            tableData={tasks}
-            columns={columns}
-            loading={loading}
-            paramObj={{ ...paramObj, total }}
-            setParamObj={setParamObj}
-            setRefreshCounter={() => refetch()}
-          />
+            <PlusOutlined /> NEW TASK
+          </button>
         </div>
 
-        {selectedTask && (
-          <TaskDetailPanel
-            task={selectedTask}
-            onClose={() => setSelectedTaskId(null)}
-            onStatusChange={(id, v) => editTask(id, { status: v }).then(refetch)}
-            onPriorityChange={(id, v) => editTask(id, { priority: v }).then(refetch)}
-            onDueDateChange={(id, v) => editTask(id, { dueDate: v }).then(refetch)}
-            onAddSubtask={(id, title) => addTaskSubtask(id, title).then(refetch)}
-            onToggleSubtask={(id, subId, done) => toggleSubtask(id, subId, done).then(refetch)}
-            onDeleteSubtask={(id, subId) => removeSubtask(id, subId).then(refetch)}
-            fetchActivity={fetchActivity}
+        <div
+          style={{
+            display: 'flex',
+            gap: 10,
+            marginBottom: 16,
+            flexWrap: 'wrap',
+            justifyContent: 'flex-end',
+          }}
+        >
+          <Input
+            prefix={<SearchOutlined style={{ color: 'var(--term-green-dim)' }} />}
+            placeholder="Search tasks..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            style={{ width: 200, border: '2px var(--term-border) solid' }}
           />
-        )}
+          <Select
+            placeholder="ALL STATUS"
+            allowClear
+            value={status}
+            options={TASK_STATUS_OPTIONS}
+            onChange={setStatus}
+            style={{ width: 150, border: '2px var(--term-border) solid' }}
+          />
+          <Select
+            placeholder="ALL PRIORITY"
+            allowClear
+            value={priority}
+            options={TASK_PRIORITY_OPTIONS}
+            onChange={setPriority}
+            style={{ width: 150, border: '2px var(--term-border) solid' }}
+          />
+          <Input
+            placeholder="Project..."
+            allowClear
+            value={project}
+            onChange={(e) => setProject(e.target.value || undefined)}
+            style={{ width: 150, border: '2px var(--term-border) solid' }}
+          />
+          <button
+            type="button"
+            onClick={clearFilters}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 6,
+              border: '1px solid var(--term-border-strong)',
+              background: 'rgba(57,255,106,0.08)',
+              color: 'var(--term-green)',
+              borderRadius: 6,
+              padding: '6px 25px',
+              fontSize: 12,
+              letterSpacing: 1,
+              cursor: 'pointer',
+            }}
+          >
+            <ClearOutlined /> CLEAR
+          </button>
+        </div>
+
+        <CrudTable
+          tableData={tasks}
+          columns={columns}
+          loading={loading}
+          paramObj={{ ...paramObj, total }}
+          setParamObj={setParamObj}
+          setRefreshCounter={() => refetch()}
+        />
       </div>
+
+      {selectedTask && (
+        <TaskDetailPanel
+          task={selectedTask}
+          onClose={() => setSelectedTaskId(null)}
+          onStatusChange={(id, v) => editTask(id, { status: v }).then(refetch)}
+          onPriorityChange={(id, v) => editTask(id, { priority: v }).then(refetch)}
+          onDueDateChange={(id, v) => editTask(id, { dueDate: v }).then(refetch)}
+          onAddSubtask={(id, title) => addTaskSubtask(id, title).then(refetch)}
+          onToggleSubtask={(id, subId, done) => toggleSubtask(id, subId, done).then(refetch)}
+          onDeleteSubtask={(id, subId) => removeSubtask(id, subId).then(refetch)}
+          fetchActivity={fetchActivity}
+        />
+      )}
 
       <NewTaskModal
         open={newTaskOpen}

@@ -1,11 +1,11 @@
 import {
   ClockCircleOutlined,
-  CloseOutlined,
   DeleteOutlined,
   HistoryOutlined,
   PlusOutlined,
 } from '@ant-design/icons'
 import ReusableAntdTag from '@devStack/components/AntdTag/ReusableAntdTag'
+import TerminalModal from '@devStack/components/Terminalmodal'
 import {
   TASK_PRIORITY_BADGE_CONFIG,
   TASK_PRIORITY_OPTIONS,
@@ -70,32 +70,71 @@ const TaskDetailPanel = ({
     setNewSubtask('')
   }
 
-  return (
-    <div className="terminal-frame" style={{ width: 340, flexShrink: 0, alignSelf: 'flex-start' }}>
-      <span className="terminal-frame__corner terminal-frame__corner--tl" />
-      <span className="terminal-frame__corner terminal-frame__corner--tr" />
-      <span className="terminal-frame__corner terminal-frame__corner--bl" />
-      <span className="terminal-frame__corner terminal-frame__corner--br" />
-      <span className="terminal-frame__scanlines" />
-      <span className="terminal-frame__beam" />
-
-      <div className="terminal-frame__header">
-        <span
-          className="terminal-frame__prompt"
-          style={{ display: 'flex', alignItems: 'center', gap: 6 }}
-        >
-          <span style={{ color: 'var(--term-green)' }}>●</span>
-          {task.taskCode || task._id?.slice(-6).toUpperCase()}
-        </span>
-        <button type="button" className="terminal-frame__close" onClick={onClose}>
-          <CloseOutlined style={{ fontSize: 10 }} />
-        </button>
-      </div>
-
+  const activityLogFooter = (
+    <div style={{ width: '100%' }}>
       <div
-        className="terminal-frame__body"
-        style={{ display: 'flex', flexDirection: 'column', gap: 16 }}
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: 6,
+          color: 'var(--term-green)',
+          fontSize: 11,
+          letterSpacing: 1,
+          marginBottom: 8,
+        }}
       >
+        <HistoryOutlined /> ACTIVITY LOG
+      </div>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 10,
+          maxHeight: 180,
+          overflowY: 'auto',
+          paddingRight: '10px', // Prevent scrollbar from clipping text
+        }}
+      >
+        {activityLoading && (
+          <span style={{ color: 'var(--term-text-muted)', fontSize: 11 }}>reading log...</span>
+        )}
+        {!activityLoading && activity.length === 0 && (
+          <span style={{ color: 'var(--term-text-muted)', fontSize: 11 }}>no entries yet</span>
+        )}
+        {activity.map((entry) => (
+          <div key={entry._id} style={{ fontSize: 11, lineHeight: 1.5 }}>
+            <div style={{ color: 'var(--term-green-dim)' }}>
+              [{dayjs(entry.createdAt).format('YYYY-MM-DD HH:mm:ss')}]
+            </div>
+            <div
+              style={{
+                color: 'var(--term-text)',
+                overflow: 'hidden',
+                whiteSpace: 'nowrap',
+                textOverflow: 'ellipsis',
+              }}
+            >
+              {entry.message}
+            </div>
+            <div style={{ color: 'var(--term-text-muted)' }}>
+              by {entry.performedBy?.username || entry.performedBy?.name || 'system'}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+
+  return (
+    <TerminalModal
+      open={!!task}
+      onClose={onClose}
+      title={task.taskCode || task._id?.slice(-6).toUpperCase()}
+      prompt="root@mission-control:~# view"
+      width={420}
+      footer={activityLogFooter}
+    >
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
         <div>
           <div
             style={{
@@ -239,7 +278,6 @@ const TaskDetailPanel = ({
                     border: '1px var(--primitive-red-500) solid',
                     padding: '5px',
                     borderRadius: '5px',
-                    // fontWeight: '700',
                   }}
                   onClick={() => onDeleteSubtask(task._id, s._id)}
                 />
@@ -272,59 +310,7 @@ const TaskDetailPanel = ({
           </div>
         </div>
       </div>
-
-      <div className="terminal-frame__footer">
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 6,
-            color: 'var(--term-green)',
-            fontSize: 11,
-            letterSpacing: 1,
-            marginBottom: 8,
-          }}
-        >
-          <HistoryOutlined /> ACTIVITY LOG
-        </div>
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 10,
-            maxHeight: 180,
-            overflowY: 'auto',
-          }}
-        >
-          {activityLoading && (
-            <span style={{ color: 'var(--term-text-muted)', fontSize: 11 }}>reading log...</span>
-          )}
-          {!activityLoading && activity.length === 0 && (
-            <span style={{ color: 'var(--term-text-muted)', fontSize: 11 }}>no entries yet</span>
-          )}
-          {activity.map((entry) => (
-            <div key={entry._id} style={{ fontSize: 11, lineHeight: 1.5 }}>
-              <div style={{ color: 'var(--term-green-dim)' }}>
-                [{dayjs(entry.createdAt).format('YYYY-MM-DD HH:mm:ss')}]
-              </div>
-              <div
-                style={{
-                  color: 'var(--term-text)',
-                  overflow: 'hidden',
-                  whiteSpace: 'nowrap',
-                  textOverflow: 'ellipsis',
-                }}
-              >
-                {entry.message}
-              </div>
-              <div style={{ color: 'var(--term-text-muted)' }}>
-                by {entry.performedBy?.username || entry.performedBy?.name || 'system'}
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
+    </TerminalModal>
   )
 }
 
