@@ -133,7 +133,7 @@ const KnowledgeVaultPage = () => {
           placeholder="Search topics..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          style={{ width: 260 }}
+          style={{ width: 260, border: '2px var(--term-border) solid' }}
         />
       </div>
 

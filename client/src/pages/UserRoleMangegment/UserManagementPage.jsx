@@ -135,7 +135,7 @@ const UserManagementPage = () => {
               border: '1px solid var(--term-border)',
               borderRadius: 6,
               background: 'transparent',
-              color: 'var(--term-text-muted)',
+              color: 'var(--term-green)',
               fontFamily: 'var(--term-font)',
               fontSize: 12,
               letterSpacing: 1,

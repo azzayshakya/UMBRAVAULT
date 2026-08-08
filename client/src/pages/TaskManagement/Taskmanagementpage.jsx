@@ -251,6 +251,7 @@ const TaskManagementPage = () => {
               justifyContent: 'space-between',
               alignItems: 'center',
               marginBottom: 16,
+              // border: '2px red solid',
             }}
           >
             <span style={{ color: 'var(--term-text-muted)', fontSize: 12, letterSpacing: 1 }}>
@@ -277,13 +278,23 @@ const TaskManagementPage = () => {
             </button>
           </div>
 
-          <div style={{ display: 'flex', gap: 10, marginBottom: 16, flexWrap: 'wrap' }}>
+          <div
+            style={{
+              display: 'flex',
+              gap: 10,
+              marginBottom: 16,
+              flexWrap: 'wrap',
+              // alignItems: 'flex-end'
+              justifyContent: 'flex-end',
+              // border: '2px green solid',
+            }}
+          >
             <Input
               prefix={<SearchOutlined style={{ color: 'var(--term-green-dim)' }} />}
               placeholder="Search tasks..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              style={{ width: 200 }}
+              style={{ width: 200, border: '2px var(--term-border) solid' }}
             />
             <Select
               placeholder="ALL STATUS"
@@ -291,7 +302,7 @@ const TaskManagementPage = () => {
               value={status}
               options={TASK_STATUS_OPTIONS}
               onChange={setStatus}
-              style={{ width: 150 }}
+              style={{ width: 150, border: '2px var(--term-border) solid' }}
             />
             <Select
               placeholder="ALL PRIORITY"
@@ -299,28 +310,40 @@ const TaskManagementPage = () => {
               value={priority}
               options={TASK_PRIORITY_OPTIONS}
               onChange={setPriority}
-              style={{ width: 150 }}
+              style={{ width: 150, border: '2px var(--term-border) solid' }}
             />
             <Input
               placeholder="Project..."
               allowClear
               value={project}
               onChange={(e) => setProject(e.target.value || undefined)}
-              style={{ width: 150 }}
+              style={{ width: 150, border: '2px var(--term-border) solid' }}
             />
             <button
               type="button"
               onClick={clearFilters}
               style={{
+                // display: 'flex',
+                // alignItems: 'center',
+                // gap: 6,
+                // border: '1px solid var(--term-border)',
+                // background: 'transparent',
+                // color: 'var(--term-green)',
+                // borderRadius: 6,
+                // padding: '0 12px',
+                // fontSize: 12,
+                // cursor: 'pointer',
+
                 display: 'flex',
                 alignItems: 'center',
                 gap: 6,
-                border: '1px solid var(--term-border)',
-                background: 'transparent',
-                color: 'var(--term-text-muted)',
+                border: '1px solid var(--term-border-strong)',
+                background: 'rgba(57,255,106,0.08)',
+                color: 'var(--term-green)',
                 borderRadius: 6,
-                padding: '0 12px',
+                padding: '6px 25px',
                 fontSize: 12,
+                letterSpacing: 1,
                 cursor: 'pointer',
               }}
             >
