@@ -11,6 +11,7 @@ import AppRoutes from './router/AppRoutes'
 import './styles/index.css'
 import './styles/custom_component.css'
 import './styles/gobal_animation.css'
+import './styles/terminal_scrollbar.css'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>

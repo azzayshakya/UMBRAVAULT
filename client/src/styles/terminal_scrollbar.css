@@ -14,3 +14,21 @@
 .terminal-scroll::-webkit-scrollbar-thumb:hover {
   background: #5dff86;
 }
+
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: #39ff6a;
+  border-radius: 10px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: #5dff86;
+}

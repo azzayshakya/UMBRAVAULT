@@ -6,14 +6,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Umbra Vault</title>
     <script>
+      // IIFE to apply theme immediately and prevent screen flash
       ;(function () {
-        var scheme = localStorage.getItem('app:colorScheme')
+        try {
+          var prefsString = localStorage.getItem('user_preferences')
+          var prefs = prefsString ? JSON.parse(prefsString) : {}
+          var scheme = prefs.theme
 
-        if (!scheme || scheme === 'system') {
-          scheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+          if (!scheme || scheme === 'system') {
+            scheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+          }
+
+          document.documentElement.setAttribute('data-scheme', scheme)
+        } catch (e) {
+          // Fallback if JSON parsing fails
+          var isDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+          document.documentElement.setAttribute('data-scheme', isDark ? 'dark' : 'light')
         }
-
-        document.documentElement.setAttribute('data-scheme', scheme)
       })()
     </script>
   </head>
