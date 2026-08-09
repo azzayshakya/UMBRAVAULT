@@ -26,32 +26,20 @@ const allowedOrigins = [
   "http://localhost:3005",
 ];
 
-// 1. Extract CORS options
-const corsOptions = {
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-  credentials: true,
-  // 2. Use a comma-separated string (standard format)
-  methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
-  allowedHeaders: [
-    "Content-Type",
-    "Authorization",
-    "X-Requested-With",
-    "Accept",
-  ],
-};
-
-// 3. Apply CORS middleware
-app.use(cors(corsOptions));
-
-// 4. EXPLICITLY handle preflight OPTIONS requests for all routes (Crucial for Vercel)
-app.options("*", cors(corsOptions));
-
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  }),
+);
 app.use(express.json({ limit: "1mb" }));
 app.use(cookieParser());
 app.use(requestLogger);
@@ -77,6 +65,7 @@ app.use("/api/topic", topicRoutes);
 app.use(notFoundHandler);
 app.use(errorHandler);
 
+// run locally with `node server.js`, skip listen() on Vercel
 if (!process.env.VERCEL) {
   const PORT = process.env.PORT || 3006;
   app.listen(PORT, () => logger.info(`Server started on port ${PORT}`));
