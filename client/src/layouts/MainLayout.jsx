@@ -49,13 +49,13 @@ const MainLayout = ({ userRole, userData = null }) => {
   }
 
   return (
-    <Layout style={{ minHeight: '100vh' }}>
+    <Layout style={{ minHeight: '100vh', position: 'relative', overflowX: 'hidden' }}>
       <Sider
         collapsed={collapsed}
         onCollapse={handleCollapse}
         width={250}
-        // 👈 Optional: On mobile, you can make the sider absolute/drawer style if preferred
         style={{
+          overflow: 'hidden',
           height: '100vh',
           position: 'fixed',
           left: 0,
@@ -63,14 +63,14 @@ const MainLayout = ({ userRole, userData = null }) => {
           bottom: 0,
           background: 'var(--color-bg-container)',
           borderRight: '1px solid var(--color-border)',
-          zIndex: 10,
+          zIndex: 100,
         }}
       >
         <div
           style={{
             display: 'flex',
             flexDirection: 'column',
-            height: '100%',
+            height: '100vh',
           }}
         >
           <div
@@ -82,6 +82,7 @@ const MainLayout = ({ userRole, userData = null }) => {
               background: 'var(--color-primary-light)',
               margin: '16px',
               borderRadius: 'var(--radius)',
+              flexShrink: 0,
             }}
           >
             <Text
@@ -108,6 +109,7 @@ const MainLayout = ({ userRole, userData = null }) => {
               style={{
                 flex: 1,
                 overflowY: 'auto',
+                overflowX: 'hidden',
               }}
             >
               <Menu
@@ -125,16 +127,20 @@ const MainLayout = ({ userRole, userData = null }) => {
               />
             </div>
 
-            <div style={{ marginTop: 'auto' }}>
+            <div style={{ marginTop: 'auto', flexShrink: 0 }}>
               <SidebarQuoteCard collapsed={collapsed} />
             </div>
           </div>
         </div>
       </Sider>
+
       <Layout
         style={{
           marginLeft: collapsed ? 80 : 250,
-          transition: 'margin-left 0.2s',
+          transition: 'margin-left 0.2s ease',
+          minHeight: '100vh',
+          display: 'flex',
+          flexDirection: 'column',
         }}
       >
         <AdminHeaderComponent
