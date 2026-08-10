@@ -29,7 +29,7 @@ export const StatCard = ({ icon, label, value, color, loading }) => (
       {icon}
     </div>
     <div style={{ flex: 1 }}>
-      <div style={{ color: 'var(--term-text-muted)', fontSize: 11, letterSpacing: 1 }}>{label}</div>
+      <div style={{ color: 'var(--color-secondary)', fontSize: 11, letterSpacing: 1 }}>{label}</div>
       {loading ? (
         <Skeleton height={22} width={48} borderRadius={4} style={{ marginTop: 4 }} />
       ) : (

@@ -38,7 +38,7 @@ const actionBtnStyle = {
   border: '1px solid var(--term-border)',
   borderRadius: 5,
   background: 'transparent',
-  color: 'var(--term-green)',
+  color: 'var(--color-primary)',
   cursor: 'pointer',
 }
 
@@ -98,7 +98,7 @@ const TaskManagementPage = () => {
       key: '_id',
       width: 90,
       render: (v) => (
-        <span style={{ color: 'var(--term-green-dim)' }}>#{v.slice(-6).toUpperCase()}</span>
+        <span style={{ color: 'var(--color-primary-light)' }}>#{v.slice(-6).toUpperCase()}</span>
       ),
     },
     {
@@ -108,9 +108,9 @@ const TaskManagementPage = () => {
       width: 220, // Added fixed width so table respects scrolling bounds on mobile
       render: (v, record) => (
         <div>
-          <div style={{ color: 'var(--term-green)', fontWeight: 600 }}>{v}</div>
+          <div style={{ color: 'var(--color-primary)', fontWeight: 600 }}>{v}</div>
           {record.description && (
-            <div style={{ color: 'var(--term-text-muted)', fontSize: 11 }}>
+            <div style={{ color: 'var(--color-secondary)', fontSize: 11 }}>
               {record.description}
             </div>
           )}
@@ -122,7 +122,7 @@ const TaskManagementPage = () => {
       dataIndex: 'project',
       key: 'project',
       width: 140,
-      render: (v) => <span style={{ color: 'var(--term-text-muted)' }}>{v || '—'}</span>,
+      render: (v) => <span style={{ color: 'var(--color-secondary)' }}>{v || '—'}</span>,
     },
     {
       title: ':STATUS',
@@ -144,7 +144,7 @@ const TaskManagementPage = () => {
       key: 'dueDate',
       width: 120,
       render: (v) => (
-        <span style={{ color: 'var(--term-text-muted)', fontSize: 12 }}>
+        <span style={{ color: 'var(--color-secondary)', fontSize: 12 }}>
           {v ? dayjs(v).format('YYYY-MM-DD') : '—'}
         </span>
       ),
@@ -162,7 +162,7 @@ const TaskManagementPage = () => {
               style={{
                 background: 'transparent',
                 borderColor: 'var(--term-border)',
-                color: 'var(--term-text-muted)',
+                color: 'var(--color-secondary)',
               }}
             >
               {t}
@@ -265,7 +265,7 @@ const TaskManagementPage = () => {
             gap: 10,
           }}
         >
-          <span style={{ color: 'var(--term-text-muted)', fontSize: 12, letterSpacing: 1 }}>
+          <span style={{ color: 'var(--color-secondary)', fontSize: 12, letterSpacing: 1 }}>
             TASKS // TABLE VIEW
           </span>
           <button
@@ -275,9 +275,9 @@ const TaskManagementPage = () => {
               display: 'flex',
               alignItems: 'center',
               gap: 6,
-              border: '1px solid var(--term-border-strong)',
+              border: '1px solid var(--color-border-secondary)',
               background: 'rgba(57,255,106,0.08)',
-              color: 'var(--term-green)',
+              color: 'var(--color-primary)',
               borderRadius: 6,
               padding: '6px 14px',
               fontSize: 12,
@@ -300,7 +300,7 @@ const TaskManagementPage = () => {
           }}
         >
           <Input
-            prefix={<SearchOutlined style={{ color: 'var(--term-green-dim)' }} />}
+            prefix={<SearchOutlined style={{ color: 'var(--color-primary-light)' }} />}
             placeholder="Search tasks..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
@@ -337,9 +337,9 @@ const TaskManagementPage = () => {
               alignItems: 'center',
               justifyContent: 'center',
               gap: 6,
-              border: '1px solid var(--term-border-strong)',
+              border: '1px solid var(--color-border-secondary)',
               background: 'rgba(57,255,106,0.08)',
-              color: 'var(--term-green)',
+              color: 'var(--color-primary)',
               borderRadius: 6,
               padding: '6px 25px',
               fontSize: 12,

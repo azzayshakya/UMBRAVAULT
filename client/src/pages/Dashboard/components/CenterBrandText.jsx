@@ -18,7 +18,7 @@ const CenterBrandText = () => {
           fontSize: 'clamp(22px, 3vw, 34px)',
           fontWeight: 700,
           letterSpacing: 4,
-          color: 'var(--term-green, #22e07a)',
+          color: 'var(--color-primary, #22e07a)',
         }}
       >
         TRUST NO ONE
@@ -28,7 +28,7 @@ const CenterBrandText = () => {
           fontFamily: 'var(--term-font, "JetBrains Mono", monospace)',
           fontSize: 11,
           letterSpacing: 6,
-          color: 'var(--term-text-muted, #6b8f78)',
+          color: 'var(--color-secondary, #6b8f78)',
         }}
       >
         EVERYTHING IS A LIE

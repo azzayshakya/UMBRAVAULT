@@ -37,7 +37,7 @@ const ChangeRoleModal = ({ open, user, onClose, onRoleChanged }) => {
             style={{
               background: 'transparent',
               border: '1px solid var(--term-border)',
-              color: 'var(--term-text-muted)',
+              color: 'var(--color-secondary)',
               fontFamily: 'var(--term-font)',
               fontSize: 11,
               letterSpacing: 1,
@@ -53,8 +53,8 @@ const ChangeRoleModal = ({ open, user, onClose, onRoleChanged }) => {
             disabled={submitting || isUnchanged}
             style={{
               background: isEscalation ? 'rgba(255, 59, 59, 0.12)' : 'rgba(57, 255, 106, 0.12)',
-              border: `1px solid ${isEscalation ? '#ff3b3b' : 'var(--term-border-strong)'}`,
-              color: isEscalation ? '#ff3b3b' : 'var(--term-green)',
+              border: `1px solid ${isEscalation ? '#ff3b3b' : 'var(--color-border-secondary)'}`,
+              color: isEscalation ? '#ff3b3b' : 'var(--color-primary)',
               fontFamily: 'var(--term-font)',
               fontWeight: 700,
               fontSize: 11,
@@ -83,19 +83,19 @@ const ChangeRoleModal = ({ open, user, onClose, onRoleChanged }) => {
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <span style={{ fontSize: 11, color: 'var(--term-text-muted)', letterSpacing: 1 }}>
+          <span style={{ fontSize: 11, color: 'var(--color-secondary)', letterSpacing: 1 }}>
             TARGET
           </span>
-          <span style={{ fontSize: 13, color: 'var(--term-green)', fontWeight: 600 }}>
+          <span style={{ fontSize: 13, color: 'var(--color-primary)', fontWeight: 600 }}>
             {user.username}
           </span>
         </div>
 
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <span style={{ fontSize: 11, color: 'var(--term-text-muted)', letterSpacing: 1 }}>
+          <span style={{ fontSize: 11, color: 'var(--color-secondary)', letterSpacing: 1 }}>
             CURRENT ROLE
           </span>
-          <span style={{ fontSize: 12, color: 'var(--term-green-dim)' }}>
+          <span style={{ fontSize: 12, color: 'var(--color-primary-light)' }}>
             {getRoleLabel(user.role)}
           </span>
         </div>
@@ -114,9 +114,9 @@ const ChangeRoleModal = ({ open, user, onClose, onRoleChanged }) => {
                   letterSpacing: 0.5,
                   borderRadius: 6,
                   cursor: 'pointer',
-                  border: `1px solid ${active ? 'var(--term-green)' : 'var(--term-border)'}`,
+                  border: `1px solid ${active ? 'var(--color-primary)' : 'var(--term-border)'}`,
                   background: active ? 'rgba(57, 255, 106, 0.14)' : 'transparent',
-                  color: active ? 'var(--term-green)' : 'var(--term-text-muted)',
+                  color: active ? 'var(--color-primary)' : 'var(--color-secondary)',
                   boxShadow: active ? '0 0 10px rgba(57,255,106,0.3)' : 'none',
                   transition: 'all 0.15s ease',
                 }}

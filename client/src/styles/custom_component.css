@@ -4,12 +4,11 @@
   position: relative;
   isolation: isolate;
   overflow: hidden;
-  /* background: var(--term-bg-panel); */
   border: 1px solid var(--term-border);
   border-radius: var(--term-radius);
-  box-shadow: var(--term-glow);
+  box-shadow: var(--color-glow);
   font-family: var(--term-font);
-  color: var(--term-text);
+  color: var(--color-secondary-hover);
 }
 
 .terminal-frame__corner {
@@ -24,29 +23,29 @@
 .terminal-frame__corner--tl {
   top: -1px;
   left: -1px;
-  border-top: 2px solid var(--term-green);
-  border-left: 2px solid var(--term-green);
+  border-top: 2px solid var(--color-primary);
+  border-left: 2px solid var(--color-primary);
 }
 
 .terminal-frame__corner--tr {
   top: -1px;
   right: -1px;
-  border-top: 2px solid var(--term-green);
-  border-right: 2px solid var(--term-green);
+  border-top: 2px solid var(--color-primary);
+  border-right: 2px solid var(--color-primary);
 }
 
 .terminal-frame__corner--bl {
   bottom: -1px;
   left: -1px;
-  border-bottom: 2px solid var(--term-green);
-  border-left: 2px solid var(--term-green);
+  border-bottom: 2px solid var(--color-primary);
+  border-left: 2px solid var(--color-primary);
 }
 
 .terminal-frame__corner--br {
   bottom: -1px;
   right: -1px;
-  border-bottom: 2px solid var(--term-green);
-  border-right: 2px solid var(--term-green);
+  border-bottom: 2px solid var(--color-primary);
+  border-right: 2px solid var(--color-primary);
 }
 
 .terminal-frame__scanlines {
@@ -70,7 +69,7 @@
   height: 2px;
   z-index: 1;
   pointer-events: none;
-  background: linear-gradient(to right, transparent, var(--term-green), transparent);
+  background: linear-gradient(to right, transparent, var(--color-primary), transparent);
   animation: term-scan-sweep 6s linear infinite;
 }
 
@@ -89,7 +88,7 @@
   display: flex;
   align-items: center;
   font-size: 12px;
-  color: var(--term-green-dim);
+  color: var(--color-primary-light);
   letter-spacing: 0.4px;
   white-space: nowrap;
   overflow: hidden;
@@ -98,7 +97,7 @@
 
 .terminal-frame__cursor {
   margin-left: 4px;
-  color: var(--term-green);
+  color: var(--color-primary);
   animation: term-blink 1s steps(1) infinite;
 }
 
@@ -112,7 +111,7 @@
 .terminal-frame__title {
   font-size: 13px;
   font-weight: 600;
-  color: var(--term-green);
+  color: var(--color-primary);
   letter-spacing: 0.5px;
   text-transform: uppercase;
   white-space: nowrap;
@@ -130,7 +129,7 @@
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  border: 1px solid var(--term-green-dim);
+  border: 1px solid var(--color-primary-light);
 }
 
 .terminal-frame__close {
@@ -138,7 +137,7 @@
   font-family: var(--term-font);
   font-size: 11px;
   letter-spacing: 0.5px;
-  color: var(--term-green-dim);
+  color: var(--color-primary-light);
   background: transparent;
   border: 1px solid var(--term-border);
   border-radius: 4px;
@@ -150,8 +149,8 @@
 }
 
 .terminal-frame__close:hover {
-  color: var(--term-green);
-  border-color: var(--term-border-strong);
+  color: var(--color-primary);
+  border-color: var(--color-border-secondary);
 }
 
 .terminal-frame__body {
@@ -215,7 +214,7 @@
 }
 .hacker-table .ant-table-thead > tr > th {
   background: rgba(57, 255, 106, 0.05) !important;
-  color: var(--term-green) !important;
+  color: var(--color-primary) !important;
   border-bottom: 1px solid var(--term-border) !important;
   font-family: var(--term-font);
   font-size: 11px;
@@ -225,7 +224,7 @@
 .hacker-table .ant-table-tbody > tr > td {
   background: transparent !important;
   border-bottom: 1px solid var(--term-border) !important;
-  color: var(--term-text);
+  color: var(--color-secondary-hover);
   font-size: 12px;
 }
 .hacker-table .ant-table-tbody > tr:hover > td {
@@ -236,16 +235,16 @@
 .hacker-table .ant-pagination-next .ant-pagination-item-link {
   background: transparent !important;
   border: 1px solid var(--term-border) !important;
-  color: var(--term-text-muted) !important;
+  color: var(--color-secondary) !important;
 }
 .hacker-table .ant-pagination-item-active {
-  border-color: var(--term-green) !important;
+  border-color: var(--color-primary) !important;
 }
 .hacker-table .ant-pagination-item-active a {
-  color: var(--term-green) !important;
+  color: var(--color-primary) !important;
 }
 .hacker-table .ant-select-selector {
   background: transparent !important;
   border: 1px solid var(--term-border) !important;
-  color: var(--term-text) !important;
+  color: var(--color-secondary-hover) !important;
 }

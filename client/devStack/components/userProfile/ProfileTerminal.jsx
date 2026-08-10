@@ -45,11 +45,11 @@ export const ProfileTerminal = ({ user }) => {
     <div
       style={{
         width: 420,
-        background: 'var(--term-bg-panel)',
+        background: 'var(--color-secondary-light)',
         border: '1px solid var(--term-border)',
         borderRadius: 12,
         padding: 20,
-        color: 'var(--term-text)',
+        color: 'var(--color-secondary-hover)',
         fontFamily: 'var(--term-font)',
         boxShadow: '0 0 25px rgba(57,255,106,.15), inset 0 0 20px rgba(57,255,106,.05)',
         position: 'relative',
@@ -60,7 +60,7 @@ export const ProfileTerminal = ({ user }) => {
 
       <div
         style={{
-          color: 'var(--term-green)',
+          color: 'var(--color-primary)',
           //   fontWeight: 700,
           fontSize: 11,
           marginBottom: 5,
@@ -85,8 +85,8 @@ export const ProfileTerminal = ({ user }) => {
             width: 72,
             height: 72,
             borderRadius: '50%',
-            border: '2px solid var(--term-green)',
-            boxShadow: 'var(--term-glow)',
+            border: '2px solid var(--color-primary)',
+            boxShadow: 'var(--color-glow)',
             objectFit: 'cover',
           }}
         />
@@ -94,7 +94,7 @@ export const ProfileTerminal = ({ user }) => {
         <div>
           <div
             style={{
-              color: 'var(--term-green)',
+              color: 'var(--color-primary)',
               fontSize: 16,
               fontWeight: 700,
             }}
@@ -104,7 +104,7 @@ export const ProfileTerminal = ({ user }) => {
 
           <div
             style={{
-              color: 'var(--term-text-muted)',
+              color: 'var(--color-secondary)',
               fontSize: 12,
             }}
           >
@@ -118,7 +118,7 @@ export const ProfileTerminal = ({ user }) => {
               padding: '4px 10px',
               border: '1px solid var(--term-border)',
               borderRadius: 6,
-              color: 'var(--term-green)',
+              color: 'var(--color-primary)',
               fontSize: 11,
             }}
           >
@@ -153,7 +153,7 @@ export const ProfileTerminal = ({ user }) => {
           >
             <span
               style={{
-                color: 'var(--term-text-muted)',
+                color: 'var(--color-secondary)',
                 fontSize: 11,
               }}
             >
@@ -162,7 +162,7 @@ export const ProfileTerminal = ({ user }) => {
 
             <span
               style={{
-                color: 'var(--term-green)',
+                color: 'var(--color-primary)',
                 fontSize: 11,
               }}
             >
@@ -185,7 +185,7 @@ export const ProfileTerminal = ({ user }) => {
       >
         <LaptopOutlined
           style={{
-            color: 'var(--term-green)',
+            color: 'var(--color-primary)',
             fontSize: 20,
           }}
         />
@@ -193,7 +193,7 @@ export const ProfileTerminal = ({ user }) => {
         <div style={{ flex: 1 }}>
           <div
             style={{
-              color: 'var(--term-green)',
+              color: 'var(--color-primary)',
               fontWeight: 600,
             }}
           >
@@ -202,7 +202,7 @@ export const ProfileTerminal = ({ user }) => {
 
           <div
             style={{
-              color: 'var(--term-text-muted)',
+              color: 'var(--color-secondary)',
               fontSize: 11,
             }}
           >
@@ -213,7 +213,7 @@ export const ProfileTerminal = ({ user }) => {
         <div
           style={{
             border: '1px solid var(--term-border)',
-            color: 'var(--term-green)',
+            color: 'var(--color-primary)',
             padding: '4px 10px',
             borderRadius: 6,
             fontSize: 11,
@@ -240,13 +240,13 @@ export const ProfileTerminal = ({ user }) => {
             background: 'transparent',
             border: '1px solid var(--term-border)',
             borderRadius: 8,
-            color: 'var(--term-green)',
+            color: 'var(--color-primary)',
             display: 'flex',
             gap: 10,
             alignItems: 'center',
             justifyContent: 'center',
             cursor: 'pointer',
-            boxShadow: 'var(--term-glow)',
+            boxShadow: 'var(--color-glow)',
           }}
         >
           <DeleteOutlined />
@@ -280,7 +280,7 @@ export const ProfileTerminal = ({ user }) => {
       <div
         style={{
           marginTop: 20,
-          color: 'var(--term-green)',
+          color: 'var(--color-primary)',
           opacity: 0.7,
           fontSize: 12,
           letterSpacing: 0.5,

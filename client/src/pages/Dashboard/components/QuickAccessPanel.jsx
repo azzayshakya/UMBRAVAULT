@@ -40,17 +40,17 @@ const QuickAccessPanel = () => {
               border: 'none',
               borderRadius: 4,
               cursor: 'pointer',
-              color: 'var(--term-text, #d7ffe4)',
+              color: 'var(--color-secondary-hover, #d7ffe4)',
               fontFamily: 'var(--term-font, "JetBrains Mono", monospace)',
               fontSize: 12.5,
               textAlign: 'left',
             }}
           >
             <span style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-              <Icon style={{ color: 'var(--term-green-dim, #6fae87)' }} />
+              <Icon style={{ color: 'var(--color-primary-light, #6fae87)' }} />
               {label}
             </span>
-            <RightOutlined style={{ fontSize: 10, color: 'var(--term-text-muted, #6b8f78)' }} />
+            <RightOutlined style={{ fontSize: 10, color: 'var(--color-secondary, #6b8f78)' }} />
           </button>
         ))}
       </div>

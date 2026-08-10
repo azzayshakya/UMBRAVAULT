@@ -2,12 +2,12 @@ const terminalFrameStyle = {
   position: 'relative',
   isolation: 'isolate',
   overflow: 'hidden',
-  background: 'var(--term-bg-panel)',
+  background: 'var(--color-secondary-light)',
   border: '1px solid var(--term-border)',
   borderRadius: 'var(--term-radius)',
-  boxShadow: 'var(--term-glow)',
+  boxShadow: 'var(--color-glow)',
   fontFamily: 'var(--term-font)',
-  color: 'var(--term-text)',
+  color: 'var(--color-secondary-hover)',
 }
 
 const cornerBaseStyle = {
@@ -52,8 +52,8 @@ export function ProjectCardSkeleton({ index }) {
           ...cornerBaseStyle,
           top: -1,
           left: -1,
-          borderTop: '2px solid var(--term-green)',
-          borderLeft: '2px solid var(--term-green)',
+          borderTop: '2px solid var(--color-primary)',
+          borderLeft: '2px solid var(--color-primary)',
         }}
       />
       <span
@@ -61,8 +61,8 @@ export function ProjectCardSkeleton({ index }) {
           ...cornerBaseStyle,
           top: -1,
           right: -1,
-          borderTop: '2px solid var(--term-green)',
-          borderRight: '2px solid var(--term-green)',
+          borderTop: '2px solid var(--color-primary)',
+          borderRight: '2px solid var(--color-primary)',
         }}
       />
       <span
@@ -70,8 +70,8 @@ export function ProjectCardSkeleton({ index }) {
           ...cornerBaseStyle,
           bottom: -1,
           left: -1,
-          borderBottom: '2px solid var(--term-green)',
-          borderLeft: '2px solid var(--term-green)',
+          borderBottom: '2px solid var(--color-primary)',
+          borderLeft: '2px solid var(--color-primary)',
         }}
       />
       <span
@@ -79,8 +79,8 @@ export function ProjectCardSkeleton({ index }) {
           ...cornerBaseStyle,
           bottom: -1,
           right: -1,
-          borderBottom: '2px solid var(--term-green)',
-          borderRight: '2px solid var(--term-green)',
+          borderBottom: '2px solid var(--color-primary)',
+          borderRight: '2px solid var(--color-primary)',
         }}
       />
       <span style={scanlinesStyle} />

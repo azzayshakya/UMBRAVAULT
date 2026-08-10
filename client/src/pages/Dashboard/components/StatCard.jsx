@@ -50,7 +50,7 @@ const StatCard = ({ icon, label, value, sub, trend, tone }) => {
             style={{
               fontFamily: 'var(--term-font, "JetBrains Mono", monospace)',
               fontSize: 11,
-              color: 'var(--term-text-muted, #6b8f78)',
+              color: 'var(--color-secondary, #6b8f78)',
             }}
           >
             {sub}

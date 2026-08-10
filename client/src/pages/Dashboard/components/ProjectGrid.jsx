@@ -91,12 +91,12 @@ const terminalFrameStyle = {
   position: 'relative',
   isolation: 'isolate',
   overflow: 'hidden',
-  background: 'var(--term-bg-panel)',
+  background: 'var(--color-secondary-light)',
   border: '1px solid var(--term-border)',
   borderRadius: 'var(--term-radius)',
-  // boxShadow: 'var(--term-glow)',
+  // boxShadow: 'var(--color-glow)',
   fontFamily: 'var(--term-font)',
-  color: 'var(--term-text)',
+  color: 'var(--color-secondary-hover)',
 }
 
 function ProjectCard({ project, index }) {
@@ -114,7 +114,7 @@ function ProjectCard({ project, index }) {
       }}
       onMouseEnter={(e) => {
         e.currentTarget.style.transform = 'translateY(-5px)'
-        e.currentTarget.style.boxShadow = 'var(--term-glow)'
+        e.currentTarget.style.boxShadow = 'var(--color-glow)'
       }}
       onMouseLeave={(e) => {
         e.currentTarget.style.transform = 'translateY(0)'
@@ -139,7 +139,7 @@ function ProjectCard({ project, index }) {
             <Icon
               size={40}
               style={{
-                color: 'var(--term-green)',
+                color: 'var(--color-primary)',
               }}
             />
           </div>
@@ -150,7 +150,7 @@ function ProjectCard({ project, index }) {
             style={{
               fontSize: 18,
               textAlign: 'center',
-              color: 'var(--term-green)',
+              color: 'var(--color-primary)',
               textTransform: 'uppercase',
               textShadow: '0 0 15px rgba(57,255,106,.5)',
             }}
@@ -162,7 +162,7 @@ function ProjectCard({ project, index }) {
               style={{
                 textAlign: 'center',
                 fontSize: 12,
-                color: 'var(--term-text-muted)',
+                color: 'var(--color-secondary)',
                 maxWidth: 180,
                 overflow: 'hidden',
                 textOverflow: 'ellipsis',
@@ -185,7 +185,7 @@ function ProjectCard({ project, index }) {
                 padding: '3px 8px',
                 borderRadius: 4,
                 border: '1px solid var(--term-border)',
-                color: 'var(--term-green-dim)',
+                color: 'var(--color-primary-light)',
                 background: 'rgba(57,255,106,0.04)',
               }}
             >
@@ -229,7 +229,6 @@ export default function ProjectsGrid() {
   return (
     <div
       style={{
-        // background: 'var(--term-bg)',
         border: '1px solid var(--term-border)',
         padding: 24,
         fontFamily: 'var(--term-font)',
@@ -259,7 +258,7 @@ export default function ProjectsGrid() {
           style={{
             fontSize: 11,
             letterSpacing: 0.5,
-            color: 'var(--term-green)',
+            color: 'var(--color-primary)',
             cursor: 'pointer',
           }}
         >

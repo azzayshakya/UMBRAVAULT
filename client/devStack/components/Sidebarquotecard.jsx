@@ -43,7 +43,7 @@ const quoteTextStyle = {
   fontFamily: 'var(--term-font, "JetBrains Mono", monospace)',
   fontSize: 11,
   lineHeight: 1.6,
-  color: 'var(--term-text, var(--color-text))',
+  color: 'var(--color-secondary-hover, var(--color-text))',
   letterSpacing: 0.2,
   transition: 'opacity 0.35s ease',
 }
@@ -52,7 +52,7 @@ const tagStyle = {
   fontFamily: 'var(--term-font, "JetBrains Mono", monospace)',
   fontSize: 10.5,
   lineHeight: 1.6,
-  color: 'var(--term-text-muted, var(--color-text-muted))',
+  color: 'var(--color-secondary, var(--color-text-muted))',
   marginTop: 6,
   transition: 'opacity 0.35s ease',
 }

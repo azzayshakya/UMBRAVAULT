@@ -14,7 +14,7 @@ const headerStyle = {
   alignItems: 'center',
   gap: 8,
   marginBottom: 12,
-  color: 'var(--term-green-dim, #6fae87)',
+  color: 'var(--color-primary-light, #6fae87)',
   fontFamily: 'var(--term-font, "JetBrains Mono", monospace)',
   fontSize: 11,
   letterSpacing: 1,

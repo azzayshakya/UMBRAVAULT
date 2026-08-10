@@ -77,7 +77,7 @@ const TaskDetailPanel = ({
           display: 'flex',
           alignItems: 'center',
           gap: 6,
-          color: 'var(--term-green)',
+          color: 'var(--color-primary)',
           fontSize: 11,
           letterSpacing: 1,
           marginBottom: 8,
@@ -96,19 +96,19 @@ const TaskDetailPanel = ({
         }}
       >
         {activityLoading && (
-          <span style={{ color: 'var(--term-text-muted)', fontSize: 11 }}>reading log...</span>
+          <span style={{ color: 'var(--color-secondary)', fontSize: 11 }}>reading log...</span>
         )}
         {!activityLoading && activity.length === 0 && (
-          <span style={{ color: 'var(--term-text-muted)', fontSize: 11 }}>no entries yet</span>
+          <span style={{ color: 'var(--color-secondary)', fontSize: 11 }}>no entries yet</span>
         )}
         {activity.map((entry) => (
           <div key={entry._id} style={{ fontSize: 11, lineHeight: 1.5 }}>
-            <div style={{ color: 'var(--term-green-dim)' }}>
+            <div style={{ color: 'var(--color-primary-light)' }}>
               [{dayjs(entry.createdAt).format('YYYY-MM-DD HH:mm:ss')}]
             </div>
             <div
               style={{
-                color: 'var(--term-text)',
+                color: 'var(--color-secondary-hover)',
                 overflow: 'hidden',
                 whiteSpace: 'nowrap',
                 textOverflow: 'ellipsis',
@@ -116,7 +116,7 @@ const TaskDetailPanel = ({
             >
               {entry.message}
             </div>
-            <div style={{ color: 'var(--term-text-muted)' }}>
+            <div style={{ color: 'var(--color-secondary)' }}>
               by {entry.performedBy?.username || entry.performedBy?.name || 'system'}
             </div>
           </div>
@@ -138,7 +138,7 @@ const TaskDetailPanel = ({
         <div>
           <div
             style={{
-              color: 'var(--term-text-muted)',
+              color: 'var(--color-secondary)',
               fontSize: 11,
               letterSpacing: 1,
               marginBottom: 4,
@@ -164,7 +164,7 @@ const TaskDetailPanel = ({
         <div>
           <div
             style={{
-              color: 'var(--term-text-muted)',
+              color: 'var(--color-secondary)',
               fontSize: 11,
               letterSpacing: 1,
               marginBottom: 4,
@@ -189,7 +189,7 @@ const TaskDetailPanel = ({
         <div>
           <div
             style={{
-              color: 'var(--term-text-muted)',
+              color: 'var(--color-secondary)',
               fontSize: 11,
               letterSpacing: 1,
               marginBottom: 4,
@@ -202,7 +202,7 @@ const TaskDetailPanel = ({
             style={{ width: '100%', ...selectVarStyle }}
             onChange={(d) => onDueDateChange(task._id, d ? d.toISOString() : null)}
           />
-          <div style={{ color: 'var(--term-green-dim)', fontSize: 11, marginTop: 4 }}>
+          <div style={{ color: 'var(--color-primary-light)', fontSize: 11, marginTop: 4 }}>
             {daysLeftLabel(task.dueDate)}
           </div>
         </div>
@@ -212,14 +212,14 @@ const TaskDetailPanel = ({
             style={{
               display: 'flex',
               justifyContent: 'space-between',
-              color: 'var(--term-text-muted)',
+              color: 'var(--color-secondary)',
               fontSize: 11,
               letterSpacing: 1,
               marginBottom: 6,
             }}
           >
             <span>{'>'} SUBTASKS</span>
-            <span style={{ color: 'var(--term-green)' }}>
+            <span style={{ color: 'var(--color-primary)' }}>
               {doneCount} / {totalCount}
             </span>
           </div>
@@ -237,8 +237,8 @@ const TaskDetailPanel = ({
               style={{
                 height: '100%',
                 width: `${progressPct}%`,
-                background: 'var(--term-green)',
-                boxShadow: '0 0 8px var(--term-green)',
+                background: 'var(--color-primary)',
+                boxShadow: '0 0 8px var(--color-primary)',
                 transition: 'width 0.3s ease',
               }}
             />
@@ -254,13 +254,13 @@ const TaskDetailPanel = ({
                   type="checkbox"
                   checked={s.isDone}
                   onChange={(e) => onToggleSubtask(task._id, s._id, e.target.checked)}
-                  style={{ accentColor: 'var(--term-green)', cursor: 'pointer' }}
+                  style={{ accentColor: 'var(--color-primary)', cursor: 'pointer' }}
                 />
                 <Tooltip title={s?.title}>
                   <span
                     style={{
                       flex: 1,
-                      color: s.isDone ? 'var(--term-text-muted)' : 'var(--term-text)',
+                      color: s.isDone ? 'var(--color-secondary)' : 'var(--color-secondary-hover)',
                       textDecoration: s.isDone ? 'line-through' : 'none',
                       overflow: 'hidden',
                       whiteSpace: 'nowrap',
@@ -299,7 +299,7 @@ const TaskDetailPanel = ({
               style={{
                 border: '1px solid var(--term-border)',
                 background: 'transparent',
-                color: 'var(--term-green)',
+                color: 'var(--color-primary)',
                 borderRadius: 5,
                 padding: '0 8px',
                 cursor: 'pointer',

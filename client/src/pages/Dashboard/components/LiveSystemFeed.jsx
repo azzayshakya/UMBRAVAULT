@@ -58,10 +58,12 @@ const LiveSystemFeed = () => {
                     textOverflow: 'ellipsis',
                   }}
                 >
-                  <span style={{ color: 'var(--term-text-muted, #6b8f78)' }}>[{log.time}]</span>
-                  <span style={{ color: 'var(--term-green, #22e07a)' }}>{log.actor}</span>
-                  <span style={{ color: 'var(--term-text-muted, #6b8f78)' }}>→</span>
-                  <span style={{ color: 'var(--term-text, #d7ffe4)' }}>{log.action}</span>
+                  <span style={{ color: 'var(--color-secondary, #6b8f78)' }}>[{log.time}]</span>
+                  <span style={{ color: 'var(--color-primary, #22e07a)' }}>{log.actor}</span>
+                  <span style={{ color: 'var(--color-secondary, #6b8f78)' }}>→</span>
+                  <span style={{ color: 'var(--color-secondary-hover, #d7ffe4)' }}>
+                    {log.action}
+                  </span>
                   {STATUS_LABEL[log.status] && (
                     <span style={{ color, marginLeft: 'auto', fontWeight: 600, flexShrink: 0 }}>
                       [{STATUS_LABEL[log.status]}]

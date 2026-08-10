@@ -11,7 +11,7 @@ export const NOTE_TYPE_OPTIONS = [
 ]
 
 export const NOTE_TYPE_BADGE_CONFIG = {
-  [NOTE_TYPE.THEORY]: { label: 'theory', color: 'var(--term-green)' },
+  [NOTE_TYPE.THEORY]: { label: 'theory', color: 'var(--color-primary)' },
   [NOTE_TYPE.SNIPPET]: { label: 'snippet', color: '#38bdf8' },
   [NOTE_TYPE.QUESTION]: { label: 'question', color: '#f5c542' },
 }

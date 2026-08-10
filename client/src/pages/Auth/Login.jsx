@@ -16,14 +16,14 @@ const { Text } = Typography
 const inputStyle = {
   background: 'rgba(6, 18, 10, 0.6)',
   border: '1px solid var(--term-border)',
-  color: 'var(--term-text)',
+  color: 'var(--color-secondary-hover)',
   fontFamily: 'var(--term-font)',
   fontSize: 13,
   borderRadius: 6,
 }
 
 const fieldLabelStyle = {
-  color: 'var(--term-green-dim)',
+  color: 'var(--color-primary-light)',
   fontFamily: 'var(--term-font)',
   fontSize: 12,
   letterSpacing: 0.5,
@@ -82,7 +82,7 @@ const LoginPage = () => {
           <Text
             style={{
               fontSize: 11,
-              color: 'var(--term-text-muted)',
+              color: 'var(--color-secondary)',
               fontFamily: 'var(--term-font)',
               letterSpacing: 0.3,
             }}
@@ -108,7 +108,7 @@ const LoginPage = () => {
             ]}
           >
             <Input
-              prefix={<UserOutlined style={{ color: 'var(--term-green-dim)' }} />}
+              prefix={<UserOutlined style={{ color: 'var(--color-primary-light)' }} />}
               placeholder="you@domain.com"
               autoComplete="new-email"
               style={inputStyle}
@@ -121,7 +121,7 @@ const LoginPage = () => {
             rules={[{ required: true, message: 'Enter your password' }]}
           >
             <Input.Password
-              prefix={<LockOutlined style={{ color: 'var(--term-green-dim)' }} />}
+              prefix={<LockOutlined style={{ color: 'var(--color-primary-light)' }} />}
               placeholder="********"
               autoComplete="new-password"
               style={inputStyle}
@@ -135,9 +135,9 @@ const LoginPage = () => {
               disabled={loading}
               style={{
                 height: 42,
-                background: loading ? 'rgba(57, 255, 106, 0.12)' : 'var(--term-green)',
-                border: '1px solid var(--term-border-strong)',
-                color: loading ? 'var(--term-green)' : '#04150a',
+                background: loading ? 'rgba(57, 255, 106, 0.12)' : 'var(--color-primary)',
+                border: '1px solid var(--color-border-secondary)',
+                color: loading ? 'var(--color-primary)' : '#04150a',
                 fontFamily: 'var(--term-font)',
                 fontWeight: 600,
                 letterSpacing: 1,
@@ -155,10 +155,10 @@ const LoginPage = () => {
                 <Loader
                   size={16}
                   thickness={2}
-                  color="var(--term-green)"
+                  color="var(--color-primary)"
                   trackColor="rgba(57, 255, 106, 0.2)"
                   label="AUTHENTICATING..."
-                  labelColor="var(--term-green)"
+                  labelColor="var(--color-primary)"
                   labelSize={12}
                 />
               ) : (

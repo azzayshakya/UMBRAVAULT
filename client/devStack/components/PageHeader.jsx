@@ -40,7 +40,7 @@ const PageHeader = ({
           {title && (
             <h1
               style={{
-                color: 'var(--term-green, #39ff6a)',
+                color: 'var(--color-primary, #39ff6a)',
                 fontSize: 24,
                 letterSpacing: 1.5,
                 margin: 0,
@@ -57,7 +57,7 @@ const PageHeader = ({
           {subtitle && (
             <p
               style={{
-                color: 'var(--term-text-muted, #888)',
+                color: 'var(--color-secondary, #888)',
                 fontSize: 12,
                 marginTop: 4,
                 marginBottom: 0,

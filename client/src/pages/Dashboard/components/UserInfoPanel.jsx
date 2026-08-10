@@ -15,14 +15,14 @@ const cornerBase = {
   position: 'absolute',
   width: 16,
   height: 16,
-  borderColor: 'var(--term-green, #22e07a)',
+  borderColor: 'var(--color-primary, #22e07a)',
   opacity: 0.9,
 }
 
 const labelStyle = {
   fontFamily: 'var(--term-font, "JetBrains Mono", monospace)',
   fontSize: 11,
-  color: 'var(--term-text-muted, #6b8f78)',
+  color: 'var(--color-secondary, #6b8f78)',
   letterSpacing: 0.5,
   display: 'flex',
   alignItems: 'center',
@@ -33,7 +33,7 @@ const labelStyle = {
 const valueStyle = {
   fontFamily: 'var(--term-font, "JetBrains Mono", monospace)',
   fontSize: 12,
-  color: 'var(--term-text, #d7ffe4)',
+  color: 'var(--color-secondary-hover, #d7ffe4)',
   letterSpacing: 0.3,
 }
 
@@ -53,7 +53,7 @@ const UserInfoPanel = () => {
 
   const wrapStyle = {
     position: 'relative',
-    border: '1px solid var(--term-border-strong, rgba(34, 224, 122, 0.35))',
+    border: '1px solid var(--color-border-secondary, rgba(34, 224, 122, 0.35))',
     background:
       'radial-gradient(circle at 15% 15%, rgba(34,224,122,0.08), transparent 55%), linear-gradient(135deg, rgba(34, 224, 122, 0.05), rgba(4, 9, 6, 0.9))',
     borderRadius: 'var(--radius-sm, 6px)',
@@ -73,13 +73,13 @@ const UserInfoPanel = () => {
     height: isMobile ? 70 : 84,
     flexShrink: 0,
     borderRadius: '50%',
-    border: '2px solid var(--term-green, #22e07a)',
+    border: '2px solid var(--color-primary, #22e07a)',
     boxShadow: '0 0 18px rgba(34, 224, 122, 0.45), inset 0 0 12px rgba(34,224,122,0.25)',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     background: 'radial-gradient(circle at 30% 20%, rgba(34,224,122,0.18), #060b08)',
-    color: 'var(--term-green, #22e07a)',
+    color: 'var(--color-primary, #22e07a)',
     fontSize: 32,
     overflow: 'hidden',
   }
@@ -98,10 +98,10 @@ const UserInfoPanel = () => {
         <Loader
           size={18}
           thickness={2}
-          color="var(--term-green, #22e07a)"
+          color="var(--color-primary, #22e07a)"
           trackColor="rgba(34, 224, 122, 0.15)"
           label="FETCHING YOUR INFO..."
-          labelColor="var(--term-green, #22e07a)"
+          labelColor="var(--color-primary, #22e07a)"
           labelSize={12}
         />
       </div>
@@ -133,7 +133,7 @@ const UserInfoPanel = () => {
         }
         .dash-user-panel__radar {
           position: absolute; inset: -2px; border-radius: 50%;
-          border-top: 1.5px solid var(--term-green, #22e07a);
+          border-top: 1.5px solid var(--color-primary, #22e07a);
           border-right: 1.5px solid transparent;
           border-bottom: 1.5px solid transparent;
           border-left: 1.5px solid transparent;
@@ -142,7 +142,7 @@ const UserInfoPanel = () => {
         }
         .dash-user-panel__handle { animation: glitchShift 6s infinite; }
         .dash-user-panel__cursor { animation: cursorBlink 1s step-end infinite; }
-        .dash-user-panel__bio-icon:hover { color: var(--term-green, #22e07a) !important; }
+        .dash-user-panel__bio-icon:hover { color: var(--color-primary, #22e07a) !important; }
       `}</style>
 
       {/* scan frame corners */}
@@ -190,7 +190,7 @@ const UserInfoPanel = () => {
           gap: 5,
           fontFamily: 'var(--term-font, monospace)',
           fontSize: 9,
-          color: 'var(--term-green, #22e07a)',
+          color: 'var(--color-primary, #22e07a)',
           letterSpacing: 1,
         }}
       >
@@ -199,8 +199,8 @@ const UserInfoPanel = () => {
             width: 6,
             height: 6,
             borderRadius: '50%',
-            background: 'var(--term-green, #22e07a)',
-            boxShadow: '0 0 6px var(--term-green, #22e07a)',
+            background: 'var(--color-primary, #22e07a)',
+            boxShadow: '0 0 6px var(--color-primary, #22e07a)',
             animation: 'livePulse 1.4s ease-in-out infinite',
           }}
         />
@@ -243,7 +243,7 @@ const UserInfoPanel = () => {
             fontFamily: 'var(--term-font, "JetBrains Mono", monospace)',
             fontSize: isMobile ? 17 : 20,
             fontWeight: 700,
-            color: 'var(--term-green, #22e07a)',
+            color: 'var(--color-primary, #22e07a)',
             letterSpacing: 1,
             textShadow: '0 0 8px rgba(34,224,122,0.6)',
           }}
@@ -254,7 +254,7 @@ const UserInfoPanel = () => {
           style={{
             fontFamily: 'var(--term-font, "JetBrains Mono", monospace)',
             fontSize: 11,
-            color: 'var(--term-text-muted, #6b8f78)',
+            color: 'var(--color-secondary, #6b8f78)',
             letterSpacing: 2,
             marginBottom: 2,
           }}
@@ -265,7 +265,7 @@ const UserInfoPanel = () => {
           style={{
             fontFamily: 'var(--term-font, "JetBrains Mono", monospace)',
             fontSize: 11,
-            color: 'var(--term-text-muted, #6b8f78)',
+            color: 'var(--color-secondary, #6b8f78)',
             letterSpacing: 2,
             marginBottom: 2,
           }}
@@ -285,7 +285,10 @@ const UserInfoPanel = () => {
         </span>
         <span style={labelStyle}>
           email: <span style={valueStyle}>{authenticUser?.email}</span>
-          <span className="dash-user-panel__cursor" style={{ color: 'var(--term-green, #22e07a)' }}>
+          <span
+            className="dash-user-panel__cursor"
+            style={{ color: 'var(--color-primary, #22e07a)' }}
+          >
             ▍
           </span>
         </span>
@@ -300,7 +303,7 @@ const UserInfoPanel = () => {
                 flexDirection: 'column',
                 alignItems: 'center',
                 gap: 3,
-                color: 'var(--term-green-dim, #6fae87)',
+                color: 'var(--color-primary-light, #6fae87)',
                 fontSize: 15,
                 cursor: 'pointer',
                 transition: 'color 0.15s ease',

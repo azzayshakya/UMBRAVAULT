@@ -6,7 +6,7 @@ export const toneColor = (tone) => {
       return 'var(--term-amber, #f59e0b)'
     case 'ok':
     default:
-      return 'var(--term-green, #22e07a)'
+      return 'var(--color-primary, #22e07a)'
   }
 }
 
@@ -17,7 +17,7 @@ export const statusDotColor = (status) => {
     case 'danger':
       return 'var(--term-red, #ef4444)'
     default:
-      return 'var(--term-green, #22e07a)'
+      return 'var(--color-primary, #22e07a)'
   }
 }
 

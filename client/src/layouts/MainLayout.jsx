@@ -30,7 +30,9 @@ const MainLayout = ({ userRole, userData = null }) => {
   }, [isMobile, dispatch])
 
   const contentBgUrl = '/images/global/binary-bg.webp'
-
+  //
+  const userPreference = useSelector((s) => s.preference)
+  const isDark = userPreference.colorScheme === 'dark'
   const { selectedKeys, openKeys, handleMenuClick, handleOpenChange } = useMenu({
     defaultSelectedKey: 'dashboard',
     persistState: true,
@@ -153,7 +155,10 @@ const MainLayout = ({ userRole, userData = null }) => {
 
         <div
           style={{
-            background: `linear-gradient(rgba(8, 11, 9, 0.72), rgba(8, 11, 9, 0.72)), url(${contentBgUrl})`,
+            background: !isDark
+              ? 'none' // or whatever your dark mode background fallback is
+              : `none`,
+            // : `linear-gradient(rgba(8, 11, 9, 0.72), rgba(8, 11, 9, 0.72)), url(${contentBgUrl})`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat',

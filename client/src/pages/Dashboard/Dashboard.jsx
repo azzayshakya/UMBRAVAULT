@@ -13,14 +13,11 @@ const pageStyle = {
   display: 'flex',
   flexDirection: 'column',
   gap: 14,
-  // padding: 'var(--page-padding, 24px)',
-  // background: 'var(--term-bg, #05080a)',
   boxSizing: 'border-box',
   overflow: 'hidden',
-  color: 'var(--term-text, #d7ffe4)',
+  color: 'var(--color-secondary-hover, #d7ffe4)',
 }
 const DashboardHeaderUrl = '/images/global/dashboard_header.png'
-// dashboard_header.png
 const Dashboard = () => {
   // Both the status list and the stat-card row are backed by the same
   // getSystemStatus() call, so it's fetched once here and passed down.
@@ -147,8 +144,8 @@ const DASH_ANIMATION_CSS = `
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: var(--term-green, #22e07a);
-  box-shadow: 0 0 6px var(--term-green, #22e07a);
+  background: var(--color-primary, #22e07a);
+  box-shadow: 0 0 6px var(--color-primary, #22e07a);
   animation: dash-blink 1.6s ease-in-out infinite;
 }
 @keyframes dash-blink {
@@ -173,7 +170,7 @@ const DASH_ANIMATION_CSS = `
   top: 0;
   width: 100%;
   overflow: hidden;
-  color: var(--term-green, #22e07a);
+  color: var(--color-primary, #22e07a);
   background: transparent;
 }
 .dash-brand-glitch::before {

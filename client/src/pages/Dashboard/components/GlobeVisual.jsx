@@ -70,7 +70,7 @@ const GlobeVisual = () => {
             cx={d.x}
             cy={d.y}
             r={DOT_R}
-            fill="var(--term-green, #22e07a)"
+            fill="var(--color-primary, #22e07a)"
             opacity={d.opacity}
           />
         ))}
@@ -79,17 +79,17 @@ const GlobeVisual = () => {
         <g transform={`translate(${WIDTH * 0.5}, ${HEIGHT * 0.42})`}>
           <circle
             r="14"
-            fill="var(--term-green, #22e07a)"
+            fill="var(--color-primary, #22e07a)"
             opacity="0.12"
             className="dash-globe__ring dash-globe__ring--1"
           />
           <circle
             r="14"
-            fill="var(--term-green, #22e07a)"
+            fill="var(--color-primary, #22e07a)"
             opacity="0.12"
             className="dash-globe__ring dash-globe__ring--2"
           />
-          <circle r="5" fill="var(--term-green, #22e07a)" className="dash-globe__core" />
+          <circle r="5" fill="var(--color-primary, #22e07a)" className="dash-globe__core" />
         </g>
       </svg>
     </div>

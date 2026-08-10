@@ -32,7 +32,7 @@ const SystemStatusPanel = ({ statusList, loading }) => {
       {loading
         ? Array.from({ length: 5 }).map((_, i) => (
             <div key={i} style={{ ...rowStyle, opacity: 0.35 }}>
-              <span style={{ color: 'var(--term-text-muted, #6b8f78)' }}>Loading...</span>
+              <span style={{ color: 'var(--color-secondary, #6b8f78)' }}>Loading...</span>
             </div>
           ))
         : statusList.map((item) => {
@@ -43,7 +43,7 @@ const SystemStatusPanel = ({ statusList, loading }) => {
                   style={{
                     display: 'flex',
                     alignItems: 'center',
-                    color: 'var(--term-text-muted, #9bb8a7)',
+                    color: 'var(--color-secondary, #9bb8a7)',
                   }}
                 >
                   <span style={dotStyle(color)} />
@@ -51,7 +51,7 @@ const SystemStatusPanel = ({ statusList, loading }) => {
                 </span>
                 <span
                   style={{
-                    color: item.tone === 'danger' ? color : 'var(--term-text, #d7ffe4)',
+                    color: item.tone === 'danger' ? color : 'var(--color-secondary-hover, #d7ffe4)',
                     fontWeight: 600,
                   }}
                 >

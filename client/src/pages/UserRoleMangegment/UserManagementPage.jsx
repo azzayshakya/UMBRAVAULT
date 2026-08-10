@@ -27,7 +27,7 @@ const actionBtnStyle = {
   border: '1px solid var(--term-border)',
   borderRadius: 5,
   background: 'transparent',
-  color: 'var(--term-green)',
+  color: 'var(--color-primary)',
   cursor: 'pointer',
 }
 
@@ -60,28 +60,28 @@ const UserManagementPage = () => {
       dataIndex: '_id',
       key: '_id',
       width: 100,
-      render: (v) => <span style={{ color: 'var(--term-text-muted)' }}>{v}</span>,
+      render: (v) => <span style={{ color: 'var(--color-secondary)' }}>{v}</span>,
     },
     {
       title: ':USERNAME',
       dataIndex: 'username',
       key: 'username',
       width: 140,
-      render: (v) => <span style={{ color: 'var(--term-green)' }}>{v}</span>,
+      render: (v) => <span style={{ color: 'var(--color-primary)' }}>{v}</span>,
     },
     {
       title: ':NAME',
       dataIndex: 'name',
       key: 'name',
       width: 140,
-      render: (v) => <span style={{ color: 'var(--term-green)' }}>{v}</span>,
+      render: (v) => <span style={{ color: 'var(--color-primary)' }}>{v}</span>,
     },
     {
       title: ':EMAIL',
       dataIndex: 'email',
       key: 'email',
       width: 200,
-      render: (v) => <span style={{ color: 'var(--term-text-muted)' }}>{v}</span>,
+      render: (v) => <span style={{ color: 'var(--color-secondary)' }}>{v}</span>,
     },
     {
       title: ':ROLE',
@@ -135,7 +135,7 @@ const UserManagementPage = () => {
           }}
         >
           <Input
-            prefix={<SearchOutlined style={{ color: 'var(--term-green-dim)' }} />}
+            prefix={<SearchOutlined style={{ color: 'var(--color-primary-light)' }} />}
             placeholder="Search users..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
@@ -143,7 +143,7 @@ const UserManagementPage = () => {
               width: isMobile ? '100%' : 220,
               background: 'rgba(6, 18, 10, 0.6)',
               border: '1px solid var(--term-border)',
-              color: 'var(--term-text)',
+              color: 'var(--color-secondary-hover)',
             }}
           />
           <button
@@ -156,7 +156,7 @@ const UserManagementPage = () => {
               border: '1px solid var(--term-border)',
               borderRadius: 6,
               background: 'transparent',
-              color: 'var(--term-green)',
+              color: 'var(--color-primary)',
               fontFamily: 'var(--term-font)',
               fontSize: 12,
               letterSpacing: 1,

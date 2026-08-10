@@ -36,7 +36,7 @@ const NewTaskModal = ({ open, onClose, onCreate, submitting }) => {
             style={{
               border: '1px solid var(--term-border)',
               background: 'transparent',
-              color: 'var(--term-text-muted)',
+              color: 'var(--color-secondary)',
               borderRadius: 6,
               padding: '6px 14px',
               cursor: 'pointer',
@@ -50,9 +50,9 @@ const NewTaskModal = ({ open, onClose, onCreate, submitting }) => {
             onClick={handleSubmit}
             disabled={submitting}
             style={{
-              border: '1px solid var(--term-border-strong)',
+              border: '1px solid var(--color-border-secondary)',
               background: 'rgba(57,255,106,0.08)',
-              color: 'var(--term-green)',
+              color: 'var(--color-primary)',
               borderRadius: 6,
               padding: '6px 16px',
               cursor: submitting ? 'not-allowed' : 'pointer',

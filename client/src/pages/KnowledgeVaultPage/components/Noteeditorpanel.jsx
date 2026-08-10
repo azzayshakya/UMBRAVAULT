@@ -33,7 +33,7 @@ const NoteEditorPanel = ({ noteId, onClose, onDeleted }) => {
           display: 'flex',
           alignItems: 'center',
           gap: 6,
-          color: saveStatus === 'error' ? '#ef4444' : 'var(--term-text-muted)',
+          color: saveStatus === 'error' ? '#ef4444' : 'var(--color-secondary)',
           fontSize: 11,
         }}
       >
@@ -80,7 +80,7 @@ const NoteEditorPanel = ({ noteId, onClose, onDeleted }) => {
             style={{
               background: 'rgba(6, 18, 10, 0.6)',
               border: '1px solid var(--term-border)',
-              color: 'var(--term-text)',
+              color: 'var(--color-secondary-hover)',
               fontWeight: 600,
             }}
           />
@@ -110,7 +110,7 @@ const NoteEditorPanel = ({ noteId, onClose, onDeleted }) => {
             style={{
               background: 'rgba(6, 18, 10, 0.6)',
               border: '1px solid var(--term-border)',
-              color: 'var(--term-text)',
+              color: 'var(--color-secondary-hover)',
               fontSize: 13,
               lineHeight: 1.6,
             }}

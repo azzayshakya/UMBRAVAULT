@@ -74,7 +74,7 @@ const TopicCard = ({ topic, index, onOpen, onEdit, onDelete }) => {
               justifyContent: 'center',
               border: 'none',
               background: 'transparent',
-              color: 'var(--term-text-muted)',
+              color: 'var(--color-secondary)',
               cursor: 'pointer',
             }}
           >
@@ -83,7 +83,7 @@ const TopicCard = ({ topic, index, onOpen, onEdit, onDelete }) => {
         </Dropdown>
       </div>
 
-      <div style={{ marginTop: 12, color: 'var(--term-green)', fontWeight: 600, fontSize: 15 }}>
+      <div style={{ marginTop: 12, color: 'var(--color-primary)', fontWeight: 600, fontSize: 15 }}>
         {topic.name}
       </div>
 
@@ -91,7 +91,7 @@ const TopicCard = ({ topic, index, onOpen, onEdit, onDelete }) => {
         <div
           style={{
             marginTop: 4,
-            color: 'var(--term-text-muted)',
+            color: 'var(--color-secondary)',
             fontSize: 12,
             lineHeight: 1.5,
             display: '-webkit-box',
@@ -104,7 +104,7 @@ const TopicCard = ({ topic, index, onOpen, onEdit, onDelete }) => {
         </div>
       )}
 
-      <div style={{ marginTop: 14, color: 'var(--term-text-muted)', fontSize: 11 }}>
+      <div style={{ marginTop: 14, color: 'var(--color-secondary)', fontSize: 11 }}>
         {topic.noteCount ?? 0} notes
       </div>
     </div>

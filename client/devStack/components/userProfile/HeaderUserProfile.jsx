@@ -23,7 +23,7 @@ const avatarFrameStyle = {
   height: 36,
   flexShrink: 0,
   borderRadius: '50%',
-  border: '1.5px solid var(--term-green, var(--color-primary))',
+  border: '1.5px solid var(--color-primary, var(--color-primary))',
   boxShadow: '0 0 10px rgba(34, 224, 122, 0.4)',
   overflow: 'hidden',
   background: 'var(--color-bg-container)',
@@ -40,7 +40,7 @@ const nameStyle = {
   fontFamily: 'var(--term-font, "JetBrains Mono", monospace)',
   fontSize: 13,
   fontWeight: 700,
-  color: 'var(--term-green, var(--color-primary))',
+  color: 'var(--color-primary, var(--color-primary))',
   letterSpacing: 0.4,
   lineHeight: 1.3,
   whiteSpace: 'nowrap',
@@ -49,7 +49,7 @@ const nameStyle = {
 const taglineStyle = {
   fontFamily: 'var(--term-font, "JetBrains Mono", monospace)',
   fontSize: 12,
-  color: 'var(--term-text-muted, var(--color-text-muted))',
+  color: 'var(--color-secondary, var(--color-text-muted))',
   letterSpacing: 0.3,
   lineHeight: 1.3,
   whiteSpace: 'nowrap',
@@ -57,7 +57,7 @@ const taglineStyle = {
 
 const chevronStyle = {
   fontSize: 10,
-  color: 'var(--term-text-muted, var(--color-text-muted))',
+  color: 'var(--color-secondary, var(--color-text-muted))',
   marginLeft: 2,
 }
 

@@ -85,9 +85,9 @@ const KnowledgeVaultPage = () => {
               display: 'flex',
               alignItems: 'center',
               gap: 6,
-              border: '1px solid var(--term-border-strong)',
+              border: '1px solid var(--color-border-secondary)',
               background: 'rgba(57,255,106,0.08)',
-              color: 'var(--term-green)',
+              color: 'var(--color-primary)',
               borderRadius: 6,
               padding: '8px 16px',
               fontSize: 12,
@@ -163,7 +163,7 @@ const KnowledgeVaultPage = () => {
             borderRadius: 10,
             padding: 40,
             textAlign: 'center',
-            color: 'var(--term-text-muted)',
+            color: 'var(--color-secondary)',
           }}
         >
           No topics yet. Create one to start building your vault.

@@ -53,7 +53,7 @@ export default function AdminHeaderComponent({
 
         {isMobile ? undefined : (
           <>
-            <span style={{ color: 'var(--term-green, var(--color-primary))' }}>
+            <span style={{ color: 'var(--color-primary, var(--color-primary))' }}>
               &nbsp;&nbsp;{'>_'}
             </span>
             <div style={{ display: 'flex', alignItems: 'center' }}>
