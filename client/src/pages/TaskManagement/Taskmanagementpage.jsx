@@ -251,7 +251,7 @@ const TaskManagementPage = () => {
           border: '1px solid var(--term-border)',
           borderRadius: 10,
           padding: isMobile ? 12 : 20, // Adjust padding automatically for mobile screens
-          // background: 'rgba(6, 18, 10, 0.4)',
+          background: 'var(--color-bg-container)',
           overflowX: 'hidden',
         }}
       >

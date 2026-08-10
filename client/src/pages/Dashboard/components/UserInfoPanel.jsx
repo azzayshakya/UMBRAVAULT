@@ -15,25 +15,26 @@ const cornerBase = {
   position: 'absolute',
   width: 16,
   height: 16,
-  borderColor: 'var(--color-primary, #22e07a)',
-  opacity: 0.9,
+  borderColor: 'var(--color-primary)',
+  opacity: 0.8,
 }
 
 const labelStyle = {
   fontFamily: 'var(--term-font, "JetBrains Mono", monospace)',
   fontSize: 11,
-  color: 'var(--color-secondary, #6b8f78)',
+  color: 'var(--color-text-muted)',
   letterSpacing: 0.5,
   display: 'flex',
   alignItems: 'center',
   gap: 6,
-  wordBreak: 'break-all', // Prevents long emails/IDs from overflowing bounds on mobile
+  wordBreak: 'break-all',
 }
 
 const valueStyle = {
   fontFamily: 'var(--term-font, "JetBrains Mono", monospace)',
   fontSize: 12,
-  color: 'var(--color-secondary-hover, #d7ffe4)',
+  color: 'var(--color-text)',
+  fontWeight: 600,
   letterSpacing: 0.3,
 }
 
@@ -47,20 +48,19 @@ const bioIcons = [
 
 const UserInfoPanel = () => {
   const { user, loading } = useUserInfo()
-  const authenticUser = useSelector((state) => state.user.user)
+  const authenticUser = useSelector((state) => state.user?.user)
   const isMobile = useIsMobile()
   const contentBgUrl = '/images/global/my-profile.jpg'
 
   const wrapStyle = {
     position: 'relative',
-    border: '1px solid var(--color-border-secondary, rgba(34, 224, 122, 0.35))',
-    background:
-      'radial-gradient(circle at 15% 15%, rgba(34,224,122,0.08), transparent 55%), linear-gradient(135deg, rgba(34, 224, 122, 0.05), rgba(4, 9, 6, 0.9))',
-    borderRadius: 'var(--radius-sm, 6px)',
-    padding: isMobile ? 14 : 20, // Compact padding on mobile
+    border: '1px solid var(--color-border)',
+    background: 'var(--color-bg-container)',
+    borderRadius: 'var(--radius, 10px)',
+    padding: isMobile ? 14 : 20,
     display: 'flex',
-    flexDirection: isMobile ? 'column' : 'row', // Stack vertically on mobile, horizontal on desktop
-    alignItems: isMobile ? 'center' : 'center',
+    flexDirection: isMobile ? 'column' : 'row',
+    alignItems: 'center',
     textAlign: isMobile ? 'center' : 'left',
     gap: isMobile ? 14 : 18,
     height: '100%',
@@ -69,17 +69,17 @@ const UserInfoPanel = () => {
 
   const avatarFrameStyle = {
     position: 'relative',
-    width: isMobile ? 70 : 84, // Slightly smaller avatar on mobile
+    width: isMobile ? 70 : 84,
     height: isMobile ? 70 : 84,
     flexShrink: 0,
     borderRadius: '50%',
-    border: '2px solid var(--color-primary, #22e07a)',
-    boxShadow: '0 0 18px rgba(34, 224, 122, 0.45), inset 0 0 12px rgba(34,224,122,0.25)',
+    border: '2px solid var(--color-primary)',
+    boxShadow: '0 0 14px var(--color-primary-light)',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    background: 'radial-gradient(circle at 30% 20%, rgba(34,224,122,0.18), #060b08)',
-    color: 'var(--color-primary, #22e07a)',
+    background: 'var(--color-bg)',
+    color: 'var(--color-primary)',
     fontSize: 32,
     overflow: 'hidden',
   }
@@ -98,10 +98,10 @@ const UserInfoPanel = () => {
         <Loader
           size={18}
           thickness={2}
-          color="var(--color-primary, #22e07a)"
-          trackColor="rgba(34, 224, 122, 0.15)"
+          color="var(--color-primary)"
+          trackColor="var(--color-primary-light)"
           label="FETCHING YOUR INFO..."
-          labelColor="var(--color-primary, #22e07a)"
+          labelColor="var(--color-primary)"
           labelSize={12}
         />
       </div>
@@ -113,8 +113,8 @@ const UserInfoPanel = () => {
       <style>{`
         @keyframes scanSweep {
           0% { transform: translateY(-100%); opacity: 0; }
-          10% { opacity: 0.6; }
-          90% { opacity: 0.6; }
+          10% { opacity: 0.5; }
+          90% { opacity: 0.5; }
           100% { transform: translateY(100%); opacity: 0; }
         }
         @keyframes radarSpin { to { transform: rotate(360deg); } }
@@ -125,15 +125,16 @@ const UserInfoPanel = () => {
         }
         @keyframes livePulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
         @keyframes cursorBlink { 0%,49% { opacity: 1; } 50%,100% { opacity: 0; } }
+        
         .dash-user-panel__scanline {
           position: absolute; left: 0; right: 0; height: 40px;
-          background: linear-gradient(180deg, transparent, rgba(34,224,122,0.18), transparent);
+          background: linear-gradient(180deg, transparent, var(--color-primary-light), transparent);
           animation: scanSweep 4s linear infinite;
           pointer-events: none;
         }
         .dash-user-panel__radar {
           position: absolute; inset: -2px; border-radius: 50%;
-          border-top: 1.5px solid var(--color-primary, #22e07a);
+          border-top: 1.5px solid var(--color-primary);
           border-right: 1.5px solid transparent;
           border-bottom: 1.5px solid transparent;
           border-left: 1.5px solid transparent;
@@ -142,10 +143,35 @@ const UserInfoPanel = () => {
         }
         .dash-user-panel__handle { animation: glitchShift 6s infinite; }
         .dash-user-panel__cursor { animation: cursorBlink 1s step-end infinite; }
-        .dash-user-panel__bio-icon:hover { color: var(--color-primary, #22e07a) !important; }
+        .dash-user-panel__bio-icon {
+          color: var(--color-text-muted);
+        }
+        .dash-user-panel__bio-icon:hover {
+          color: var(--color-primary) !important;
+        }
+
+        /* ── Dark Scheme Visual Effects ── */
+        [data-scheme='dark'] .dash-user-panel {
+          background: radial-gradient(circle at 15% 15%, rgba(57,255,106,0.08), transparent 55%), 
+                      linear-gradient(135deg, rgba(57, 255, 106, 0.05), rgba(4, 9, 6, 0.9)) !important;
+          border-color: var(--term-border) !important;
+        }
+        [data-scheme='dark'] .dash-user-panel__handle {
+          text-shadow: 0 0 8px rgba(57, 255, 106, 0.6);
+        }
+
+        /* ── Light Scheme Visual Overrides ── */
+        [data-scheme='light'] .dash-user-panel {
+          background: var(--primitive-white) !important;
+          border: 1px solid var(--color-border) !important;
+          box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+        }
+        [data-scheme='light'] .dash-user-panel__handle {
+          text-shadow: none !important;
+        }
       `}</style>
 
-      {/* scan frame corners */}
+      {/* Scan frame corners */}
       <span
         style={{ ...cornerBase, top: 6, left: 6, borderTop: '2px solid', borderLeft: '2px solid' }}
       />
@@ -179,7 +205,7 @@ const UserInfoPanel = () => {
 
       <span className="dash-user-panel__scanline" />
 
-      {/* live session badge */}
+      {/* Live session badge */}
       <div
         style={{
           position: 'absolute',
@@ -190,8 +216,9 @@ const UserInfoPanel = () => {
           gap: 5,
           fontFamily: 'var(--term-font, monospace)',
           fontSize: 9,
-          color: 'var(--color-primary, #22e07a)',
+          color: 'var(--color-primary)',
           letterSpacing: 1,
+          fontWeight: 600,
         }}
       >
         <span
@@ -199,8 +226,8 @@ const UserInfoPanel = () => {
             width: 6,
             height: 6,
             borderRadius: '50%',
-            background: 'var(--color-primary, #22e07a)',
-            boxShadow: '0 0 6px var(--color-primary, #22e07a)',
+            background: 'var(--color-primary)',
+            boxShadow: '0 0 6px var(--color-primary)',
             animation: 'livePulse 1.4s ease-in-out infinite',
           }}
         />
@@ -243,19 +270,18 @@ const UserInfoPanel = () => {
             fontFamily: 'var(--term-font, "JetBrains Mono", monospace)',
             fontSize: isMobile ? 17 : 20,
             fontWeight: 700,
-            color: 'var(--color-primary, #22e07a)',
+            color: 'var(--color-primary)',
             letterSpacing: 1,
-            textShadow: '0 0 8px rgba(34,224,122,0.6)',
           }}
         >
-          {authenticUser?.name}
+          {authenticUser?.name || 'User Name'}
         </span>
         <span
           style={{
             fontFamily: 'var(--term-font, "JetBrains Mono", monospace)',
             fontSize: 11,
-            color: 'var(--color-secondary, #6b8f78)',
-            letterSpacing: 2,
+            color: 'var(--color-text-secondary)',
+            letterSpacing: 1.5,
             marginBottom: 2,
           }}
         >
@@ -265,9 +291,10 @@ const UserInfoPanel = () => {
           style={{
             fontFamily: 'var(--term-font, "JetBrains Mono", monospace)',
             fontSize: 11,
-            color: 'var(--color-secondary, #6b8f78)',
-            letterSpacing: 2,
+            color: 'var(--color-text-secondary)',
+            letterSpacing: 1.5,
             marginBottom: 2,
+            textTransform: 'uppercase',
           }}
         >
           {authenticUser?.role}
@@ -275,20 +302,18 @@ const UserInfoPanel = () => {
 
         <span style={labelStyle}>
           <SafetyCertificateOutlined /> Clearance Level:{' '}
-          <span style={valueStyle}>{user.clearanceLevel}</span>
+          <span style={valueStyle}>{user?.clearanceLevel || 'Level 1'}</span>
         </span>
         <span style={labelStyle}>
-          <IdcardOutlined /> Access Level: <span style={valueStyle}>{user.accessLevel}</span>
+          <IdcardOutlined /> Access Level:{' '}
+          <span style={valueStyle}>{user?.accessLevel || 'Standard'}</span>
         </span>
         <span style={labelStyle}>
-          Session ID: <span style={valueStyle}>{authenticUser?.deviceId}</span>
+          Session ID: <span style={valueStyle}>{authenticUser?.deviceId || '—'}</span>
         </span>
         <span style={labelStyle}>
-          email: <span style={valueStyle}>{authenticUser?.email}</span>
-          <span
-            className="dash-user-panel__cursor"
-            style={{ color: 'var(--color-primary, #22e07a)' }}
-          >
+          email: <span style={valueStyle}>{authenticUser?.email || '—'}</span>
+          <span className="dash-user-panel__cursor" style={{ color: 'var(--color-primary)' }}>
             ▍
           </span>
         </span>
@@ -303,7 +328,6 @@ const UserInfoPanel = () => {
                 flexDirection: 'column',
                 alignItems: 'center',
                 gap: 3,
-                color: 'var(--color-primary-light, #6fae87)',
                 fontSize: 15,
                 cursor: 'pointer',
                 transition: 'color 0.15s ease',

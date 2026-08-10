@@ -11,12 +11,12 @@ import ReusableAntdTag from '@devStack/components/AntdTag/ReusableAntdTag'
 import PageHeader from '@devStack/components/PageHeader'
 import CrudTable from '@devStack/components/table/CrudTable'
 import { ROLE_BADGE_CONFIG } from '@devStack/enums/user-role-enums'
+import { useIsMobile } from '@devStack/utils/useIsMobile'
 import { Input } from 'antd'
 import { useEffect, useMemo, useState } from 'react'
 
 import ChangeRoleModal from './components/ChangeRoleModal'
 import { useUserManagementApi } from './hooks/useUserManagementApi'
-import { useIsMobile } from '@devStack/utils/useIsMobile'
 
 const actionBtnStyle = {
   width: 28,
@@ -121,7 +121,7 @@ const UserManagementPage = () => {
           border: '1px solid var(--term-border)',
           borderRadius: 10,
           padding: isMobile ? 12 : 20, // Scaled down padding for mobile
-          background: 'rgba(6, 18, 10, 0.4)',
+          background: 'var(--color-bg-container)',
           overflowX: 'hidden',
         }}
       >
