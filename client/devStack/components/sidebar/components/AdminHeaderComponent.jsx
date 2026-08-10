@@ -1,29 +1,11 @@
-import { MenuFoldOutlined, MenuUnfoldOutlined, SunOutlined, MoonOutlined } from '@ant-design/icons'
+import { MoonOutlined, SunOutlined, MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons'
 import HeaderUserProfile from '@devStack/components/userProfile/HeaderUserProfile'
 import { ColorScheme } from '@devStack/constants/theme-constants'
-import { clearUserSession } from '@devStack/store/userSlice'
-import useThemeStore from '@devStack/store/useThemeStore'
-import { redirectToLoginUtil } from '@devStack/utils/redirect-utils'
-import { removeUserSessionLocally } from '@devStack/utils/user-session-utils'
+import { toggleColorScheme } from '@devStack/store/preferenceSlice'
 import { Breadcrumb, Layout } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate } from 'react-router'
 
 const { Header } = Layout
-
-const authBtnBase = {
-  height: 36,
-  padding: '0 16px',
-  borderRadius: 6,
-  fontFamily: 'var(--term-font, "JetBrains Mono", monospace)',
-  fontSize: 12,
-  letterSpacing: 1,
-  cursor: 'pointer',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  transition: 'all 0.2s ease',
-}
 
 export default function AdminHeaderComponent({
   colorBgContainer,
@@ -31,17 +13,15 @@ export default function AdminHeaderComponent({
   collapsed,
   breadcrumbItems,
 }) {
-  const navigate = useNavigate()
   const dispatch = useDispatch()
-  const resolvedScheme = useThemeStore((s) => s.resolvedScheme)
-  const toggleColorScheme = useThemeStore((s) => s.toggleColorScheme)
-  const authenticUser = useSelector((state) => state.user.user)
+
+  const resolvedScheme = useSelector((s) => s.preference.resolvedScheme)
   const isDark = resolvedScheme === ColorScheme.DARK
-  const handleLogout = () => {
-    dispatch(clearUserSession())
-    removeUserSessionLocally()
-    redirectToLoginUtil()
+
+  const handleToggleTheme = () => {
+    dispatch(toggleColorScheme())
   }
+
   return (
     <div>
       <Header
@@ -55,7 +35,6 @@ export default function AdminHeaderComponent({
           position: 'sticky',
           top: 0,
           zIndex: 1,
-          // border: '2px red solid',
         }}
       >
         <div
@@ -79,64 +58,8 @@ export default function AdminHeaderComponent({
 
         {/* pushes toggle + auth buttons to far right */}
         <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 10 }}>
-          {/* <button
-            onClick={() => navigate('/login')}
-            style={{
-              ...authBtnBase,
-              background: 'transparent',
-              border: '1px solid var(--term-border-strong, rgba(34, 224, 122, 0.4))',
-              color: 'var(--term-green, #22e07a)',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = 'rgba(34, 224, 122, 0.08)'
-              e.currentTarget.style.boxShadow = '0 0 10px rgba(34, 224, 122, 0.35)'
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = 'transparent'
-              e.currentTarget.style.boxShadow = 'none'
-            }}
-          >
-            LOGIN
-          </button> */}
-
-          {/* <button
-            onClick={() => navigate('/signup')}
-            style={{
-              ...authBtnBase,
-              background: 'var(--term-green, #22e07a)',
-              border: '1px solid var(--term-green, #22e07a)',
-              color: '#04140a',
-              fontWeight: 700,
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.boxShadow = '0 0 14px rgba(34, 224, 122, 0.55)'
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.boxShadow = 'none'
-            }}
-          >
-            SIGN UP
-          </button> */}
-          {/* <button
-            onClick={handleLogout}
-            style={{
-              ...authBtnBase,
-              background: '#d32f2f',
-              border: '1px solid #d32f2f',
-              color: '#fff',
-              fontWeight: 700,
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.boxShadow = '0 0 14px rgba(211, 47, 47, 0.55)'
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.boxShadow = 'none'
-            }}
-          >
-            LOGOUT
-          </button> */}
           <button
-            onClick={toggleColorScheme}
+            onClick={handleToggleTheme}
             aria-label="Toggle theme"
             style={{
               width: 36,

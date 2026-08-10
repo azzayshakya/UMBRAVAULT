@@ -6,7 +6,6 @@ import { buildMenuItems } from '@devStack/components/sidebar/utilities/MenuBuild
 import SidebarQuoteCard from '@devStack/components/Sidebarquotecard'
 import { App_Name, App_ShortName } from '@devStack/constants'
 import { setSidebarCollapsed } from '@devStack/store/preferenceSlice'
-import useThemeStore from '@devStack/store/useThemeStore'
 import { Layout, Menu, Typography } from 'antd'
 import { useMemo } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
@@ -19,7 +18,7 @@ const MainLayout = ({ userRole, userData = null }) => {
   const dispatch = useDispatch()
 
   const collapsed = useSelector((s) => s.preference.sidebarCollapsed)
-  const scheme = useThemeStore((s) => s.scheme)
+  const scheme = useSelector((s) => s.preference.colorScheme)
 
   const contentBgUrl = '/images/global/binary-bg.jpg'
 
