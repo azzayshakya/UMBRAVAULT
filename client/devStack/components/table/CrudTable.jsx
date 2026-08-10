@@ -7,6 +7,8 @@ export default function CrudTable({
   setParamObj,
   setRefreshCounter,
   loading,
+  scroll,
+  ...restProps
 }) {
   const handleTableChange = (pagination) => {
     setParamObj((prev) => ({
@@ -25,15 +27,17 @@ export default function CrudTable({
       size="small"
       dataSource={tableData}
       columns={columns}
-      rowKey={(record) => record?.id || record?.aon}
+      rowKey={(record) => record?._id || record?.id || record?.aon}
       pagination={{
-        current: paramObj.offset + 1,
-        pageSize: paramObj.limit,
-        total: tableData.length,
+        current: (paramObj.offset || 0) + 1,
+        pageSize: paramObj.limit || 10,
+        total: paramObj.total || tableData?.length || 0,
         showSizeChanger: true,
       }}
       loading={loading}
       onChange={handleTableChange}
+      scroll={scroll || { x: 800 }}
+      {...restProps}
     />
   )
 }

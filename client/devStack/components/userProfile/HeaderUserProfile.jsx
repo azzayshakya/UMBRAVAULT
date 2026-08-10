@@ -64,7 +64,6 @@ const chevronStyle = {
 const HeaderUserProfile = () => {
   const authenticUser = useSelector((state) => state.user.user)
   const avatarUrl = authenticUser?.avatar || '/images/global/my-profile.jpg'
-  console.log(authenticUser)
   if (!authenticUser) {
     return (
       <div style={wrapStyle}>

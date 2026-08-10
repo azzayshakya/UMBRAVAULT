@@ -208,43 +208,86 @@
   animation: term-fade-in 0.22s ease-out;
 }
 
-/* table related */
+/* ============================================================
+   THEME-AWARE HACKER TABLE CSS
+   ============================================================ */
 .hacker-table .ant-table {
-  background: transparent;
+  background: transparent !important;
 }
+
+/* Header Cells */
 .hacker-table .ant-table-thead > tr > th {
-  background: rgba(57, 255, 106, 0.05) !important;
+  background: var(--color-primary-light) !important;
   color: var(--color-primary) !important;
-  border-bottom: 1px solid var(--term-border) !important;
+  border-bottom: 1px solid var(--color-border) !important;
   font-family: var(--term-font);
   font-size: 11px;
   letter-spacing: 1px;
   text-transform: uppercase;
+  font-weight: 700;
 }
+
+/* Body Cells */
 .hacker-table .ant-table-tbody > tr > td {
   background: transparent !important;
-  border-bottom: 1px solid var(--term-border) !important;
-  color: var(--color-secondary-hover);
+  border-bottom: 1px solid var(--color-border) !important;
+  color: var(--color-text-secondary) !important;
   font-size: 12px;
 }
+
+/* Row Hover */
 .hacker-table .ant-table-tbody > tr:hover > td {
-  background: rgba(57, 255, 106, 0.06) !important;
+  background: var(--color-bg-hover) !important;
 }
+
+/* Fixed Right Columns (Actions Column Support) */
+.hacker-table .ant-table-cell-fix-right,
+.hacker-table .ant-table-cell-fix-left {
+  background: var(--color-bg-container) !important;
+}
+
+.hacker-table .ant-table-tbody > tr:hover .ant-table-cell-fix-right,
+.hacker-table .ant-table-tbody > tr:hover .ant-table-cell-fix-left {
+  background: var(--color-bg-hover) !important;
+}
+
+/* Pagination Styling */
 .hacker-table .ant-pagination-item,
 .hacker-table .ant-pagination-prev .ant-pagination-item-link,
-.hacker-table .ant-pagination-next .ant-pagination-item-link {
-  background: transparent !important;
-  border: 1px solid var(--term-border) !important;
-  color: var(--color-secondary) !important;
+.hacker-table .ant-pagination-next .ant-pagination-item-link,
+.hacker-table .ant-pagination-jump-prev .ant-pagination-item-link-icon,
+.hacker-table .ant-pagination-jump-next .ant-pagination-item-link-icon {
+  background: var(--color-bg-container) !important;
+  border: 1px solid var(--color-border) !important;
+  color: var(--color-text-secondary) !important;
+  border-radius: var(--radius-sm, 6px);
 }
+
 .hacker-table .ant-pagination-item-active {
+  background: var(--color-primary-light) !important;
   border-color: var(--color-primary) !important;
 }
+
 .hacker-table .ant-pagination-item-active a {
   color: var(--color-primary) !important;
+  font-weight: 700;
 }
-.hacker-table .ant-select-selector {
-  background: transparent !important;
+
+.hacker-table .ant-pagination-options .ant-select-selector {
+  background: var(--color-bg-container) !important;
+  border: 1px solid var(--color-border) !important;
+  color: var(--color-text) !important;
+  border-radius: var(--radius-sm, 6px);
+}
+
+/* Outer Card Container Overrides (Light vs Dark) */
+[data-scheme='light'] .hacker-table-wrapper {
+  background: var(--color-bg-container) !important;
+  border: 1px solid var(--color-border) !important;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+}
+
+[data-scheme='dark'] .hacker-table-wrapper {
+  background: rgba(6, 18, 10, 0.4) !important;
   border: 1px solid var(--term-border) !important;
-  color: var(--color-secondary-hover) !important;
 }

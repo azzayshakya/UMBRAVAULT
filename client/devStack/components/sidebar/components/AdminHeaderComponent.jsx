@@ -16,7 +16,6 @@ export default function AdminHeaderComponent({
 }) {
   const dispatch = useDispatch()
   const isMobile = useIsMobile()
-  console.log('brooo', isMobile)
   const resolvedScheme = useSelector((s) => s.preference.resolvedScheme)
   const isDark = resolvedScheme === ColorScheme.DARK
 

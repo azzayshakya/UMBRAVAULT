@@ -20,6 +20,7 @@ import {
   TASK_STATUS_BADGE_CONFIG,
   TASK_STATUS_OPTIONS,
 } from '@devStack/enums/task-page-enums'
+import { useIsMobile } from '@devStack/utils/useIsMobile'
 import { Input, Select, Tag } from 'antd'
 import dayjs from 'dayjs'
 import { useMemo, useState } from 'react'
@@ -27,7 +28,6 @@ import { useMemo, useState } from 'react'
 import NewTaskModal from './components/Newtaskmodal'
 import TaskDetailPanel from './components/Taskdetailpanel'
 import { useTaskManagementApi } from './hooks/Usetaskmanagementapi'
-import { useIsMobile } from '@devStack/utils/useIsMobile'
 
 const actionBtnStyle = {
   width: 28,
@@ -98,7 +98,7 @@ const TaskManagementPage = () => {
       key: '_id',
       width: 90,
       render: (v) => (
-        <span style={{ color: 'var(--color-primary-light)' }}>#{v.slice(-6).toUpperCase()}</span>
+        <span style={{ color: 'var(--color-primary)' }}>#{v.slice(-6).toUpperCase()}</span>
       ),
     },
     {
@@ -251,7 +251,7 @@ const TaskManagementPage = () => {
           border: '1px solid var(--term-border)',
           borderRadius: 10,
           padding: isMobile ? 12 : 20, // Adjust padding automatically for mobile screens
-          background: 'rgba(6, 18, 10, 0.4)',
+          // background: 'rgba(6, 18, 10, 0.4)',
           overflowX: 'hidden',
         }}
       >
