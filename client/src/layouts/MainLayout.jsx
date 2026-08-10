@@ -5,16 +5,20 @@ import { buildBreadcrumbs } from '@devStack/components/sidebar/utilities/breadCr
 import { buildMenuItems } from '@devStack/components/sidebar/utilities/MenuBuilder'
 import SidebarQuoteCard from '@devStack/components/Sidebarquotecard'
 import { App_Name, App_ShortName } from '@devStack/constants'
+import { setSidebarCollapsed } from '@devStack/store/preferenceSlice'
 import useThemeStore from '@devStack/store/useThemeStore'
 import { Layout, Menu, Typography } from 'antd'
-import { useState, useMemo } from 'react'
+import { useMemo } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 import { Outlet } from 'react-router-dom'
 
 const { Sider } = Layout
 const { Text } = Typography
 
 const MainLayout = ({ userRole, userData = null }) => {
-  const [collapsed, setCollapsed] = useState(false)
+  const dispatch = useDispatch()
+
+  const collapsed = useSelector((s) => s.preference.sidebarCollapsed)
   const scheme = useThemeStore((s) => s.scheme)
 
   const contentBgUrl = '/images/global/binary-bg.jpg'
@@ -32,11 +36,15 @@ const MainLayout = ({ userRole, userData = null }) => {
     return buildBreadcrumbs(selectedKeys[0])
   }, [selectedKeys])
 
+  const handleCollapse = (value) => {
+    dispatch(setSidebarCollapsed(value))
+  }
+
   return (
     <Layout style={{ minHeight: '100vh' }}>
       <Sider
         collapsed={collapsed}
-        onCollapse={setCollapsed}
+        onCollapse={handleCollapse}
         width={250}
         style={{
           height: '100vh',
@@ -121,7 +129,7 @@ const MainLayout = ({ userRole, userData = null }) => {
       >
         <AdminHeaderComponent
           colorBgContainer="var(--color-bg-container)"
-          setCollapsed={setCollapsed}
+          setCollapsed={handleCollapse}
           collapsed={collapsed}
           userData={userData}
           breadcrumbItems={breadcrumbItems}
@@ -141,8 +149,6 @@ const MainLayout = ({ userRole, userData = null }) => {
         >
           <Outlet />
         </div>
-
-        {/* <AdminFooterComponentx color="var(--color-bg-container)" /> */}
       </Layout>
     </Layout>
   )
