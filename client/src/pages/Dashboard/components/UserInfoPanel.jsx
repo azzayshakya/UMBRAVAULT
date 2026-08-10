@@ -1,4 +1,3 @@
-// components/UserInfoPanel.jsx
 import {
   UserOutlined,
   SafetyCertificateOutlined,
@@ -7,23 +6,10 @@ import {
   KeyOutlined,
 } from '@ant-design/icons'
 import Loader from '@devStack/components/spinners/Loader'
+import { useIsMobile } from '@devStack/utils/useIsMobile'
 import { useSelector } from 'react-redux'
 
 import useUserInfo from '../hooks/useUserInfo'
-
-const wrapStyle = {
-  position: 'relative',
-  border: '1px solid var(--term-border-strong, rgba(34, 224, 122, 0.35))',
-  background:
-    'radial-gradient(circle at 15% 15%, rgba(34,224,122,0.08), transparent 55%), linear-gradient(135deg, rgba(34, 224, 122, 0.05), rgba(4, 9, 6, 0.9))',
-  borderRadius: 'var(--radius-sm, 6px)',
-  padding: 20,
-  display: 'flex',
-  alignItems: 'center',
-  gap: 18,
-  height: '100%',
-  overflow: 'hidden',
-}
 
 const cornerBase = {
   position: 'absolute',
@@ -31,23 +17,6 @@ const cornerBase = {
   height: 16,
   borderColor: 'var(--term-green, #22e07a)',
   opacity: 0.9,
-}
-
-const avatarFrameStyle = {
-  position: 'relative',
-  width: 84,
-  height: 84,
-  flexShrink: 0,
-  borderRadius: '50%',
-  border: '2px solid var(--term-green, #22e07a)',
-  boxShadow: '0 0 18px rgba(34, 224, 122, 0.45), inset 0 0 12px rgba(34,224,122,0.25)',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  background: 'radial-gradient(circle at 30% 20%, rgba(34,224,122,0.18), #060b08)',
-  color: 'var(--term-green, #22e07a)',
-  fontSize: 32,
-  overflow: 'hidden',
 }
 
 const labelStyle = {
@@ -58,6 +27,7 @@ const labelStyle = {
   display: 'flex',
   alignItems: 'center',
   gap: 6,
+  wordBreak: 'break-all', // Prevents long emails/IDs from overflowing bounds on mobile
 }
 
 const valueStyle = {
@@ -65,12 +35,6 @@ const valueStyle = {
   fontSize: 12,
   color: 'var(--term-text, #d7ffe4)',
   letterSpacing: 0.3,
-}
-
-const iconRowStyle = {
-  display: 'flex',
-  gap: 18,
-  marginTop: 12,
 }
 
 const bioIcons = [
@@ -84,7 +48,50 @@ const bioIcons = [
 const UserInfoPanel = () => {
   const { user, loading } = useUserInfo()
   const authenticUser = useSelector((state) => state.user.user)
+  const isMobile = useIsMobile()
   const contentBgUrl = '/images/global/my-profile.jpg'
+
+  const wrapStyle = {
+    position: 'relative',
+    border: '1px solid var(--term-border-strong, rgba(34, 224, 122, 0.35))',
+    background:
+      'radial-gradient(circle at 15% 15%, rgba(34,224,122,0.08), transparent 55%), linear-gradient(135deg, rgba(34, 224, 122, 0.05), rgba(4, 9, 6, 0.9))',
+    borderRadius: 'var(--radius-sm, 6px)',
+    padding: isMobile ? 14 : 20, // Compact padding on mobile
+    display: 'flex',
+    flexDirection: isMobile ? 'column' : 'row', // Stack vertically on mobile, horizontal on desktop
+    alignItems: isMobile ? 'center' : 'center',
+    textAlign: isMobile ? 'center' : 'left',
+    gap: isMobile ? 14 : 18,
+    height: '100%',
+    overflow: 'hidden',
+  }
+
+  const avatarFrameStyle = {
+    position: 'relative',
+    width: isMobile ? 70 : 84, // Slightly smaller avatar on mobile
+    height: isMobile ? 70 : 84,
+    flexShrink: 0,
+    borderRadius: '50%',
+    border: '2px solid var(--term-green, #22e07a)',
+    boxShadow: '0 0 18px rgba(34, 224, 122, 0.45), inset 0 0 12px rgba(34,224,122,0.25)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    background: 'radial-gradient(circle at 30% 20%, rgba(34,224,122,0.18), #060b08)',
+    color: 'var(--term-green, #22e07a)',
+    fontSize: 32,
+    overflow: 'hidden',
+  }
+
+  const iconRowStyle = {
+    display: 'flex',
+    gap: isMobile ? 12 : 18,
+    marginTop: 12,
+    justifyContent: isMobile ? 'center' : 'flex-start',
+    flexWrap: 'wrap',
+  }
+
   if (loading) {
     return (
       <div style={{ ...wrapStyle, justifyContent: 'center' }}>
@@ -177,7 +184,7 @@ const UserInfoPanel = () => {
         style={{
           position: 'absolute',
           top: 10,
-          right: 28,
+          right: isMobile ? 12 : 28,
           display: 'flex',
           alignItems: 'center',
           gap: 5,
@@ -202,29 +209,39 @@ const UserInfoPanel = () => {
 
       <div style={avatarFrameStyle}>
         <span className="dash-user-panel__radar" />
-        {/* <UserOutlined /> */}
         <div
           style={{
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            backgroundRepeat: 'no-repeat',
-            backgroundAttachment: 'fixed',
-            borderRadius: 'var(--radius)',
-            // padding: 'var(--page-padding)',
-            flex: 1,
-            overflow: 'hidden ',
+            width: '100%',
+            height: '100%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            overflow: 'hidden',
           }}
         >
-          <img style={{ overflow: 'hidden' }} src={contentBgUrl} />
+          <img
+            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+            src={contentBgUrl}
+            alt="Profile Avatar"
+          />
         </div>
       </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 6, minWidth: 0 }}>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 6,
+          minWidth: 0,
+          alignItems: isMobile ? 'center' : 'flex-start',
+          width: '100%',
+        }}
+      >
         <span
           className="dash-user-panel__handle"
           style={{
             fontFamily: 'var(--term-font, "JetBrains Mono", monospace)',
-            fontSize: 20,
+            fontSize: isMobile ? 17 : 20,
             fontWeight: 700,
             color: 'var(--term-green, #22e07a)',
             letterSpacing: 1,
@@ -239,7 +256,7 @@ const UserInfoPanel = () => {
             fontSize: 11,
             color: 'var(--term-text-muted, #6b8f78)',
             letterSpacing: 2,
-            marginBottom: 4,
+            marginBottom: 2,
           }}
         >
           {authenticUser?.username}
@@ -250,7 +267,7 @@ const UserInfoPanel = () => {
             fontSize: 11,
             color: 'var(--term-text-muted, #6b8f78)',
             letterSpacing: 2,
-            marginBottom: 4,
+            marginBottom: 2,
           }}
         >
           {authenticUser?.role}
@@ -264,7 +281,7 @@ const UserInfoPanel = () => {
           <IdcardOutlined /> Access Level: <span style={valueStyle}>{user.accessLevel}</span>
         </span>
         <span style={labelStyle}>
-          Session ID: <span style={valueStyle}>{authenticUser.deviceId}</span>
+          Session ID: <span style={valueStyle}>{authenticUser?.deviceId}</span>
         </span>
         <span style={labelStyle}>
           email: <span style={valueStyle}>{authenticUser?.email}</span>

@@ -1,5 +1,6 @@
+import { useIsMobile } from '@devStack/utils/useIsMobile'
+
 import CenterBrandText from './components/CenterBrandText'
-import GlobeVisual from './components/GlobeVisual'
 import LiveSystemFeed from './components/LiveSystemFeed'
 import ProjectsGrid from './components/ProjectGrid'
 import QuickAccessPanel from './components/QuickAccessPanel'
@@ -24,7 +25,7 @@ const Dashboard = () => {
   // Both the status list and the stat-card row are backed by the same
   // getSystemStatus() call, so it's fetched once here and passed down.
   const { statusList, stats, loading: statusLoading } = useSystemStatus()
-
+  const isMobile = useIsMobile()
   return (
     <div style={pageStyle}>
       <style>{DASH_ANIMATION_CSS}</style>
@@ -46,44 +47,54 @@ const Dashboard = () => {
       <div
         style={{
           display: 'grid',
-          gridTemplateColumns: '360px 1fr 300px',
+          // On mobile: 1 column that fits the content naturally
+          // On desktop: your original 3-column split layout
+          gridTemplateColumns: isMobile ? '1fr' : '360px 1fr 300px',
           gap: 14,
-          // height: 220,
           flexShrink: 0,
         }}
       >
         <UserInfoPanel />
-        <div
-          style={{
-            border: '1px solid var(--term-border, rgba(34, 224, 122, 0.2))',
-            borderRadius: 'var(--radius-sm, 6px)',
-            background: 'rgba(6, 14, 9, 0.35)',
-          }}
-        >
-          {/* <GlobeVisual /> */}
-        </div>
-        <SystemStatusPanel statusList={statusList} loading={statusLoading} />
+        {!isMobile && (
+          <>
+            <div
+              style={{
+                border: '1px solid var(--term-border, rgba(34, 224, 122, 0.2))',
+                borderRadius: 'var(--radius-sm, 6px)',
+                background: 'rgba(6, 14, 9, 0.35)',
+              }}
+            >
+              {/* <GlobeVisual /> */}
+            </div>
+            <SystemStatusPanel statusList={statusList} loading={statusLoading} />
+          </>
+        )}
       </div>
 
       {/* Row 2 — key metrics */}
-      <div style={{ flexShrink: 0 }}>
-        <StatsRow stats={stats} loading={statusLoading} />
-      </div>
+      {!isMobile && (
+        <div style={{ flexShrink: 0 }}>
+          <StatsRow stats={stats} loading={statusLoading} />
+        </div>
+      )}
+
       <ProjectsGrid />
       {/* Row 3 — live feed, brand statement, shortcuts */}
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: '1fr 320px 300px',
-          gap: 14,
-          flex: 1,
-          minHeight: 0,
-        }}
-      >
-        <LiveSystemFeed />
-        <CenterBrandText />
-        <QuickAccessPanel />
-      </div>
+      {!isMobile && (
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: '1fr 320px 300px',
+            gap: 14,
+            flex: 1,
+            minHeight: 0,
+          }}
+        >
+          <LiveSystemFeed />
+          <CenterBrandText />
+          <QuickAccessPanel />
+        </div>
+      )}
     </div>
   )
 }
