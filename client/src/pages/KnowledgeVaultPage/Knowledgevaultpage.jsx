@@ -8,6 +8,7 @@ import {
 import PageHeader from '@devStack/components/PageHeader'
 import { Skeleton } from '@devStack/components/Skelton/Skeleton'
 import { StatCard } from '@devStack/components/StateCard'
+import { useIsMobile } from '@devStack/utils/useIsMobile'
 import { Input, message, Modal } from 'antd'
 import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -21,6 +22,8 @@ const KnowledgeVaultPage = () => {
   const [search, setSearch] = useState('')
   const [newTopicOpen, setNewTopicOpen] = useState(false)
   const [editingTopic, setEditingTopic] = useState(null)
+
+  const isMobile = useIsMobile()
 
   const filters = useMemo(() => ({ search: search || undefined }), [search])
 
@@ -62,6 +65,13 @@ const KnowledgeVaultPage = () => {
     })
   }
 
+  // Responsive grid styling for topic cards and skeleton loaders
+  const responsiveGridStyle = {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
+    gap: 16,
+  }
+
   return (
     <div style={{ fontFamily: 'var(--term-font)' }}>
       <PageHeader
@@ -93,7 +103,7 @@ const KnowledgeVaultPage = () => {
       <div
         style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
           gap: 14,
           marginBottom: 20,
         }}
@@ -133,12 +143,15 @@ const KnowledgeVaultPage = () => {
           placeholder="Search topics..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          style={{ width: 260, border: '2px var(--term-border) solid' }}
+          style={{
+            width: isMobile ? '100%' : 260, // 👈 Expands full width on mobile screens
+            border: '2px var(--term-border) solid',
+          }}
         />
       </div>
 
       {loading ? (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16 }}>
+        <div style={responsiveGridStyle}>
           {Array.from({ length: 8 }).map((_, i) => (
             <Skeleton key={i} height={130} borderRadius={10} />
           ))}
@@ -156,7 +169,7 @@ const KnowledgeVaultPage = () => {
           No topics yet. Create one to start building your vault.
         </div>
       ) : (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16 }}>
+        <div style={responsiveGridStyle}>
           {topics.map((topic, index) => (
             <TopicCard
               key={topic._id}

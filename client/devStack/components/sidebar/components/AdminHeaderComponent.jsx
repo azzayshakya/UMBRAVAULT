@@ -2,6 +2,7 @@ import { MoonOutlined, SunOutlined, MenuFoldOutlined, MenuUnfoldOutlined } from 
 import HeaderUserProfile from '@devStack/components/userProfile/HeaderUserProfile'
 import { ColorScheme } from '@devStack/constants/theme-constants'
 import { toggleColorScheme } from '@devStack/store/preferenceSlice'
+import { useIsMobile } from '@devStack/utils/useIsMobile'
 import { Breadcrumb, Layout } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -14,7 +15,8 @@ export default function AdminHeaderComponent({
   breadcrumbItems,
 }) {
   const dispatch = useDispatch()
-
+  const isMobile = useIsMobile()
+  console.log('brooo', isMobile)
   const resolvedScheme = useSelector((s) => s.preference.resolvedScheme)
   const isDark = resolvedScheme === ColorScheme.DARK
 
@@ -49,14 +51,19 @@ export default function AdminHeaderComponent({
           {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
         </div>
 
-        <span style={{ color: 'var(--term-green, var(--color-primary))' }}>&nbsp;&nbsp;{'>_'}</span>
-        <div style={{ display: 'flex', alignItems: 'center' }}>
-          {breadcrumbItems.length > 0 && (
-            <Breadcrumb items={breadcrumbItems} style={{ margin: 0 }} />
-          )}
-        </div>
+        {isMobile ? undefined : (
+          <>
+            <span style={{ color: 'var(--term-green, var(--color-primary))' }}>
+              &nbsp;&nbsp;{'>_'}
+            </span>
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              {breadcrumbItems.length > 0 && (
+                <Breadcrumb items={breadcrumbItems} style={{ margin: 0 }} />
+              )}
+            </div>
+          </>
+        )}
 
-        {/* pushes toggle + auth buttons to far right */}
         <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 10 }}>
           <button
             onClick={handleToggleTheme}

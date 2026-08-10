@@ -6,8 +6,9 @@ import { buildMenuItems } from '@devStack/components/sidebar/utilities/MenuBuild
 import SidebarQuoteCard from '@devStack/components/Sidebarquotecard'
 import { App_Name, App_ShortName } from '@devStack/constants'
 import { setSidebarCollapsed } from '@devStack/store/preferenceSlice'
+import { useIsMobile } from '@devStack/utils/useIsMobile'
 import { Layout, Menu, Typography } from 'antd'
-import { useMemo } from 'react'
+import { useMemo, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Outlet } from 'react-router-dom'
 
@@ -20,7 +21,15 @@ const MainLayout = ({ userRole, userData = null }) => {
   const collapsed = useSelector((s) => s.preference.sidebarCollapsed)
   const scheme = useSelector((s) => s.preference.colorScheme)
 
-  const contentBgUrl = '/images/global/binary-bg.jpg'
+  const isMobile = useIsMobile()
+
+  useEffect(() => {
+    if (isMobile) {
+      dispatch(setSidebarCollapsed(true))
+    }
+  }, [isMobile, dispatch])
+
+  const contentBgUrl = '/images/global/binary-bg.webp'
 
   const { selectedKeys, openKeys, handleMenuClick, handleOpenChange } = useMenu({
     defaultSelectedKey: 'dashboard',
@@ -45,6 +54,7 @@ const MainLayout = ({ userRole, userData = null }) => {
         collapsed={collapsed}
         onCollapse={handleCollapse}
         width={250}
+        // 👈 Optional: On mobile, you can make the sider absolute/drawer style if preferred
         style={{
           height: '100vh',
           position: 'fixed',
@@ -53,6 +63,7 @@ const MainLayout = ({ userRole, userData = null }) => {
           bottom: 0,
           background: 'var(--color-bg-container)',
           borderRight: '1px solid var(--color-border)',
+          zIndex: 10,
         }}
       >
         <div

@@ -30,7 +30,7 @@ const fieldLabelStyle = {
 }
 
 const LoginPage = () => {
-  const contentBgUrl = '/images/global/binary-bg.jpg'
+  const contentBgUrl = '/images/global/binary-bg.webp'
   const [form] = Form.useForm()
   const [loading, setLoading] = useState(false)
   const dispatch = useDispatch()

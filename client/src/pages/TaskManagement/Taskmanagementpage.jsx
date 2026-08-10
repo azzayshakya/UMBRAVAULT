@@ -27,6 +27,7 @@ import { useMemo, useState } from 'react'
 import NewTaskModal from './components/Newtaskmodal'
 import TaskDetailPanel from './components/Taskdetailpanel'
 import { useTaskManagementApi } from './hooks/Usetaskmanagementapi'
+import { useIsMobile } from '@devStack/utils/useIsMobile'
 
 const actionBtnStyle = {
   width: 28,
@@ -49,6 +50,8 @@ const TaskManagementPage = () => {
   const [selectedTaskId, setSelectedTaskId] = useState(null)
   const [newTaskOpen, setNewTaskOpen] = useState(false)
   const [paramObj, setParamObj] = useState({ limit: 10, offset: 0, total: 0 })
+
+  const isMobile = useIsMobile() // 👈 Track mobile breakpoint (768px default)
 
   const filters = useMemo(
     () => ({ search: search || undefined, status, priority, project }),
@@ -102,6 +105,7 @@ const TaskManagementPage = () => {
       title: ':TITLE',
       dataIndex: 'title',
       key: 'title',
+      width: 220, // Added fixed width so table respects scrolling bounds on mobile
       render: (v, record) => (
         <div>
           <div style={{ color: 'var(--term-green)', fontWeight: 600 }}>{v}</div>
@@ -117,24 +121,28 @@ const TaskManagementPage = () => {
       title: ':PROJECT',
       dataIndex: 'project',
       key: 'project',
+      width: 140,
       render: (v) => <span style={{ color: 'var(--term-text-muted)' }}>{v || '—'}</span>,
     },
     {
       title: ':STATUS',
       dataIndex: 'status',
       key: 'status',
+      width: 130,
       render: (v) => <ReusableAntdTag config={TASK_STATUS_BADGE_CONFIG} status={v} />,
     },
     {
       title: ':PRIORITY',
       dataIndex: 'priority',
       key: 'priority',
+      width: 130,
       render: (v) => <ReusableAntdTag config={TASK_PRIORITY_BADGE_CONFIG} status={v} />,
     },
     {
       title: ':DUE DATE',
       dataIndex: 'dueDate',
       key: 'dueDate',
+      width: 120,
       render: (v) => (
         <span style={{ color: 'var(--term-text-muted)', fontSize: 12 }}>
           {v ? dayjs(v).format('YYYY-MM-DD') : '—'}
@@ -145,6 +153,7 @@ const TaskManagementPage = () => {
       title: ':TAGS',
       dataIndex: 'tags',
       key: 'tags',
+      width: 180,
       render: (tags) => (
         <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
           {tags?.map((t) => (
@@ -165,6 +174,8 @@ const TaskManagementPage = () => {
     {
       title: 'ACTIONS',
       key: 'actions',
+      width: 90,
+      fixed: isMobile ? false : 'right', // Freeze actions column on desktop for better usability
       render: (_, record) => (
         <div style={{ display: 'flex', gap: 8 }}>
           <button style={actionBtnStyle} onClick={() => setSelectedTaskId(record._id)}>
@@ -192,7 +203,7 @@ const TaskManagementPage = () => {
       <div
         style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
           gap: 14,
           marginBottom: 20,
         }}
@@ -234,13 +245,14 @@ const TaskManagementPage = () => {
         />
       </div>
 
-      {/* Main Table Container - Split Layout Removed */}
+      {/* Main Table Container */}
       <div
         style={{
           border: '1px solid var(--term-border)',
           borderRadius: 10,
-          padding: 20,
+          padding: isMobile ? 12 : 20, // Adjust padding automatically for mobile screens
           background: 'rgba(6, 18, 10, 0.4)',
+          overflowX: 'hidden',
         }}
       >
         <div
@@ -249,6 +261,8 @@ const TaskManagementPage = () => {
             justifyContent: 'space-between',
             alignItems: 'center',
             marginBottom: 16,
+            flexWrap: 'wrap',
+            gap: 10,
           }}
         >
           <span style={{ color: 'var(--term-text-muted)', fontSize: 12, letterSpacing: 1 }}>
@@ -275,13 +289,14 @@ const TaskManagementPage = () => {
           </button>
         </div>
 
+        {/* Filter Controls Row: Fluid widths on mobile */}
         <div
           style={{
             display: 'flex',
             gap: 10,
             marginBottom: 16,
             flexWrap: 'wrap',
-            justifyContent: 'flex-end',
+            justifyContent: isMobile ? 'stretch' : 'flex-end',
           }}
         >
           <Input
@@ -289,7 +304,7 @@ const TaskManagementPage = () => {
             placeholder="Search tasks..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            style={{ width: 200, border: '2px var(--term-border) solid' }}
+            style={{ width: isMobile ? '100%' : 200, border: '2px var(--term-border) solid' }}
           />
           <Select
             placeholder="ALL STATUS"
@@ -297,7 +312,7 @@ const TaskManagementPage = () => {
             value={status}
             options={TASK_STATUS_OPTIONS}
             onChange={setStatus}
-            style={{ width: 150, border: '2px var(--term-border) solid' }}
+            style={{ width: isMobile ? '100%' : 150, border: '2px var(--term-border) solid' }}
           />
           <Select
             placeholder="ALL PRIORITY"
@@ -305,14 +320,14 @@ const TaskManagementPage = () => {
             value={priority}
             options={TASK_PRIORITY_OPTIONS}
             onChange={setPriority}
-            style={{ width: 150, border: '2px var(--term-border) solid' }}
+            style={{ width: isMobile ? '100%' : 150, border: '2px var(--term-border) solid' }}
           />
           <Input
             placeholder="Project..."
             allowClear
             value={project}
             onChange={(e) => setProject(e.target.value || undefined)}
-            style={{ width: 150, border: '2px var(--term-border) solid' }}
+            style={{ width: isMobile ? '100%' : 150, border: '2px var(--term-border) solid' }}
           />
           <button
             type="button"
@@ -320,6 +335,7 @@ const TaskManagementPage = () => {
             style={{
               display: 'flex',
               alignItems: 'center',
+              justifyContent: 'center',
               gap: 6,
               border: '1px solid var(--term-border-strong)',
               background: 'rgba(57,255,106,0.08)',
@@ -329,20 +345,25 @@ const TaskManagementPage = () => {
               fontSize: 12,
               letterSpacing: 1,
               cursor: 'pointer',
+              width: isMobile ? '100%' : 'auto',
             }}
           >
             <ClearOutlined /> CLEAR
           </button>
         </div>
 
-        <CrudTable
-          tableData={tasks}
-          columns={columns}
-          loading={loading}
-          paramObj={{ ...paramObj, total }}
-          setParamObj={setParamObj}
-          setRefreshCounter={() => refetch()}
-        />
+        {/* CrudTable wrapper with built-in Ant Design horizontal overflow handling */}
+        <div style={{ width: '100%', overflowX: 'auto' }}>
+          <CrudTable
+            tableData={tasks}
+            columns={columns}
+            loading={loading}
+            paramObj={{ ...paramObj, total }}
+            setParamObj={setParamObj}
+            setRefreshCounter={() => refetch()}
+            scroll={{ x: 900 }} // 👈 Forces the table to enable fluid horizontal scrolling on mobile screens
+          />
+        </div>
       </div>
 
       {selectedTask && (

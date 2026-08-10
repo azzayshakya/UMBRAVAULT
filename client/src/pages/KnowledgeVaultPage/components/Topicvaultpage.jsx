@@ -1,9 +1,10 @@
-import { ArrowLeftOutlined, PlusOutlined, SearchOutlined } from '@ant-design/icons'
+import { PlusOutlined, SearchOutlined } from '@ant-design/icons'
 import PageHeader from '@devStack/components/PageHeader'
 import { Skeleton } from '@devStack/components/Skelton/Skeleton'
+import { useIsMobile } from '@devStack/utils/useIsMobile'
 import { Input, message, Modal } from 'antd'
 import { useMemo, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 
 import NewNoteModal from '../components/Newnotemodal'
 import NoteCard from '../components/Notecard'
@@ -12,11 +13,12 @@ import { useTopicNotesApi } from '../hooks/Usetopicnotesapi'
 
 const TopicVaultPage = () => {
   const { topicId } = useParams()
-  const navigate = useNavigate()
 
   const [search, setSearch] = useState('')
   const [selectedNoteId, setSelectedNoteId] = useState(null)
   const [newNoteOpen, setNewNoteOpen] = useState(false)
+
+  const isMobile = useIsMobile()
 
   const filters = useMemo(() => ({ search: search || undefined }), [search])
 
@@ -51,6 +53,12 @@ const TopicVaultPage = () => {
         }
       },
     })
+  }
+
+  const responsiveGridStyle = {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
+    gap: 16,
   }
 
   return (
@@ -88,14 +96,25 @@ const TopicVaultPage = () => {
           placeholder="Search notes in this topic..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          style={{ width: 260, border: '2px var(--term-border) solid' }}
+          style={{
+            width: isMobile ? '100%' : 260, // 👈 Expands full width on mobile screens
+            border: '2px var(--term-border) solid',
+          }}
         />
       </div>
 
-      <div style={{ display: 'flex', gap: 16, alignItems: 'flex-start' }}>
-        <div style={{ flex: 1, minWidth: 0 }}>
+      {/* Main Container: Switches to column stack on mobile if preferred, or keeps flex */}
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: isMobile ? 'column' : 'row',
+          gap: 16,
+          alignItem: 'flex-start',
+        }}
+      >
+        <div style={{ flex: 1, minWidth: 0, width: '100%' }}>
           {loading ? (
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16 }}>
+            <div style={responsiveGridStyle}>
               {Array.from({ length: 8 }).map((_, i) => (
                 <Skeleton key={i} height={150} borderRadius={4} />
               ))}
@@ -113,7 +132,7 @@ const TopicVaultPage = () => {
               No notes here yet. Create the first one.
             </div>
           ) : (
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16 }}>
+            <div style={responsiveGridStyle}>
               {notes.map((note, index) => (
                 <NoteCard
                   key={note._id}
