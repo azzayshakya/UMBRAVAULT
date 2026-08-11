@@ -7,8 +7,6 @@ const previewOf = (content = '') =>
     .trim()
     .slice(0, 90)
 
-// Plain JS relative time — avoids depending on the dayjs relativeTime plugin,
-// which isn't confirmed to be registered elsewhere in the app
 const relativeTime = (dateString) => {
   if (!dateString) return '—'
   const diffMs = Date.now() - new Date(dateString).getTime()

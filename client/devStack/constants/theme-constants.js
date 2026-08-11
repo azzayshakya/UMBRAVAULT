@@ -4,7 +4,6 @@ export const ColorScheme = Object.freeze({
   SYSTEM: 'system',
 })
 
-// Single source of truth for your localStorage key
 export const PREFS_STORAGE_KEY = 'user_preferences'
 
 export const SYSTEM_DARK_QUERY = '(prefers-color-scheme: dark)'
