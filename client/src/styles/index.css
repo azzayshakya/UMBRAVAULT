@@ -56,6 +56,7 @@
 
 [data-scheme='light'] {
   --color-primary: var(--primitive-green-700);
+
   --color-primary-hover: var(--primitive-green-600);
   --color-primary-light: var(--primitive-green-50);
 
@@ -88,7 +89,7 @@
 
   --color-secondary: var(--term-text-muted);
   --color-secondary-hover: var(--term-text);
-  --color-secondary-light: var(--color-secondary-light);
+  --color-secondary-light: var(--term-bg-panel);
 
   --color-bg: var(--term-bg);
   --color-bg-container: var(--color-secondary-light);

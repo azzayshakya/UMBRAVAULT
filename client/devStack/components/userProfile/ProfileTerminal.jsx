@@ -67,7 +67,7 @@ export const ProfileTerminal = ({ user }) => {
           letterSpacing: 1,
         }}
       >
-        // SESSION_INFO
+        {'// SESSION_INFO'}
       </div>
 
       <div

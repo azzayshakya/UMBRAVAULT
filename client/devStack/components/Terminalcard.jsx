@@ -1,3 +1,5 @@
+import React from 'react'
+
 const TerminalCard = ({
   title,
   prompt = 'root@system:~#',
@@ -11,7 +13,10 @@ const TerminalCard = ({
   return (
     <div
       className={`terminal-frame terminal-card ${className}`}
-      style={{ '--term-card-max-width': maxWidth ? `${maxWidth}px` : undefined, ...style }}
+      style={{
+        '--term-card-max-width': maxWidth ? `${maxWidth}px` : undefined,
+        ...style,
+      }}
     >
       <span className="terminal-frame__corner terminal-frame__corner--tl" />
       <span className="terminal-frame__corner terminal-frame__corner--tr" />

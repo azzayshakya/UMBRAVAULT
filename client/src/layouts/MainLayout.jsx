@@ -7,7 +7,7 @@ import SidebarQuoteCard from '@devStack/components/Sidebarquotecard'
 import { App_Name, App_ShortName } from '@devStack/constants'
 import { setSidebarCollapsed } from '@devStack/store/preferenceSlice'
 import { useIsMobile } from '@devStack/utils/useIsMobile'
-import { Layout, Menu, Typography } from 'antd'
+import { ConfigProvider, Layout, Menu, Typography } from 'antd'
 import { useMemo, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Outlet } from 'react-router-dom'
@@ -29,8 +29,6 @@ const MainLayout = ({ userRole, userData = null }) => {
     }
   }, [isMobile, dispatch])
 
-  const contentBgUrl = '/images/global/binary-bg.webp'
-  //
   const userPreference = useSelector((s) => s.preference)
   const isDark = userPreference.colorScheme === 'dark'
   const { selectedKeys, openKeys, handleMenuClick, handleOpenChange } = useMenu({
@@ -81,7 +79,7 @@ const MainLayout = ({ userRole, userData = null }) => {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              background: 'var(--color-primary-light)',
+              background: 'var(--color-bg-hover)',
               margin: '16px',
               borderRadius: 'var(--radius)',
               flexShrink: 0,
@@ -114,19 +112,37 @@ const MainLayout = ({ userRole, userData = null }) => {
                 overflowX: 'hidden',
               }}
             >
-              <Menu
-                theme={scheme === 'dark' ? 'dark' : 'light'}
-                mode="inline"
-                selectedKeys={selectedKeys}
-                openKeys={openKeys}
-                items={menuItems}
-                onClick={handleMenuClick}
-                onOpenChange={handleOpenChange}
-                style={{
-                  background: 'transparent',
-                  borderInlineEnd: 'none',
+              <ConfigProvider
+                theme={{
+                  components: {
+                    Menu: {
+                      itemSelectedColor: 'var(--color-primary)',
+                      itemSelectedBg: 'var(--color-bg-hover)',
+                      itemHoverColor: 'var(--color-primary)',
+                      itemActiveBg: 'var(--color-bg-hover)',
+
+                      darkItemSelectedColor: 'var(--color-primary)',
+                      darkItemSelectedBg: 'var(--color-bg-hover)',
+                      darkItemHoverColor: 'var(--color-primary)',
+                      darkItemHoverBg: 'var(--color-bg-hover)',
+                    },
+                  },
                 }}
-              />
+              >
+                <Menu
+                  theme={scheme === 'dark' ? 'dark' : 'light'}
+                  mode="inline"
+                  selectedKeys={selectedKeys}
+                  openKeys={openKeys}
+                  items={menuItems}
+                  onClick={handleMenuClick}
+                  onOpenChange={handleOpenChange}
+                  style={{
+                    background: 'transparent',
+                    borderInlineEnd: 'none',
+                  }}
+                />
+              </ConfigProvider>
             </div>
 
             <div style={{ marginTop: 'auto', flexShrink: 0 }}>
@@ -155,14 +171,7 @@ const MainLayout = ({ userRole, userData = null }) => {
 
         <div
           style={{
-            background: !isDark
-              ? 'none' // or whatever your dark mode background fallback is
-              : `none`,
-            // : `linear-gradient(rgba(8, 11, 9, 0.72), rgba(8, 11, 9, 0.72)), url(${contentBgUrl})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            backgroundRepeat: 'no-repeat',
-            backgroundAttachment: 'fixed',
+            background: 'var(--color-bg)',
             borderRadius: 'var(--radius)',
             padding: 'var(--page-padding)',
             flex: 1,
