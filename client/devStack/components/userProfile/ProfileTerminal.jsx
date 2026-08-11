@@ -44,7 +44,7 @@ export const ProfileTerminal = ({ user }) => {
   return (
     <div
       style={{
-        width: 420,
+        width: 350,
         background: 'var(--color-secondary-light)',
         border: '1px solid var(--term-border)',
         borderRadius: 12,

@@ -18,7 +18,6 @@ const NoteEditorPanel = ({ noteId, onClose, onDeleted }) => {
   // Don't render the modal at all if there's no selected note
   if (!noteId) return null
 
-  // The footer containing the Save Status and Delete button
   const footerContent = (
     <div
       style={{
@@ -68,7 +67,7 @@ const NoteEditorPanel = ({ noteId, onClose, onDeleted }) => {
       onClose={onClose}
       title={loading ? 'LOADING...' : note?.title || 'NOTE'}
       prompt="root@vault:~# edit"
-      width={700} // Wider width for comfortable reading/editing
+      width={700} 
       footer={footerContent}
     >
       {!loading && note && (
