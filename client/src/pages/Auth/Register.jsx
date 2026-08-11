@@ -9,23 +9,23 @@ import { useState } from 'react'
 const { Text } = Typography
 
 const inputStyle = {
-  background: 'rgba(6, 18, 10, 0.6)',
-  border: '1px solid var(--term-border)',
-  color: 'var(--color-secondary-hover)',
-  fontFamily: 'var(--term-font)',
+  background: 'var(--color-bg-container)',
+  border: '1px solid var(--color-border)',
+  color: 'var(--color-text)',
+  fontFamily: 'var(--term-font, monospace)',
   fontSize: 13,
   borderRadius: 6,
 }
 
 const fieldLabelStyle = {
-  color: 'var(--color-primary-light)',
-  fontFamily: 'var(--term-font)',
+  color: 'var(--color-text-secondary)',
+  fontFamily: 'var(--term-font, monospace)',
   fontSize: 12,
+  fontWeight: 600,
   letterSpacing: 0.5,
 }
 
 const SignupPage = () => {
-  const contentBgUrl = '/images/global/binary-bg.webp'
   const [form] = Form.useForm()
   const [loading, setLoading] = useState(false)
 
@@ -52,12 +52,6 @@ const SignupPage = () => {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-
-        background: `linear-gradient(rgba(8, 11, 9, 0.72), rgba(8, 11, 9, 0.72)), url(${contentBgUrl})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
-        backgroundAttachment: 'fixed',
         borderRadius: 'var(--radius)',
         padding: 'var(--page-padding)',
         flex: 1,
@@ -71,8 +65,8 @@ const SignupPage = () => {
           <Text
             style={{
               fontSize: 11,
-              color: 'var(--color-secondary)',
-              fontFamily: 'var(--term-font)',
+              color: 'var(--color-text-muted)',
+              fontFamily: 'var(--term-font, monospace)',
               letterSpacing: 0.3,
             }}
           >
@@ -97,12 +91,13 @@ const SignupPage = () => {
             ]}
           >
             <Input
-              prefix={<UserOutlined style={{ color: 'var(--color-primary-light)' }} />}
-              placeholder="annonymous user"
+              prefix={<UserOutlined style={{ color: 'var(--color-primary)' }} />}
+              placeholder="anonymous user"
               autoComplete="new-user"
               style={inputStyle}
             />
           </Form.Item>
+
           <Form.Item
             label={<span style={fieldLabelStyle}>EMAIL</span>}
             name="userEmail"
@@ -112,9 +107,9 @@ const SignupPage = () => {
             ]}
           >
             <Input
-              prefix={<MailFilled style={{ color: 'var(--color-primary-light)' }} />}
+              prefix={<MailFilled style={{ color: 'var(--color-primary)' }} />}
               placeholder="you@domain.com"
-              aautoComplete="new-email"
+              autoComplete="new-email"
               style={inputStyle}
             />
           </Form.Item>
@@ -125,7 +120,7 @@ const SignupPage = () => {
             rules={[{ required: true, message: 'Enter your password' }]}
           >
             <Input.Password
-              prefix={<LockOutlined style={{ color: 'var(--color-primary-light)' }} />}
+              prefix={<LockOutlined style={{ color: 'var(--color-primary)' }} />}
               placeholder="********"
               autoComplete="new-password"
               style={inputStyle}
@@ -139,10 +134,10 @@ const SignupPage = () => {
               disabled={loading}
               style={{
                 height: 42,
-                background: loading ? 'rgba(57, 255, 106, 0.12)' : 'var(--color-primary)',
+                background: loading ? 'var(--color-bg-hover)' : 'var(--color-primary)',
                 border: '1px solid var(--color-border-secondary)',
-                color: loading ? 'var(--color-primary)' : '#04150a',
-                fontFamily: 'var(--term-font)',
+                color: loading ? 'var(--color-primary)' : 'var(--color-bg)',
+                fontFamily: 'var(--term-font, monospace)',
                 fontWeight: 600,
                 letterSpacing: 1,
                 textTransform: 'uppercase',
@@ -151,8 +146,8 @@ const SignupPage = () => {
                 alignItems: 'center',
                 justifyContent: 'center',
                 gap: 8,
-                boxShadow: loading ? 'none' : '0 0 14px rgba(57, 255, 106, 0.35)',
-                transition: 'background 0.15s ease, box-shadow 0.15s ease',
+                boxShadow: loading ? 'none' : 'var(--color-glow)',
+                transition: 'background 0.15s ease, box-shadow 0.15s ease, color 0.15s ease',
               }}
             >
               {loading ? (
@@ -160,7 +155,7 @@ const SignupPage = () => {
                   size={16}
                   thickness={2}
                   color="var(--color-primary)"
-                  trackColor="rgba(57, 255, 106, 0.2)"
+                  trackColor="var(--color-border)"
                   label="AUTHENTICATING..."
                   labelColor="var(--color-primary)"
                   labelSize={12}

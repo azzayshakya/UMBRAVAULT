@@ -141,7 +141,7 @@ const UserManagementPage = () => {
             onChange={(e) => setSearch(e.target.value)}
             style={{
               width: isMobile ? '100%' : 220,
-              background: 'rgba(6, 18, 10, 0.6)',
+              // background: 'rgba(6, 18, 10, 0.6)',
               border: '1px solid var(--term-border)',
               color: 'var(--color-secondary-hover)',
             }}
