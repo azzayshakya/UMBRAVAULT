@@ -2,12 +2,12 @@ const terminalFrameStyle = {
   position: 'relative',
   isolation: 'isolate',
   overflow: 'hidden',
-  background: 'var(--color-secondary-light)',
-  border: '1px solid var(--term-border)',
-  borderRadius: 'var(--term-radius)',
+  background: 'var(--color-bg-container, var(--term-bg-panel))',
+  border: '1px solid var(--color-border, var(--term-border))',
+  borderRadius: 'var(--radius, 10px)',
   boxShadow: 'var(--color-glow)',
-  fontFamily: 'var(--term-font)',
-  color: 'var(--color-secondary-hover)',
+  fontFamily: 'var(--term-font, monospace)',
+  color: 'var(--color-text)',
 }
 
 const cornerBaseStyle = {
@@ -25,19 +25,20 @@ const scanlinesStyle = {
   zIndex: 1,
   pointerEvents: 'none',
   background:
-    'repeating-linear-gradient(to bottom, rgba(0,0,0,0) 0, rgba(0,0,0,0) 2px, rgba(57,255,106,0.035) 3px)',
+    'repeating-linear-gradient(to bottom, transparent 0, transparent 2px, var(--color-border) 3px)',
+  opacity: 0.15,
   mixBlendMode: 'overlay',
 }
 
 const shimmerBaseStyle = {
   backgroundImage:
-    'linear-gradient(90deg, rgba(57,255,106,0.05) 25%, rgba(57,255,106,0.16) 50%, rgba(57,255,106,0.05) 75%)',
+    'linear-gradient(90deg, var(--color-bg-hover) 25%, var(--color-border) 50%, var(--color-bg-hover) 75%)',
   backgroundSize: '300px 100%',
   animation: 'proj-shimmer-sweep 1.3s infinite linear',
   borderRadius: 4,
 }
 
-export function ProjectCardSkeleton({ index }) {
+export function ProjectCardSkeleton({ index = 0 }) {
   return (
     <div
       style={{
@@ -163,7 +164,7 @@ export function ProjectCardSkeleton({ index }) {
             display: 'flex',
             justifyContent: 'space-between',
             paddingTop: 12,
-            borderTop: '1px solid var(--term-border)',
+            borderTop: '1px solid var(--color-border)',
           }}
         >
           <div style={{ ...shimmerBaseStyle, width: 18, height: 18 }} />

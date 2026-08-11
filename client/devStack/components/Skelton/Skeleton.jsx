@@ -17,12 +17,12 @@ function injectShimmerStyle() {
 }
 
 /**
- * <Skeleton />  — base shimmer block
+ * <Skeleton />  — base shimmer block (Theme Adaptive)
  *
  * Props:
- *   width        string | number   e.g. "100%", 120        default "100%"
- *   height       string | number   e.g. 14, "1rem"         default 14
- *   borderRadius string | number   e.g. "50%", 8           default 6
+ *   width        string | number   e.g. "100%", 120         default "100%"
+ *   height       string | number   e.g. 14, "1rem"          default 14
+ *   borderRadius string | number   e.g. "50%", 8            default 6
  *   style        object            extra inline styles      default {}
  */
 export function Skeleton({ width = '100%', height = 14, borderRadius = 6, style = {} }) {
@@ -37,7 +37,7 @@ export function Skeleton({ width = '100%', height = 14, borderRadius = 6, style 
         height,
         borderRadius,
         background:
-          'linear-gradient(90deg, rgba(255,255,255,0.06) 25%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0.06) 75%)',
+          'linear-gradient(90deg, var(--color-bg-hover) 25%, var(--color-border) 50%, var(--color-bg-hover) 75%)',
         backgroundSize: '600px 100%',
         animation: 'shimmer 3s infinite linear',
         ...style,

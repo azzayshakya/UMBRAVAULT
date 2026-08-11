@@ -16,13 +16,15 @@ const wrapStyle = {
   margin: '16px',
   padding: '16px 14px',
   borderRadius: 'var(--radius, 8px)',
-  border: '1px solid var(--term-border, rgba(57, 255, 106, 0.25))',
-  background:
-    'linear-gradient(180deg, rgba(57,255,106,0.05), rgba(3,9,5,0.92)), var(--color-bg-container)',
+  border: '1px solid var(--color-border, var(--term-border))',
+  background: 'linear-gradient(180deg, var(--color-bg-hover), var(--color-bg-container))',
+  boxShadow: 'var(--color-glow)',
   overflow: 'hidden',
   flexShrink: 0,
   minHeight: '210px',
-  // border: '2px red solid',
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
 }
 
 const imageWrapStyle = {
@@ -32,29 +34,33 @@ const imageWrapStyle = {
 }
 
 const imageStyle = {
-  width: 100,
-  height: 89,
-  filter: 'drop-shadow(0 0 10px rgba(57, 255, 106, 0.45))',
-  opacity: 0.92,
+  width: 90,
+  height: 80,
+  filter: 'drop-shadow(var(--color-glow))',
+  opacity: 0.95,
   pointerEvents: 'none',
   borderRadius: '40%',
+  objectFit: 'cover',
 }
+
 const quoteTextStyle = {
   fontFamily: 'var(--term-font, "JetBrains Mono", monospace)',
   fontSize: 11,
   lineHeight: 1.6,
-  color: 'var(--color-secondary-hover, var(--color-text))',
+  color: 'var(--color-text)',
   letterSpacing: 0.2,
   transition: 'opacity 0.35s ease',
+  textAlign: 'center',
 }
 
 const tagStyle = {
   fontFamily: 'var(--term-font, "JetBrains Mono", monospace)',
   fontSize: 10.5,
   lineHeight: 1.6,
-  color: 'var(--color-secondary, var(--color-text-muted))',
+  color: 'var(--color-text-secondary)',
   marginTop: 6,
   transition: 'opacity 0.35s ease',
+  textAlign: 'center',
 }
 
 const SidebarQuoteCard = ({

@@ -1,5 +1,3 @@
-// components/SystemStatusPanel.jsx
-import useSystemStatus from '../hooks/useSystemStatus'
 import { statusDotColor } from '../utils/dashboardUtils'
 
 import DashboardPanel from './DashboardPanel'
@@ -11,6 +9,7 @@ const rowStyle = {
   padding: '7px 0',
   fontFamily: 'var(--term-font, "JetBrains Mono", monospace)',
   fontSize: 12.5,
+  borderBottom: '1px solid var(--color-border, rgba(255, 255, 255, 0.05))',
 }
 
 const dotStyle = (color) => ({
@@ -24,26 +23,39 @@ const dotStyle = (color) => ({
   flexShrink: 0,
 })
 
-// Shared instance so this panel's data comes from the same
-// `getSystemStatus` call the stat-card row consumes below.
-const SystemStatusPanel = ({ statusList, loading }) => {
+const SystemStatusPanel = ({ statusList = [], loading }) => {
   return (
     <DashboardPanel title="System Status" style={{ height: '100%' }}>
       {loading
         ? Array.from({ length: 5 }).map((_, i) => (
-            <div key={i} style={{ ...rowStyle, opacity: 0.35 }}>
-              <span style={{ color: 'var(--color-secondary, #6b8f78)' }}>Loading...</span>
+            <div key={i} style={{ ...rowStyle, borderBottom: 'none' }}>
+              <span
+                style={{
+                  color: 'var(--color-text-muted)',
+                  fontStyle: 'italic',
+                }}
+              >
+                Loading...
+              </span>
             </div>
           ))
-        : statusList.map((item) => {
+        : statusList.map((item, index) => {
             const color = statusDotColor(item.tone)
+            const isLast = index === statusList.length - 1
+
             return (
-              <div key={item.id} style={rowStyle}>
+              <div
+                key={item.id}
+                style={{
+                  ...rowStyle,
+                  borderBottom: isLast ? 'none' : rowStyle.borderBottom,
+                }}
+              >
                 <span
                   style={{
                     display: 'flex',
                     alignItems: 'center',
-                    color: 'var(--color-secondary, #9bb8a7)',
+                    color: 'var(--color-text-secondary)',
                   }}
                 >
                   <span style={dotStyle(color)} />
@@ -51,7 +63,7 @@ const SystemStatusPanel = ({ statusList, loading }) => {
                 </span>
                 <span
                   style={{
-                    color: item.tone === 'danger' ? color : 'var(--color-secondary-hover, #d7ffe4)',
+                    color: item.tone === 'danger' ? 'var(--color-error)' : 'var(--color-text)',
                     fontWeight: 600,
                   }}
                 >

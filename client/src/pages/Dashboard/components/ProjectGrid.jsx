@@ -7,10 +7,9 @@ import {
   Crosshair,
   Biohazard,
   Terminal,
-  //   Github,
   ExternalLink,
   ChevronsRight,
-  Link,
+  Link as LinkIcon,
 } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
 
@@ -63,22 +62,6 @@ const DUMMY_PROJECTS = [
     tags: ['SHELL', 'REMOTE'],
     threat: 'high',
   },
-  {
-    id: 'shellstorm',
-    name: 'SHELL STORM',
-    desc: 'Reverse Shell Manager',
-    icon: Terminal,
-    tags: ['SHELL', 'REMOTE'],
-    threat: 'high',
-  },
-  {
-    id: 'shellstorm',
-    name: 'SHELL STORM',
-    desc: 'Reverse Shell Manager',
-    icon: Terminal,
-    tags: ['SHELL', 'REMOTE'],
-    threat: 'high',
-  },
 ]
 
 function fetchProjects() {
@@ -91,12 +74,11 @@ const terminalFrameStyle = {
   position: 'relative',
   isolation: 'isolate',
   overflow: 'hidden',
-  background: 'var(--color-secondary-light)',
-  border: '1px solid var(--term-border)',
-  borderRadius: 'var(--term-radius)',
-  // boxShadow: 'var(--color-glow)',
-  fontFamily: 'var(--term-font)',
-  color: 'var(--color-secondary-hover)',
+  background: 'var(--color-bg-container, var(--term-bg-panel))',
+  border: '1px solid var(--color-border, var(--term-border))',
+  borderRadius: 'var(--radius, 10px)',
+  fontFamily: 'var(--term-font, monospace)',
+  color: 'var(--color-text)',
 }
 
 function ProjectCard({ project, index }) {
@@ -108,36 +90,38 @@ function ProjectCard({ project, index }) {
         ...terminalFrameStyle,
         padding: 0,
         height: 240,
-        transition: 'all .3s ease',
+        transition: 'transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease',
         animation: 'term-fade-in 0.5s ease-out both',
         animationDelay: `${index * 70}ms`,
       }}
       onMouseEnter={(e) => {
-        e.currentTarget.style.transform = 'translateY(-5px)'
+        e.currentTarget.style.transform = 'translateY(-4px)'
         e.currentTarget.style.boxShadow = 'var(--color-glow)'
+        e.currentTarget.style.borderColor = 'var(--color-primary)'
       }}
       onMouseLeave={(e) => {
         e.currentTarget.style.transform = 'translateY(0)'
-        e.currentTarget.style.boxShadow = ''
+        e.currentTarget.style.boxShadow = 'none'
+        e.currentTarget.style.borderColor = 'var(--color-border)'
       }}
     >
       <div style={{ padding: '18px', display: 'flex', flexDirection: 'column', gap: 14 }}>
-        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'center' }}>
+        {/* Icon Header */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <div
             style={{
-              width: 70,
-              height: 70,
+              width: 64,
+              height: 64,
               borderRadius: '50%',
-              border: '1px solid var(--term-border)',
-              background: 'rgba(57,255,106,.05)',
+              border: '1px solid var(--color-border)',
+              background: 'var(--color-bg-hover)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              boxShadow: '0 0 20px rgba(57,255,106,.25)',
             }}
           >
             <Icon
-              size={40}
+              size={36}
               style={{
                 color: 'var(--color-primary)',
               }}
@@ -145,14 +129,16 @@ function ProjectCard({ project, index }) {
           </div>
         </div>
 
+        {/* Project Meta */}
         <div>
           <div
             style={{
-              fontSize: 18,
+              fontSize: 16,
+              fontWeight: 700,
               textAlign: 'center',
               color: 'var(--color-primary)',
               textTransform: 'uppercase',
-              textShadow: '0 0 15px rgba(57,255,106,.5)',
+              letterSpacing: '0.5px',
             }}
           >
             {project.name}
@@ -162,12 +148,13 @@ function ProjectCard({ project, index }) {
               style={{
                 textAlign: 'center',
                 fontSize: 12,
-                color: 'var(--color-secondary)',
+                color: 'var(--color-text-secondary)',
                 maxWidth: 180,
                 overflow: 'hidden',
                 textOverflow: 'ellipsis',
                 whiteSpace: 'nowrap',
                 cursor: 'pointer',
+                marginTop: 2,
               }}
             >
               {project.desc}
@@ -175,36 +162,42 @@ function ProjectCard({ project, index }) {
           </Tooltip>
         </div>
 
-        <div style={{ display: 'flex', gap: 8, justifyContent: 'center' }}>
+        {/* Tags */}
+        <div style={{ display: 'flex', gap: 6, justifyContent: 'center', flexWrap: 'wrap' }}>
           {project.tags.map((tag) => (
             <span
               key={tag}
               style={{
                 fontSize: 10,
+                fontWeight: 600,
                 letterSpacing: '0.5px',
-                padding: '3px 8px',
-                borderRadius: 4,
-                border: '1px solid var(--term-border)',
-                color: 'var(--color-primary-light)',
-                background: 'rgba(57,255,106,0.04)',
+                padding: '2px 7px',
+                borderRadius: 'var(--radius-sm, 4px)',
+                border: '1px solid var(--color-border)',
+                color: 'var(--color-primary)',
+                background: 'var(--color-bg-hover)',
               }}
             >
               {tag}
             </span>
           ))}
         </div>
+
+        {/* Action Bar */}
         <div
           style={{
             width: '100%',
             display: 'flex',
             justifyContent: 'space-between',
-            paddingTop: 12,
-            borderTop: '1px solid var(--term-border)',
+            alignItems: 'center',
+            paddingTop: 10,
+            borderTop: '1px solid var(--color-border)',
+            color: 'var(--color-text-secondary)',
           }}
         >
-          <Link size={18} color="white" />
-          <ExternalLink size={18} color="white" />
-          <ChevronsRight size={18} color="white" />
+          <LinkIcon size={16} style={{ cursor: 'pointer', opacity: 0.8 }} />
+          <ExternalLink size={16} style={{ cursor: 'pointer', opacity: 0.8 }} />
+          <ChevronsRight size={16} style={{ cursor: 'pointer', opacity: 0.8 }} />
         </div>
       </div>
     </div>
@@ -229,34 +222,48 @@ export default function ProjectsGrid() {
   return (
     <div
       style={{
-        border: '1px solid var(--term-border)',
-        padding: 24,
-        fontFamily: 'var(--term-font)',
+        border: '1px solid var(--color-border)',
+        borderRadius: 'var(--radius, 8px)',
+        background: 'var(--color-bg-container)',
+        padding: 20,
+        fontFamily: 'var(--term-font, monospace)',
       }}
     >
+      {/* Grid Header */}
       <div
         style={{
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
           marginBottom: 14,
-          // border: '2px red solid',
         }}
       >
         <div
           style={{
-            // position: 'absolute',
-            top: 15,
-            right: 15,
-            fontSize: 10,
-            color: '#39ff6a',
+            fontSize: 11,
+            fontWeight: 700,
+            letterSpacing: '0.5px',
+            color: 'var(--color-success, var(--color-primary))',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 6,
           }}
         >
+          <span
+            style={{
+              width: 6,
+              height: 6,
+              borderRadius: '50%',
+              background: 'currentColor',
+              display: 'inline-block',
+            }}
+          />
           ACTIVE
         </div>
         <span
           style={{
             fontSize: 11,
+            fontWeight: 600,
             letterSpacing: 0.5,
             color: 'var(--color-primary)',
             cursor: 'pointer',
@@ -266,17 +273,15 @@ export default function ProjectsGrid() {
         </span>
       </div>
 
+      {/* Horizontal Scroll Container */}
       <div
         style={{
           display: 'flex',
-          // alignItems: 'center',
-          // justifyItems: 'center',
-          // justifyContent: 'center',
           gap: 16,
           overflowX: 'auto',
           overflowY: 'hidden',
           paddingBottom: 8,
-          scrollbarColor: '#39ff6a transparent',
+          scrollbarColor: 'var(--color-primary) transparent',
           scrollbarWidth: 'thin',
         }}
         className="terminal-scroll"
@@ -284,7 +289,7 @@ export default function ProjectsGrid() {
         {cards.map((item, i) =>
           projects ? (
             <div
-              key={item.id}
+              key={item.id + i}
               style={{
                 flex: '0 0 170px',
               }}
