@@ -39,7 +39,7 @@ const imageStyle = {
   filter: 'drop-shadow(var(--color-glow))',
   opacity: 0.95,
   pointerEvents: 'none',
-  borderRadius: '40%',
+  borderRadius: '10%',
   objectFit: 'cover',
 }
 

@@ -19,8 +19,6 @@ const pageStyle = {
 }
 const DashboardHeaderUrl = '/images/global/dashboard_header.png'
 const Dashboard = () => {
-  // Both the status list and the stat-card row are backed by the same
-  // getSystemStatus() call, so it's fetched once here and passed down.
   const { statusList, stats, loading: statusLoading } = useSystemStatus()
   const isMobile = useIsMobile()
   return (
@@ -44,8 +42,6 @@ const Dashboard = () => {
       <div
         style={{
           display: 'grid',
-          // On mobile: 1 column that fits the content naturally
-          // On desktop: your original 3-column split layout
           gridTemplateColumns: isMobile ? '1fr' : '360px 1fr 300px',
           gap: 14,
           flexShrink: 0,
@@ -56,9 +52,8 @@ const Dashboard = () => {
           <>
             <div
               style={{
-                border: '1px solid var(--term-border, rgba(34, 224, 122, 0.2))',
+                border: '1px solid var(--term-border)',
                 borderRadius: 'var(--radius-sm, 6px)',
-                background: 'rgba(6, 14, 9, 0.35)',
               }}
             >
               {/* <GlobeVisual /> */}
@@ -68,7 +63,6 @@ const Dashboard = () => {
         )}
       </div>
 
-      {/* Row 2 — key metrics */}
       {!isMobile && (
         <div style={{ flexShrink: 0 }}>
           <StatsRow stats={stats} loading={statusLoading} />
@@ -76,7 +70,6 @@ const Dashboard = () => {
       )}
 
       <ProjectsGrid />
-      {/* Row 3 — live feed, brand statement, shortcuts */}
       {!isMobile && (
         <div
           style={{

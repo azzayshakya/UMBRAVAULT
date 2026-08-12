@@ -106,7 +106,6 @@ function ProjectCard({ project, index }) {
       }}
     >
       <div style={{ padding: '18px', display: 'flex', flexDirection: 'column', gap: 14 }}>
-        {/* Icon Header */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <div
             style={{
@@ -129,7 +128,6 @@ function ProjectCard({ project, index }) {
           </div>
         </div>
 
-        {/* Project Meta */}
         <div>
           <div
             style={{

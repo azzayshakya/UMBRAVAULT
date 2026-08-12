@@ -129,7 +129,7 @@
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  border: 1px solid var(--color-primary-light);
+  border: 1px solid var(--color-primary);
 }
 
 .terminal-frame__close {
@@ -137,7 +137,7 @@
   font-family: var(--term-font);
   font-size: 11px;
   letter-spacing: 0.5px;
-  color: var(--color-primary-light);
+  color: var(--color-primary);
   background: transparent;
   border: 1px solid var(--term-border);
   border-radius: 4px;
@@ -187,12 +187,12 @@
 /* ─── TerminalModal (antd Modal overrides) ──────────────────────────────── */
 
 .terminal-modal .ant-modal-content {
-  background: transparent;
+  /* background: transparent; */
   box-shadow: none;
   padding: 0;
 }
 .terminal-modal .ant-modal-container {
-  background: transparent;
+  /* background: transparent; */
 }
 
 .terminal-modal .ant-modal-body {
