@@ -15,7 +15,6 @@ const ITEMS = [
   { id: 'terminal', label: 'Terminal Access', icon: CodeOutlined },
 ]
 
-// Routing intentionally deferred — clicks are logged only for now.
 const handleClick = (id) => {
   console.log(`quick-access:${id}`)
 }

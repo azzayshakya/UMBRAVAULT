@@ -160,7 +160,6 @@ function ProjectCard({ project, index }) {
           </Tooltip>
         </div>
 
-        {/* Tags */}
         <div style={{ display: 'flex', gap: 6, justifyContent: 'center', flexWrap: 'wrap' }}>
           {project.tags.map((tag) => (
             <span
@@ -181,7 +180,6 @@ function ProjectCard({ project, index }) {
           ))}
         </div>
 
-        {/* Action Bar */}
         <div
           style={{
             width: '100%',
@@ -227,7 +225,6 @@ export default function ProjectsGrid() {
         fontFamily: 'var(--term-font, monospace)',
       }}
     >
-      {/* Grid Header */}
       <div
         style={{
           display: 'flex',
@@ -271,7 +268,6 @@ export default function ProjectsGrid() {
         </span>
       </div>
 
-      {/* Horizontal Scroll Container */}
       <div
         style={{
           display: 'flex',
