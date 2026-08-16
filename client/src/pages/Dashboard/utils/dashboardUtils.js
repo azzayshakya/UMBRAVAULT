@@ -21,10 +21,6 @@ export const statusDotColor = (status) => {
   }
 }
 
-/**
- * Turns an array of numbers into an SVG `points` string for a tiny
- * sparkline, normalised to the given width/height.
- */
 export const buildSparklinePoints = (values = [], width = 64, height = 24) => {
   if (!values.length) return ''
   const max = Math.max(...values, 1)

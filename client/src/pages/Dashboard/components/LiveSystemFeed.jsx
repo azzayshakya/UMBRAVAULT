@@ -1,4 +1,3 @@
-// components/LiveSystemFeed.jsx
 import { WifiOutlined } from '@ant-design/icons'
 
 import useServerLogs from '../hooks/useServerLogs'

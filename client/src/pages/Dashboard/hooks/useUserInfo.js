@@ -1,13 +1,7 @@
-// hooks/useUserInfo.js
 import { useEffect, useState } from 'react'
 
 import { getUserInfo } from '../api/dashboardApi'
 
-/**
- * Fetches the logged-in user's identity block for the dashboard.
- * Currently backed by `getUserInfo` (localStorage + dummy fallback);
- * once a real endpoint exists, only the api layer needs to change.
- */
 const useUserInfo = () => {
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)

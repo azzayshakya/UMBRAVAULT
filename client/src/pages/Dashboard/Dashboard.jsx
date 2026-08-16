@@ -3,7 +3,6 @@ import { useIsMobile } from '@devStack/utils/useIsMobile'
 import CenterBrandText from './components/CenterBrandText'
 import LiveSystemFeed from './components/LiveSystemFeed'
 import ProjectsGrid from './components/ProjectGrid'
-import QuickAccessPanel from './components/QuickAccessPanel'
 import StatsRow from './components/StatsRow'
 import SystemStatusPanel from './components/SystemStatusPanel'
 import UserInfoPanel from './components/UserInfoPanel'
@@ -23,7 +22,7 @@ const Dashboard = () => {
   const isMobile = useIsMobile()
   return (
     <div style={pageStyle}>
-      {/* <div
+      <div
         style={{
           backgroundSize: 'cover',
           backgroundPosition: 'center',
@@ -37,7 +36,7 @@ const Dashboard = () => {
         }}
       >
         <img style={{ width: '100%' }} src={DashboardHeaderUrl} />
-      </div> */}
+      </div>
       <div
         style={{
           display: 'grid',
@@ -55,7 +54,8 @@ const Dashboard = () => {
                 borderRadius: 'var(--radius-sm, 6px)',
               }}
             >
-              <div
+              <CenterBrandText />
+              {/* <div
                 style={{
                   backgroundSize: 'cover',
                   backgroundPosition: 'center',
@@ -69,7 +69,7 @@ const Dashboard = () => {
                 }}
               >
                 <img style={{ width: '100%' }} src={DashboardHeaderUrl} />
-              </div>
+              </div> */}
               {/* <GlobeVisual /> */}
             </div>
             <SystemStatusPanel statusList={statusList} loading={statusLoading} />
@@ -95,8 +95,6 @@ const Dashboard = () => {
           }}
         >
           <LiveSystemFeed />
-          <CenterBrandText />
-          <QuickAccessPanel />
         </div>
       )}
     </div>

@@ -11,7 +11,7 @@ import {
   ChevronsRight,
   Link as LinkIcon,
 } from 'lucide-react'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 const DUMMY_PROJECTS = [
   {

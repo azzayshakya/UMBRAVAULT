@@ -1,13 +1,7 @@
-// hooks/useSystemStatus.js
 import { useEffect, useState } from 'react'
 
 import { getSystemStatus } from '../api/dashboardApi'
 
-/**
- * Powers both the top-right "SYSTEM STATUS" list and the stat-card row —
- * both come from the same `getSystemStatus` call so they can never drift
- * out of sync with each other.
- */
 const useSystemStatus = () => {
   const [statusList, setStatusList] = useState([])
   const [stats, setStats] = useState([])
