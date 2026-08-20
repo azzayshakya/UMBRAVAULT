@@ -1,15 +1,91 @@
+import {
+  BookOutlined,
+  FolderOutlined,
+  BulbOutlined,
+  RocketOutlined,
+  CodeOutlined,
+  DatabaseOutlined,
+  FireOutlined,
+  StarOutlined,
+} from '@ant-design/icons'
 import TerminalModal from '@devStack/components/Terminalmodal'
-import { NOTE_TYPE, NOTE_TYPE_OPTIONS } from '@devStack/enums/note-page-enum'
-import { Form, Input, Select, message } from 'antd'
+import { Form, Input, Select, ColorPicker, message } from 'antd'
 
-const NewNoteModal = ({ open, onClose, onCreate, submitting }) => {
+const ICON_OPTIONS = [
+  {
+    value: 'BookOutlined',
+    label: (
+      <span>
+        <BookOutlined /> Book
+      </span>
+    ),
+  },
+  {
+    value: 'FolderOutlined',
+    label: (
+      <span>
+        <FolderOutlined /> Folder
+      </span>
+    ),
+  },
+  {
+    value: 'BulbOutlined',
+    label: (
+      <span>
+        <BulbOutlined /> Bulb
+      </span>
+    ),
+  },
+  {
+    value: 'RocketOutlined',
+    label: (
+      <span>
+        <RocketOutlined /> Rocket
+      </span>
+    ),
+  },
+  {
+    value: 'CodeOutlined',
+    label: (
+      <span>
+        <CodeOutlined /> Code
+      </span>
+    ),
+  },
+  {
+    value: 'DatabaseOutlined',
+    label: (
+      <span>
+        <DatabaseOutlined /> Database
+      </span>
+    ),
+  },
+  {
+    value: 'FireOutlined',
+    label: (
+      <span>
+        <FireOutlined /> Fire
+      </span>
+    ),
+  },
+  {
+    value: 'StarOutlined',
+    label: (
+      <span>
+        <StarOutlined /> Star
+      </span>
+    ),
+  },
+]
+
+const NewTopicModal = ({ open, onClose, onSubmit, submitting }) => {
   const [form] = Form.useForm()
 
   const handleSubmit = async () => {
     const values = await form.validateFields()
-    const res = await onCreate(values)
+    const res = await onSubmit(values)
     if (res.success) {
-      message.success('Note created')
+      message.success('Topic created')
       form.resetFields()
       onClose()
     } else {
@@ -21,8 +97,8 @@ const NewNoteModal = ({ open, onClose, onCreate, submitting }) => {
     <TerminalModal
       open={open}
       onClose={onClose}
-      title="NEW NOTE"
-      prompt="root@vault:~# touch"
+      title="NEW TOPIC"
+      prompt="root@vault:~# mkdir"
       width={420}
       footer={
         <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 10 }}>
@@ -56,35 +132,41 @@ const NewNoteModal = ({ open, onClose, onCreate, submitting }) => {
               letterSpacing: 1,
             }}
           >
-            {submitting ? 'CREATING...' : '+ CREATE NOTE'}
+            {submitting ? 'CREATING...' : '+ CREATE TOPIC'}
           </button>
         </div>
       }
     >
-      <Form
-        form={form}
-        layout="vertical"
-        requiredMark={false}
-        initialValues={{ type: NOTE_TYPE.THEORY }}
-      >
+      <Form form={form} layout="vertical" requiredMark={false}>
         <Form.Item
-          name="title"
-          label="TITLE"
-          rules={[{ required: true, message: 'Title is required' }]}
+          name="name"
+          label="NAME"
+          rules={[{ required: true, message: 'Topic name is required' }]}
         >
-          <Input placeholder="e.g. Event Loop Explained" />
+          <Input placeholder="e.g. Distributed Systems" />
         </Form.Item>
 
-        <Form.Item name="type" label="TYPE">
-          <Select options={NOTE_TYPE_OPTIONS} />
+        <Form.Item name="description" label="DESCRIPTION">
+          <Input.TextArea
+            placeholder="What does this topic cover?"
+            autoSize={{ minRows: 2, maxRows: 4 }}
+          />
         </Form.Item>
 
-        <Form.Item name="tags" label="TAGS">
-          <Select mode="tags" placeholder="press enter to add tags" open={false} />
+        <Form.Item name="icon" label="ICON">
+          <Select options={ICON_OPTIONS} placeholder="Choose an icon" allowClear />
+        </Form.Item>
+
+        <Form.Item
+          name="color"
+          label="COLOR"
+          getValueFromEvent={(color) => (typeof color === 'string' ? color : color?.toHexString())}
+        >
+          <ColorPicker />
         </Form.Item>
       </Form>
     </TerminalModal>
   )
 }
 
-export default NewNoteModal
+export default NewTopicModal

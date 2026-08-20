@@ -97,13 +97,12 @@ const TopicVaultPage = () => {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           style={{
-            width: isMobile ? '100%' : 260, // 👈 Expands full width on mobile screens
+            width: isMobile ? '100%' : 260,
             border: '2px var(--term-border) solid',
           }}
         />
       </div>
 
-      {/* Main Container: Switches to column stack on mobile if preferred, or keeps flex */}
       <div
         style={{
           display: 'flex',

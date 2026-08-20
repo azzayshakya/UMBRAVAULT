@@ -65,7 +65,6 @@ const KnowledgeVaultPage = () => {
     })
   }
 
-  // Responsive grid styling for topic cards and skeleton loaders
   const responsiveGridStyle = {
     display: 'grid',
     gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
@@ -144,7 +143,7 @@ const KnowledgeVaultPage = () => {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           style={{
-            width: isMobile ? '100%' : 260, // 👈 Expands full width on mobile screens
+            width: isMobile ? '100%' : 260,
             border: '2px var(--term-border) solid',
           }}
         />
@@ -182,7 +181,6 @@ const KnowledgeVaultPage = () => {
           ))}
         </div>
       )}
-
       <NewTopicModal
         open={newTopicOpen || !!editingTopic}
         onClose={() => {

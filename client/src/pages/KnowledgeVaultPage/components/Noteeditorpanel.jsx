@@ -15,7 +15,6 @@ const SAVE_STATUS_LABEL = {
 const NoteEditorPanel = ({ noteId, onClose, onDeleted }) => {
   const { note, loading, saveStatus, saveNow, saveDebounced } = useNoteEditorApi(noteId)
 
-  // Don't render the modal at all if there's no selected note
   if (!noteId) return null
 
   const footerContent = (
@@ -67,7 +66,7 @@ const NoteEditorPanel = ({ noteId, onClose, onDeleted }) => {
       onClose={onClose}
       title={loading ? 'LOADING...' : note?.title || 'NOTE'}
       prompt="root@vault:~# edit"
-      width={700} 
+      width={700}
       footer={footerContent}
     >
       {!loading && note && (
