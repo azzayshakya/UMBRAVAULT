@@ -35,7 +35,7 @@ const MainLayout = ({ userRole, userData = null }) => {
     defaultSelectedKey: 'dashboard',
     persistState: true,
   })
-
+  const image = '/images/global/my-profile.jpg'
   const menuItems = useMemo(() => {
     return buildMenuItems(MENU_CONFIG, userRole)
   }, [userRole])
@@ -46,6 +46,24 @@ const MainLayout = ({ userRole, userData = null }) => {
 
   const handleCollapse = (value) => {
     dispatch(setSidebarCollapsed(value))
+  }
+  const avatarFrameStyle = {
+    position: 'relative',
+    width: 36,
+    height: 36,
+    flexShrink: 0,
+    borderRadius: '50%',
+    border: '1.5px solid var(--color-primary, var(--color-primary))',
+    boxShadow: '0 0 10px rgba(34, 224, 122, 0.4)',
+    overflow: 'hidden',
+    background: 'var(--color-bg-container)',
+  }
+
+  const avatarImgStyle = {
+    width: '100%',
+    height: '100%',
+    objectFit: 'cover',
+    display: 'block',
   }
 
   return (
@@ -78,23 +96,33 @@ const MainLayout = ({ userRole, userData = null }) => {
               height: 64,
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'center',
+              justifyContent: collapsed || isMobile ? 'center' : 'flex-start',
+              gap: '10px',
               background: 'var(--color-bg-hover)',
-              margin: '16px',
+              margin: isMobile ? '8px' : '16px',
+              padding: collapsed || isMobile ? '0' : '0 16px',
               borderRadius: 'var(--radius)',
               flexShrink: 0,
             }}
           >
-            <Text
-              strong
-              style={{
-                color: 'var(--color-primary)',
-                fontSize: collapsed ? '16px' : '20px',
-                transition: 'font-size 0.3s',
-              }}
-            >
-              {collapsed ? App_ShortName : App_Name}
-            </Text>
+            <div style={avatarFrameStyle}>
+              <img style={avatarImgStyle} src={image} alt={'user avatar'} />
+            </div>
+
+            {!collapsed && !isMobile && (
+              <Text
+                strong
+                style={{
+                  color: 'var(--color-primary)',
+                  fontSize: '20px',
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                }}
+              >
+                {App_Name}
+              </Text>
+            )}
           </div>
 
           <div

@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom' // Remove if not using react-router
 
 const PageHeader = ({
@@ -12,8 +13,8 @@ const PageHeader = ({
   style,
   className = '',
 }) => {
-  const navigate = useNavigate?.() // Safe fallback if react-router-dom is used
-
+  const navigate = useNavigate?.()
+  const [isHovered, setIsHovered] = useState(false)
   const handleBack = () => {
     if (typeof onBack === 'function') {
       onBack()
@@ -38,10 +39,8 @@ const PageHeader = ({
         ...style,
       }}
     >
-      {/* Optional Top Navigation / Breadcrumbs */}
       {breadcrumb && <div style={{ marginBottom: 4 }}>{breadcrumb}</div>}
 
-      {/* Main Header Content */}
       <div
         style={{
           display: 'flex',
@@ -55,7 +54,7 @@ const PageHeader = ({
         <div
           style={{
             display: 'flex',
-            alignItems: 'flex-start',
+            alignItems: subtitle ? 'flex-start' : 'center',
             gap: 12,
             flex: '1 1 240px',
             minWidth: 0,
@@ -65,37 +64,47 @@ const PageHeader = ({
             <button
               type="button"
               onClick={handleBack}
-              title="Go Back"
+              aria-label="Go back"
+              onMouseEnter={() => setIsHovered(true)}
+              onMouseLeave={() => setIsHovered(false)}
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                width: 36,
-                height: 36,
-                borderRadius: 8,
-                border: '1px solid rgba(57, 255, 106, 0.25)',
-                background: 'rgba(57, 255, 106, 0.05)',
-                color: 'var(--color-primary, #39ff6a)',
+                width: 32,
+                height: 32,
+                padding: 0,
+                borderRadius: '6px',
+                border: 'none',
+                background: isHovered
+                  ? 'var(--color-bg-hover, rgba(0, 0, 0, 0.05))'
+                  : 'transparent',
+                color: isHovered
+                  ? 'var(--color-text, #0f172a)'
+                  : 'var(--color-text-secondary, #64748b)',
                 cursor: 'pointer',
-                fontSize: 16,
-                fontWeight: 'bold',
-                fontFamily: 'inherit',
                 flexShrink: 0,
-                marginTop: 2,
-                transition: 'all 0.2s ease',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = 'rgba(57, 255, 106, 0.15)'
-                e.currentTarget.style.borderColor = 'var(--color-primary, #39ff6a)'
-                e.currentTarget.style.boxShadow = '0 0 10px rgba(57, 255, 106, 0.3)'
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = 'rgba(57, 255, 106, 0.05)'
-                e.currentTarget.style.borderColor = 'rgba(57, 255, 106, 0.25)'
-                e.currentTarget.style.boxShadow = 'none'
+                marginTop: subtitle ? 0 : 0,
+                alignSelf: subtitle ? 'flex-start' : 'center',
+                transition: 'background-color 0.15s ease, color 0.15s ease',
               }}
             >
-              ←
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                style={{
+                  transform: isHovered ? 'translateX(-2px)' : 'translateX(0)',
+                  transition: 'transform 0.15s ease',
+                }}
+              >
+                <path d="M19 12H5M12 19l-7-7 7-7" />
+              </svg>
             </button>
           )}
 
@@ -105,6 +114,7 @@ const PageHeader = ({
                 style={{
                   color: 'var(--color-primary, #39ff6a)',
                   fontSize: 24,
+                  lineHeight: '32px',
                   letterSpacing: 1.5,
                   margin: 0,
                   fontWeight: 700,

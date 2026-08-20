@@ -144,7 +144,7 @@ const KnowledgeVaultPage = () => {
           onChange={(e) => setSearch(e.target.value)}
           style={{
             width: isMobile ? '100%' : 260,
-            border: '2px var(--term-border) solid',
+            border: '1px var(--term-border) solid',
           }}
         />
       </div>

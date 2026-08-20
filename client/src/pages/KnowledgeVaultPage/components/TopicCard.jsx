@@ -40,8 +40,14 @@ const TopicCard = ({ topic, index, onOpen, onEdit, onDelete }) => {
         cursor: 'pointer',
         transition: 'border-color 0.15s ease, transform 0.15s ease',
       }}
-      onMouseEnter={(e) => (e.currentTarget.style.borderColor = accent)}
-      onMouseLeave={(e) => (e.currentTarget.style.borderColor = 'var(--term-border)')}
+      onMouseEnter={(e) => {
+        // e.currentTarget.style.borderColor = 'var(--term-border-hover)'
+        e.currentTarget.style.transform = 'translateY(-3px)'
+      }}
+      onMouseLeave={(e) => {
+        // e.currentTarget.style.borderColor = 'var(--term-border)'
+        e.currentTarget.style.transform = 'translateY(0)'
+      }}
     >
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
         <div
