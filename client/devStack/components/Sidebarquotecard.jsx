@@ -1,4 +1,6 @@
+import { useIsMobile } from '@devStack/utils/useIsMobile'
 import { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
 
 const DEFAULT_QUOTES = [
   {
@@ -9,58 +11,84 @@ const DEFAULT_QUOTES = [
     text: 'The best way to predict the future is to invent it.',
     tag: '— Alan Kay',
   },
+  {
+    text: 'Security is not a product, but a process.',
+    tag: '— Bruce Schneier',
+  },
 ]
 
 const wrapStyle = {
   position: 'relative',
-  margin: '16px',
-  padding: '16px 14px',
-  borderRadius: 'var(--radius, 8px)',
-  border: '1px solid var(--color-border, var(--term-border))',
-  background: 'linear-gradient(180deg, var(--color-bg-hover), var(--color-bg-container))',
-  boxShadow: 'var(--color-glow)',
-  overflow: 'hidden',
+  margin: '36px 14px 16px 14px',
+  padding: '42px 14px 14px 14px',
+  borderRadius: 'var(--radius, 12px)',
+  border: '1px solid var(--color-border, rgba(57, 255, 106, 0.2))',
+  backdropFilter: 'blur(12px)',
+  boxShadow:
+    '0 8px 24px rgba(0, 0, 0, 0.4), 0 0 1px 1px var(--color-border, rgba(57,255,106,0.15))',
   flexShrink: 0,
-  minHeight: '210px',
+  minHeight: '160px',
   display: 'flex',
   flexDirection: 'column',
-  justifyContent: 'center',
+  justifyContent: 'space-between',
+  textAlign: 'center',
 }
 
-const imageWrapStyle = {
-  display: 'flex',
-  justifyContent: 'center',
-  marginBottom: 12,
+const stickyAvatarWrapper = {
+  position: 'absolute',
+  top: '-28px',
+  left: '50%',
+  transform: 'translateX(-50%)',
+  width: '56px',
+  height: '56px',
+  borderRadius: '14px',
+  padding: '3px',
+  background: 'linear-gradient(135deg, var(--color-primary, #39ff6a) 0%, #06120a 100%)',
+  boxShadow: '0 0 16px var(--color-glow, rgba(57, 255, 106, 0.35))',
+  zIndex: 2,
 }
 
 const imageStyle = {
-  width: 90,
-  height: 80,
-  filter: 'drop-shadow(var(--color-glow))',
-  opacity: 0.95,
-  pointerEvents: 'none',
-  borderRadius: '10%',
+  width: '100%',
+  height: '100%',
+  borderRadius: '11px',
   objectFit: 'cover',
+  display: 'block',
+  background: '#030905',
+}
+
+const quoteContentStyle = {
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '8px',
+  transition: 'all 0.35s cubic-bezier(0.4, 0, 0.2, 1)',
 }
 
 const quoteTextStyle = {
   fontFamily: 'var(--term-font, "JetBrains Mono", monospace)',
-  fontSize: 11,
-  lineHeight: 1.6,
-  color: 'var(--color-text)',
-  letterSpacing: 0.2,
-  transition: 'opacity 0.35s ease',
-  textAlign: 'center',
+  fontSize: '11px',
+  lineHeight: 1.55,
+  color: 'var(--color-text, #d6ffe4)',
+  letterSpacing: '0.2px',
+  margin: 0,
 }
 
 const tagStyle = {
   fontFamily: 'var(--term-font, "JetBrains Mono", monospace)',
-  fontSize: 10.5,
-  lineHeight: 1.6,
-  color: 'var(--color-text-secondary)',
-  marginTop: 6,
-  transition: 'opacity 0.35s ease',
-  textAlign: 'center',
+  fontSize: '10px',
+  lineHeight: 1.4,
+  color: 'var(--color-primary, #39ff6a)',
+  opacity: 0.85,
+  letterSpacing: '0.4px',
+  margin: 0,
+}
+
+const dotContainerStyle = {
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  gap: '5px',
+  marginTop: '12px',
 }
 
 const SidebarQuoteCard = ({
@@ -72,8 +100,15 @@ const SidebarQuoteCard = ({
   const [index, setIndex] = useState(0)
   const [visible, setVisible] = useState(true)
 
+  const preference = useSelector((state) => state.preference || {})
+
+  const isMobile = useIsMobile()
+
+  const isCollapsed = collapsed || preference.sidebarCollapsed || isMobile
+  const isLight = preference.theme === 'light'
+
   useEffect(() => {
-    if (collapsed || quotes.length <= 1) return
+    if (isCollapsed || quotes.length <= 1) return
 
     const rotate = setInterval(() => {
       setVisible(false)
@@ -84,19 +119,53 @@ const SidebarQuoteCard = ({
     }, intervalMs)
 
     return () => clearInterval(rotate)
-  }, [collapsed, quotes.length, intervalMs])
+  }, [isCollapsed, quotes.length, intervalMs])
 
-  if (collapsed) return null
-
+  if (isCollapsed) return null
   const current = quotes[index]
 
+  // Conditionally apply gradient only when scheme is light
+  const dynamicWrapStyle = {
+    ...wrapStyle,
+    ...(isLight && {
+      background: 'linear-gradient(rgb(224 254 234 / 85%) 0%, rgb(125 188 146 / 95%) 100%)',
+    }),
+  }
+
   return (
-    <div style={wrapStyle}>
-      <div style={imageWrapStyle}>
-        <img src={image} alt="" style={imageStyle} draggable={false} />
+    <div style={dynamicWrapStyle}>
+      <div style={stickyAvatarWrapper}>
+        <img src={image} alt="Agent Avatar" style={imageStyle} draggable={false} />
       </div>
-      <p style={{ ...quoteTextStyle, opacity: visible ? 1 : 0 }}>&quot;{current.text}&quot;</p>
-      <p style={{ ...tagStyle, opacity: visible ? 1 : 0 }}>{current.tag}</p>
+
+      <div
+        style={{
+          ...quoteContentStyle,
+          opacity: visible ? 1 : 0,
+          transform: visible ? 'translateY(0)' : 'translateY(4px)',
+        }}
+      >
+        <p style={quoteTextStyle}>&ldquo;{current.text}&rdquo;</p>
+        <p style={tagStyle}>{current.tag}</p>
+      </div>
+
+      {quotes.length > 1 && (
+        <div style={dotContainerStyle}>
+          {quotes.map((_, i) => (
+            <span
+              key={i}
+              style={{
+                width: i === index ? '14px' : '4px',
+                height: '4px',
+                borderRadius: '2px',
+                background:
+                  i === index ? 'var(--color-primary, #39ff6a)' : 'rgba(255, 255, 255, 0.15)',
+                transition: 'all 0.3s ease',
+              }}
+            />
+          ))}
+        </div>
+      )}
     </div>
   )
 }

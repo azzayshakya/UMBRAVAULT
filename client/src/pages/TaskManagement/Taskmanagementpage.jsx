@@ -212,7 +212,7 @@ const TaskManagementPage = () => {
           icon={<UnorderedListOutlined />}
           label="TOTAL TASKS"
           value={stats?.total}
-          color="#d6ffe4"
+          color="blue"
           loading={loading}
         />
         <StatCard
@@ -233,7 +233,7 @@ const TaskManagementPage = () => {
           icon={<CheckCircleOutlined />}
           label="DONE"
           value={stats?.done}
-          color="#39ff6a"
+          color="green"
           loading={loading}
         />
         <StatCard
@@ -245,12 +245,11 @@ const TaskManagementPage = () => {
         />
       </div>
 
-      {/* Main Table Container */}
       <div
         style={{
           border: '1px solid var(--term-border)',
           borderRadius: 10,
-          padding: isMobile ? 12 : 20, // Adjust padding automatically for mobile screens
+          padding: isMobile ? 12 : 20,
           background: 'var(--color-bg-container)',
           overflowX: 'hidden',
         }}
@@ -289,7 +288,6 @@ const TaskManagementPage = () => {
           </button>
         </div>
 
-        {/* Filter Controls Row: Fluid widths on mobile */}
         <div
           style={{
             display: 'flex',
@@ -304,7 +302,7 @@ const TaskManagementPage = () => {
             placeholder="Search tasks..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            style={{ width: isMobile ? '100%' : 200, border: '2px var(--term-border) solid' }}
+            style={{ width: isMobile ? '100%' : 200, border: '1px var(--term-border) solid' }}
           />
           <Select
             placeholder="ALL STATUS"
@@ -312,7 +310,7 @@ const TaskManagementPage = () => {
             value={status}
             options={TASK_STATUS_OPTIONS}
             onChange={setStatus}
-            style={{ width: isMobile ? '100%' : 150, border: '2px var(--term-border) solid' }}
+            style={{ width: isMobile ? '100%' : 150, border: '1px var(--term-border) solid' }}
           />
           <Select
             placeholder="ALL PRIORITY"
@@ -320,14 +318,14 @@ const TaskManagementPage = () => {
             value={priority}
             options={TASK_PRIORITY_OPTIONS}
             onChange={setPriority}
-            style={{ width: isMobile ? '100%' : 150, border: '2px var(--term-border) solid' }}
+            style={{ width: isMobile ? '100%' : 150, border: '1px var(--term-border) solid' }}
           />
           <Input
             placeholder="Project..."
             allowClear
             value={project}
             onChange={(e) => setProject(e.target.value || undefined)}
-            style={{ width: isMobile ? '100%' : 150, border: '2px var(--term-border) solid' }}
+            style={{ width: isMobile ? '100%' : 150, border: '1px var(--term-border) solid' }}
           />
           <button
             type="button"
@@ -352,7 +350,6 @@ const TaskManagementPage = () => {
           </button>
         </div>
 
-        {/* CrudTable wrapper with built-in Ant Design horizontal overflow handling */}
         <div style={{ width: '100%', overflowX: 'auto' }}>
           <CrudTable
             tableData={tasks}
@@ -361,7 +358,7 @@ const TaskManagementPage = () => {
             paramObj={{ ...paramObj, total }}
             setParamObj={setParamObj}
             setRefreshCounter={() => refetch()}
-            scroll={{ x: 900 }} // 👈 Forces the table to enable fluid horizontal scrolling on mobile screens
+            scroll={{ x: 900 }}
           />
         </div>
       </div>

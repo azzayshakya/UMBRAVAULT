@@ -1,7 +1,8 @@
 import { MoonOutlined, SunOutlined, MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons'
 import HeaderUserProfile from '@devStack/components/userProfile/HeaderUserProfile'
-import { ColorScheme } from '@devStack/constants/theme-constants'
-import { toggleColorScheme } from '@devStack/store/preferenceSlice'
+import { Theme } from '@devStack/constants/theme-constants'
+import { toggleTheme } from '@devStack/store/preferenceSlice'
+import { resolveTheme } from '@devStack/utils/theme-utils'
 import { useIsMobile } from '@devStack/utils/useIsMobile'
 import { Breadcrumb, Layout } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
@@ -16,11 +17,11 @@ export default function AdminHeaderComponent({
 }) {
   const dispatch = useDispatch()
   const isMobile = useIsMobile()
-  const resolvedScheme = useSelector((s) => s.preference.resolvedScheme)
-  const isDark = resolvedScheme === ColorScheme.DARK
+  const theme = useSelector((s) => s.preference.theme)
+  const isDark = resolveTheme(theme) === Theme.DARK
 
   const handleToggleTheme = () => {
-    dispatch(toggleColorScheme())
+    dispatch(toggleTheme())
   }
 
   return (

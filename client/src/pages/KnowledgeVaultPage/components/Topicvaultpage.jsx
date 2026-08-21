@@ -6,10 +6,11 @@ import { Input, message, Modal } from 'antd'
 import { useMemo, useState } from 'react'
 import { useParams } from 'react-router-dom'
 
-import NewNoteModal from '../components/Newnotemodal'
 import NoteCard from '../components/Notecard'
 import NoteEditorPanel from '../components/Noteeditorpanel'
 import { useTopicNotesApi } from '../hooks/Usetopicnotesapi'
+
+import NewNoteModal from './NewTopicModal'
 
 const TopicVaultPage = () => {
   const { topicId } = useParams()

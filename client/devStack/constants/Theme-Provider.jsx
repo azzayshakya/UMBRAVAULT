@@ -1,5 +1,6 @@
-import { syncSystemScheme } from '@devStack/store/preferenceSlice'
+import { syncSystemTheme } from '@devStack/store/preferenceSlice'
 import getAntdTheme from '@devStack/styles/theme-token'
+import { resolveTheme } from '@devStack/utils/theme-utils'
 import { ConfigProvider } from 'antd'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
@@ -8,11 +9,12 @@ import { SYSTEM_DARK_QUERY } from './theme-constants'
 
 export default function ThemeProvider({ children }) {
   const dispatch = useDispatch()
-  const resolvedScheme = useSelector((s) => s.preference.resolvedScheme)
+  const theme = useSelector((s) => s.preference.theme)
+  const activeTheme = resolveTheme(theme)
 
   useEffect(() => {
-    document.documentElement.setAttribute('data-scheme', resolvedScheme)
-  }, [resolvedScheme])
+    document.documentElement.setAttribute('data-scheme', activeTheme)
+  }, [activeTheme])
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -23,11 +25,11 @@ export default function ThemeProvider({ children }) {
 
   useEffect(() => {
     const mediaQuery = window.matchMedia(SYSTEM_DARK_QUERY)
-    const handleSystemChange = () => dispatch(syncSystemScheme())
+    const handleSystemChange = () => dispatch(syncSystemTheme())
 
     mediaQuery.addEventListener('change', handleSystemChange)
     return () => mediaQuery.removeEventListener('change', handleSystemChange)
   }, [dispatch])
 
-  return <ConfigProvider theme={getAntdTheme(resolvedScheme)}>{children}</ConfigProvider>
+  return <ConfigProvider theme={getAntdTheme(activeTheme)}>{children}</ConfigProvider>
 }

@@ -1,6 +1,6 @@
-import { ColorScheme, PREFS_STORAGE_KEY, SYSTEM_DARK_QUERY } from '../constants/theme-constants'
+import { Theme, PREFS_STORAGE_KEY, SYSTEM_DARK_QUERY } from '../constants/theme-constants'
 
-const VALID_SCHEMES = Object.values(ColorScheme)
+const VALID_THEMES = Object.values(Theme)
 
 // Helper: Safely parse the user preferences from localStorage
 export function getUserPreferences() {
@@ -13,44 +13,41 @@ export function getUserPreferences() {
   }
 }
 
-export function getSavedColorScheme() {
+export function getSavedTheme() {
   const prefs = getUserPreferences()
-  const savedTheme = prefs.theme // Look inside the JSON object
+  const savedTheme = prefs.theme
 
-  // self-heals: only trust the stored value if it's a real enum value
-  return VALID_SCHEMES.includes(savedTheme) ? savedTheme : ColorScheme.SYSTEM
+  return VALID_THEMES.includes(savedTheme) ? savedTheme : Theme.SYSTEM
 }
 
-export function resolveColorScheme(colorScheme) {
-  if (colorScheme !== ColorScheme.SYSTEM) return colorScheme
-  return window.matchMedia(SYSTEM_DARK_QUERY).matches ? ColorScheme.DARK : ColorScheme.LIGHT
+export function resolveTheme(theme) {
+  if (theme !== Theme.SYSTEM) return theme
+  return window.matchMedia(SYSTEM_DARK_QUERY).matches ? Theme.DARK : Theme.LIGHT
 }
 
-export function applyThemeToDOM({ colorScheme }) {
+export function applyThemeToDOM({ theme }) {
   const root = document.documentElement
-  const resolved = resolveColorScheme(colorScheme)
+  const resolved = resolveTheme(theme)
   root.setAttribute('data-scheme', resolved)
 }
 
-export function saveColorScheme(value) {
-  if (!VALID_SCHEMES.includes(value)) {
-    console.error(`saveColorScheme: expected one of ${VALID_SCHEMES.join(', ')}, got`, value)
+export function saveTheme(value) {
+  if (!VALID_THEMES.includes(value)) {
+    console.error(`saveTheme: expected one of ${VALID_THEMES.join(', ')}, got`, value)
     return
   }
 
-  // Get current preferences so we don't overwrite other future settings
   const prefs = getUserPreferences()
 
-  if (value === ColorScheme.SYSTEM) {
-    delete prefs.theme // Remove theme key if reverting to system
+  if (value === Theme.SYSTEM) {
+    delete prefs.theme
   } else {
-    prefs.theme = value // Set to 'light' or 'dark'
+    prefs.theme = value
   }
 
-  // Save the updated object back to localStorage
   localStorage.setItem(PREFS_STORAGE_KEY, JSON.stringify(prefs))
 }
 
 export function bootstrapTheme() {
-  applyThemeToDOM({ colorScheme: getSavedColorScheme() })
+  applyThemeToDOM({ theme: getSavedTheme() })
 }

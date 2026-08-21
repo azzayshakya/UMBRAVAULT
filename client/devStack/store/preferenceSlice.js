@@ -1,15 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-import { ColorScheme, PREFS_STORAGE_KEY } from '../constants/theme-constants'
+import { Theme, PREFS_STORAGE_KEY } from '../constants/theme-constants'
 import {
   applyThemeToDOM,
-  getSavedColorScheme,
+  getSavedTheme,
   getUserPreferences,
-  resolveColorScheme,
-  saveColorScheme,
+  resolveTheme,
+  saveTheme,
 } from '../utils/theme-utils'
-
-const initialColorScheme = getSavedColorScheme()
 
 const getSavedSidebarCollapsed = () => {
   const prefs = getUserPreferences()
@@ -27,8 +25,7 @@ const saveSidebarCollapsed = (collapsed) => {
 }
 
 const initialState = {
-  colorScheme: initialColorScheme,
-  resolvedScheme: resolveColorScheme(initialColorScheme),
+  theme: getSavedTheme(),
   sidebarCollapsed: getSavedSidebarCollapsed(),
 }
 
@@ -36,9 +33,8 @@ const preferenceSlice = createSlice({
   name: 'preference',
   initialState,
   reducers: {
-    colorSchemeChanged: (state, action) => {
-      state.colorScheme = action.payload
-      state.resolvedScheme = resolveColorScheme(action.payload)
+    themeChanged: (state, action) => {
+      state.theme = action.payload
     },
     sidebarCollapseChanged: (state, action) => {
       state.sidebarCollapsed = action.payload
@@ -46,27 +42,26 @@ const preferenceSlice = createSlice({
   },
 })
 
-export const { colorSchemeChanged, sidebarCollapseChanged } = preferenceSlice.actions
+export const { themeChanged, sidebarCollapseChanged } = preferenceSlice.actions
 export default preferenceSlice.reducer
 
-export const setColorScheme = (colorScheme) => (dispatch) => {
-  saveColorScheme(colorScheme)
-  applyThemeToDOM({ colorScheme })
-  dispatch(colorSchemeChanged(colorScheme))
+export const setTheme = (theme) => (dispatch) => {
+  saveTheme(theme)
+  applyThemeToDOM({ theme })
+  dispatch(themeChanged(theme))
 }
 
-export const toggleColorScheme = () => (dispatch, getState) => {
-  const { resolvedScheme } = getState().preference
-  dispatch(
-    setColorScheme(resolvedScheme === ColorScheme.DARK ? ColorScheme.LIGHT : ColorScheme.DARK)
-  )
+export const toggleTheme = () => (dispatch, getState) => {
+  const { theme } = getState().preference
+  const currentResolved = resolveTheme(theme)
+  dispatch(setTheme(currentResolved === Theme.DARK ? Theme.LIGHT : Theme.DARK))
 }
 
-export const syncSystemScheme = () => (dispatch, getState) => {
-  const { colorScheme } = getState().preference
-  if (colorScheme !== ColorScheme.SYSTEM) return
-  applyThemeToDOM({ colorScheme: ColorScheme.SYSTEM })
-  dispatch(colorSchemeChanged(ColorScheme.SYSTEM))
+export const syncSystemTheme = () => (dispatch, getState) => {
+  const { theme } = getState().preference
+  if (theme !== Theme.SYSTEM) return
+  applyThemeToDOM({ theme: Theme.SYSTEM })
+  dispatch(themeChanged(Theme.SYSTEM))
 }
 
 export const setSidebarCollapsed = (collapsed) => (dispatch) => {

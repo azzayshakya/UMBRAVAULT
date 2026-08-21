@@ -1,4 +1,4 @@
-export const ColorScheme = Object.freeze({
+export const Theme = Object.freeze({
   LIGHT: 'light',
   DARK: 'dark',
   SYSTEM: 'system',

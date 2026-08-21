@@ -20,6 +20,7 @@ const DashboardHeaderUrl = '/images/global/dashboard_header.png'
 const Dashboard = () => {
   const { statusList, stats, loading: statusLoading } = useSystemStatus()
   const isMobile = useIsMobile()
+
   return (
     <div style={pageStyle}>
       <div

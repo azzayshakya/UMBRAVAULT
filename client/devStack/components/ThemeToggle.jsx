@@ -1,6 +1,6 @@
-import { ColorScheme } from '@devStack/constants/theme-constants'
-import { toggleColorScheme } from '@devStack/store/preferenceSlice'
-import { useEffect } from 'react'
+import { Theme } from '@devStack/constants/theme-constants'
+import { toggleTheme } from '@devStack/store/preferenceSlice'
+import { resolveTheme } from '@devStack/utils/theme-utils'
 import { useDispatch, useSelector } from 'react-redux'
 
 const SunIcon = () => (
@@ -59,13 +59,14 @@ const S = {
 
 export default function ThemeToggle() {
   const dispatch = useDispatch()
-  const resolvedScheme = useSelector((state) => state.preference.resolvedScheme)
+  const theme = useSelector((state) => state.preference.theme)
 
-  const isDark = resolvedScheme === ColorScheme.DARK
+  const activeTheme = resolveTheme(theme)
+  const isDark = activeTheme === Theme.DARK
 
   return (
     <button
-      onClick={() => dispatch(toggleColorScheme())}
+      onClick={() => dispatch(toggleTheme())}
       style={S.btn}
       title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
       aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
