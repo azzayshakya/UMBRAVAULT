@@ -8,7 +8,9 @@ import { Suspense } from 'react'
 import { useSelector } from 'react-redux'
 import { Routes, Route } from 'react-router-dom'
 
+import AuthLayout from '@/layouts/AuthLayout'
 import MainLayout from '@/layouts/MainLayout'
+import AboutUsPage from '@/pages/About/About'
 import LoginPage from '@/pages/Auth/Login'
 import SignupPage from '@/pages/Auth/Register'
 import UserManagementPage from '@/pages/UserRoleMangegment/UserManagementPage'
@@ -35,7 +37,11 @@ const AppRoutes = () => {
   return (
     <Suspense fallback={<PageLoader />}>
       <Routes>
-        <Route path="/login" element={<LoginPage />} />
+        <Route element={<AuthLayout />}>
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignupPage />} />
+          <Route path="/about-us" element={<AboutUsPage />} />
+        </Route>
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/unauthorized" element={<Unauthorized />} />
 

@@ -17,7 +17,7 @@ export function getSavedTheme() {
   const prefs = getUserPreferences()
   const savedTheme = prefs.theme
 
-  return VALID_THEMES.includes(savedTheme) ? savedTheme : Theme.SYSTEM
+  return VALID_THEMES.includes(savedTheme) ? savedTheme : Theme.DARK
 }
 
 export function resolveTheme(theme) {
