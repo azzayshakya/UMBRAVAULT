@@ -77,7 +77,7 @@ const About = () => {
         }
       `}</style>
       {/* Cyber Eclipse Ambient Halo (Reference Image Top Center Effect) */}
-      <div
+      {/* <div
         style={{
           position: 'absolute',
           top: '320px',
@@ -118,7 +118,7 @@ const About = () => {
             background: 'var(--color-bg)',
           }}
         />
-      </div>
+      </div> */}
       {/* Top Navbar
       <header
         style={{
@@ -545,39 +545,6 @@ const About = () => {
           })}
         </div>
       </section>
-      {/* Bottom Footer */}
-      <footer
-        style={{
-          position: 'relative',
-          zIndex: 5,
-          maxWidth: '1100px',
-          margin: '60px auto 0 auto',
-          paddingTop: 20,
-          borderTop: '1px solid var(--color-border)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          fontSize: 11,
-          fontFamily: 'monospace',
-          color: 'var(--color-text-muted)',
-        }}
-      >
-        <span>&copy; {new Date().getFullYear()} UMBRAVAULT SECURITY SYSTEMS</span>
-        <div style={{ display: 'flex', gap: 18, alignItems: 'center' }}>
-          <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-            <span
-              style={{
-                width: 6,
-                height: 6,
-                borderRadius: '50%',
-                background: 'var(--color-primary)',
-              }}
-            />
-            ENCRYPTED ARCHITECTURE
-          </span>
-          <span>LATENCY: 8ms</span>
-        </div>
-      </footer>
     </div>
   )
 }
