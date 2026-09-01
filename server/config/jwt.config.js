@@ -1,5 +1,3 @@
-require("dotenv").config();
-
 module.exports = {
   accessToken: {
     secret: process.env.JWT_ACCESS_SECRET,

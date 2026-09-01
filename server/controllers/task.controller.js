@@ -2,7 +2,7 @@ const Task = require("../models/task.model");
 const ApiError = require("../utils/apiError");
 const ApiResponse = require("../utils/apiResponse");
 const logger = require("../utils/logger");
-
+const mongoose = require("mongoose");
 const {
   TASK_STATUS,
   TASK_PRIORITY,
@@ -43,6 +43,7 @@ function assertValidPriority(priority) {
 }
 
 // ── GET /tasks ────────────────────────────────────────────────────────
+// ── GET /tasks ────────────────────────────────────────────────────────
 const getAllTasks = async (req, res) => {
   const {
     status,
@@ -63,7 +64,10 @@ const getAllTasks = async (req, res) => {
   assertValidStatus(status);
   assertValidPriority(priority);
 
-  const filter = {};
+  // Scope the query strictly to the authenticated user's tasks
+  const filter = {
+    createdBy: req.user.id,
+  };
 
   if (status) filter.status = status;
   if (priority) filter.priority = priority;
@@ -132,15 +136,20 @@ const getAllTasks = async (req, res) => {
     ),
   );
 };
-
 // ── GET /tasks/stats ──────────────────────────────────────────────────
 const getTaskStats = async (req, res) => {
   const now = new Date();
+  const userId = req.user.id;
+  const userObjectId = new mongoose.Types.ObjectId(userId);
 
   const [total, statusCounts, overdue] = await Promise.all([
-    Task.countDocuments({}),
-    Task.aggregate([{ $group: { _id: "$status", count: { $sum: 1 } } }]),
+    Task.countDocuments({ createdBy: userId }),
+    Task.aggregate([
+      { $match: { createdBy: userObjectId } },
+      { $group: { _id: "$status", count: { $sum: 1 } } },
+    ]),
     Task.countDocuments({
+      createdBy: userId,
       dueDate: { $lt: now },
       status: { $ne: TASK_STATUS.DONE },
     }),
@@ -150,6 +159,7 @@ const getTaskStats = async (req, res) => {
     acc[status] = 0;
     return acc;
   }, {});
+
   statusCounts.forEach(({ _id, count }) => {
     if (_id) byStatus[_id] = count;
   });
@@ -159,9 +169,9 @@ const getTaskStats = async (req, res) => {
       200,
       {
         total,
-        inProgress: byStatus[TASK_STATUS.IN_PROGRESS],
-        blocked: byStatus[TASK_STATUS.BLOCKED],
-        done: byStatus[TASK_STATUS.DONE],
+        inProgress: byStatus[TASK_STATUS.IN_PROGRESS] || 0,
+        blocked: byStatus[TASK_STATUS.BLOCKED] || 0,
+        done: byStatus[TASK_STATUS.DONE] || 0,
         overdue,
         byStatus,
       },
@@ -169,7 +179,6 @@ const getTaskStats = async (req, res) => {
     ),
   );
 };
-
 // ── GET /tasks/:id ────────────────────────────────────────────────────
 const getTaskById = async (req, res) => {
   const task = await Task.findById(req.params.id)

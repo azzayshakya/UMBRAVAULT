@@ -5,6 +5,7 @@ import {
   FileTextOutlined,
   PlusOutlined,
 } from '@ant-design/icons'
+import EmptyState from '@devStack/components/EmptyState/EmptyState'
 import PageHeader from '@devStack/components/PageHeader'
 import { Skeleton } from '@devStack/components/Skelton/Skeleton'
 import { StatCard } from '@devStack/components/StateCard'
@@ -141,6 +142,7 @@ const KnowledgeVaultPage = () => {
         <Input
           placeholder="Search topics..."
           value={search}
+          allowClear
           onChange={(e) => setSearch(e.target.value)}
           style={{
             width: isMobile ? '100%' : 260,
@@ -156,17 +158,14 @@ const KnowledgeVaultPage = () => {
           ))}
         </div>
       ) : topics.length === 0 ? (
-        <div
-          style={{
-            border: '1px dashed var(--term-border)',
-            borderRadius: 10,
-            padding: 40,
-            textAlign: 'center',
-            color: 'var(--color-secondary)',
-          }}
-        >
-          No topics yet. Create one to start building your vault.
-        </div>
+        <EmptyState
+          variant={search ? 'search' : 'default'}
+          query={search}
+          actionText={search ? 'Clear Search' : 'CREATE TOPIC'}
+          onAction={search ? () => setSearch('') : () => setNewTopicOpen(true)}
+          secondaryActionText={search ? 'Create Topic' : undefined}
+          onSecondaryAction={search ? () => setNewTopicOpen(true) : undefined}
+        />
       ) : (
         <div style={responsiveGridStyle}>
           {topics.map((topic, index) => (
@@ -181,6 +180,7 @@ const KnowledgeVaultPage = () => {
           ))}
         </div>
       )}
+
       <NewTopicModal
         open={newTopicOpen || !!editingTopic}
         onClose={() => {

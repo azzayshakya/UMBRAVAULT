@@ -1,4 +1,5 @@
-import { DeleteOutlined, LoadingOutlined } from '@ant-design/icons'
+import { DeleteOutlined } from '@ant-design/icons'
+import Loader from '@devStack/components/spinners/Loader'
 import TerminalModal from '@devStack/components/Terminalmodal'
 import { NOTE_TYPE_OPTIONS } from '@devStack/enums/note-page-enum'
 import { Input, Select } from 'antd'
@@ -33,14 +34,23 @@ const NoteEditorPanel = ({ noteId, onClose, onDeleted }) => {
           gap: 6,
           color: saveStatus === 'error' ? '#ef4444' : 'var(--color-secondary)',
           fontSize: 11,
+          fontFamily: 'var(--term-font, monospace)',
         }}
       >
-        {saveStatus === 'saving' && <LoadingOutlined style={{ fontSize: 11 }} />}
+        {saveStatus === 'saving' && (
+          <Loader
+            size={12}
+            thickness={2}
+            color="var(--color-primary, #39ff6a)"
+            trackColor="rgba(57, 255, 106, 0.15)"
+          />
+        )}
         {SAVE_STATUS_LABEL[saveStatus]}
       </span>
 
       <button
         type="button"
+        disabled={loading}
         onClick={() => onDeleted(note?._id)}
         style={{
           display: 'flex',
@@ -52,7 +62,8 @@ const NoteEditorPanel = ({ noteId, onClose, onDeleted }) => {
           borderRadius: 5,
           padding: '4px 10px',
           fontSize: 11,
-          cursor: 'pointer',
+          cursor: loading ? 'not-allowed' : 'pointer',
+          opacity: loading ? 0.4 : 1,
         }}
       >
         <DeleteOutlined style={{ fontSize: 11 }} /> DELETE
@@ -64,12 +75,37 @@ const NoteEditorPanel = ({ noteId, onClose, onDeleted }) => {
     <TerminalModal
       open={!!noteId}
       onClose={onClose}
-      title={loading ? 'LOADING...' : note?.title || 'NOTE'}
+      title={loading ? 'FETCHING NOTE BUFFER...' : note?.title || 'NOTE'}
       prompt="root@vault:~# edit"
       width={700}
       footer={footerContent}
     >
-      {!loading && note && (
+      {loading ? (
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            minHeight: 340,
+            borderRadius: 8,
+            border: '1px dashed rgba(57, 255, 106, 0.15)',
+            background: 'rgba(6, 18, 10, 0.4)',
+            gap: 12,
+          }}
+        >
+          <Loader
+            size={36}
+            thickness={3}
+            color="var(--color-primary, #39ff6a)"
+            trackColor="rgba(57, 255, 106, 0.12)"
+            label="Reading note data from vault..."
+            labelPosition="bottom"
+            labelSize={12}
+            labelColor="var(--color-secondary, #888)"
+          />
+        </div>
+      ) : note ? (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
           <Input
             value={note.title}
@@ -104,7 +140,7 @@ const NoteEditorPanel = ({ noteId, onClose, onDeleted }) => {
             value={note.content}
             onChange={(e) => saveDebounced({ content: e.target.value })}
             placeholder="Write your notes here (markdown supported)..."
-            autoSize={{ minRows: 15, maxRows: 25 }} // Taller default view for the modal
+            autoSize={{ minRows: 15, maxRows: 25 }}
             style={{
               background: 'rgba(6, 18, 10, 0.6)',
               border: '1px solid var(--term-border)',
@@ -114,7 +150,7 @@ const NoteEditorPanel = ({ noteId, onClose, onDeleted }) => {
             }}
           />
         </div>
-      )}
+      ) : null}
     </TerminalModal>
   )
 }

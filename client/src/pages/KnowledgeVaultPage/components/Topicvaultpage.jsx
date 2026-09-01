@@ -1,4 +1,5 @@
 import { PlusOutlined, SearchOutlined } from '@ant-design/icons'
+import EmptyState from '@devStack/components/EmptyState/EmptyState'
 import PageHeader from '@devStack/components/PageHeader'
 import { Skeleton } from '@devStack/components/Skelton/Skeleton'
 import { useIsMobile } from '@devStack/utils/useIsMobile'
@@ -96,6 +97,7 @@ const TopicVaultPage = () => {
           prefix={<SearchOutlined style={{ color: 'var(--color-primary-light)' }} />}
           placeholder="Search notes in this topic..."
           value={search}
+          allowClear
           onChange={(e) => setSearch(e.target.value)}
           style={{
             width: isMobile ? '100%' : 260,
@@ -109,7 +111,7 @@ const TopicVaultPage = () => {
           display: 'flex',
           flexDirection: isMobile ? 'column' : 'row',
           gap: 16,
-          alignItem: 'flex-start',
+          alignItems: 'flex-start',
         }}
       >
         <div style={{ flex: 1, minWidth: 0, width: '100%' }}>
@@ -120,17 +122,14 @@ const TopicVaultPage = () => {
               ))}
             </div>
           ) : notes.length === 0 ? (
-            <div
-              style={{
-                border: '1px dashed var(--term-border)',
-                borderRadius: 10,
-                padding: 40,
-                textAlign: 'center',
-                color: 'var(--color-secondary)',
-              }}
-            >
-              No notes here yet. Create the first one.
-            </div>
+            <EmptyState
+              variant={search ? 'search' : 'default'}
+              query={search}
+              actionText={search ? 'Clear Search' : 'NEW NOTE'}
+              onAction={search ? () => setSearch('') : () => setNewNoteOpen(true)}
+              secondaryActionText={search ? 'Create Note' : undefined}
+              onSecondaryAction={search ? () => setNewNoteOpen(true) : undefined}
+            />
           ) : (
             <div style={responsiveGridStyle}>
               {notes.map((note, index) => (
