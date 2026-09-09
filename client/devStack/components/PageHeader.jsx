@@ -1,20 +1,21 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom' // Remove if not using react-router
+import { useNavigate } from 'react-router-dom'
 
 const PageHeader = ({
   title,
   subtitle,
+  icon,
   breadcrumb,
   extra,
-  onBack, // Custom back function: () => navigate(...)
-  showBack = true, // Boolean to enable the back button
-  titleStyle,
-  subtitleStyle,
-  style,
+  children,
+  onBack,
+  showBack = false,
   className = '',
+  style = {},
 }) => {
-  const navigate = useNavigate?.()
+  const navigate = typeof useNavigate === 'function' ? useNavigate() : null
   const [isHovered, setIsHovered] = useState(false)
+
   const handleBack = () => {
     if (typeof onBack === 'function') {
       onBack()
@@ -29,134 +30,187 @@ const PageHeader = ({
 
   return (
     <div
-      className={`page-header-container ${className}`}
+      className={`page-wrapper-card ${className}`}
       style={{
         display: 'flex',
         flexDirection: 'column',
-        gap: 8,
-        marginBottom: 20,
+        borderRadius: 24,
+        border: '1.5px solid #a7f3d0',
+        background: '#ffffff',
+        boxShadow: '0 12px 36px rgba(16, 185, 129, 0.08)',
+        overflow: 'hidden',
+        position: 'relative',
+        margin: '16px auto',
+        width: '100%',
         fontFamily: 'var(--term-font, monospace)',
         ...style,
       }}
     >
-      {breadcrumb && <div style={{ marginBottom: 4 }}>{breadcrumb}</div>}
-
+      {/* Upper Terminal Banner */}
       <div
         style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'flex-start',
-          gap: 16,
-          flexWrap: 'wrap',
+          position: 'relative',
+          padding: '24px 30px',
+          background: 'linear-gradient(135deg, #a7f3d0 0%, #6ee7b7 45%, #34d399 100%)',
+          borderBottom: '1px solid rgba(16, 185, 129, 0.25)',
+          overflow: 'hidden',
         }}
       >
-        {/* Left Side: Back Button + Title & Subtitle */}
+        {/* Cyber / Circuit decorative lines */}
+        <svg
+          style={{
+            position: 'absolute',
+            right: 0,
+            top: 0,
+            bottom: 0,
+            height: '100%',
+            width: '45%',
+            opacity: 0.28,
+            pointerEvents: 'none',
+          }}
+          viewBox="0 0 450 120"
+          preserveAspectRatio="none"
+          fill="none"
+        >
+          <path
+            d="M 50 20 L 150 20 L 180 50 L 320 50 L 350 80 L 450 80"
+            stroke="#047857"
+            strokeWidth="3"
+            strokeLinecap="round"
+          />
+          <path
+            d="M 120 75 L 210 75 L 240 105 L 390 105"
+            stroke="#047857"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+          />
+          <rect x="180" y="46" width="22" height="8" rx="2" fill="#047857" />
+          <rect x="240" y="101" width="24" height="8" rx="2" fill="#047857" />
+          <rect x="350" y="76" width="20" height="8" rx="2" fill="#047857" />
+        </svg>
+
+        {breadcrumb && <div style={{ marginBottom: 8, opacity: 0.85 }}>{breadcrumb}</div>}
+
         <div
           style={{
             display: 'flex',
-            alignItems: subtitle ? 'flex-start' : 'center',
-            gap: 12,
-            flex: '1 1 240px',
-            minWidth: 0,
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            position: 'relative',
+            zIndex: 2,
+            gap: 16,
+            flexWrap: 'wrap',
           }}
         >
-          {isBackVisible && (
-            <button
-              type="button"
-              onClick={handleBack}
-              aria-label="Go back"
-              onMouseEnter={() => setIsHovered(true)}
-              onMouseLeave={() => setIsHovered(false)}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                width: 32,
-                height: 32,
-                padding: 0,
-                borderRadius: '6px',
-                border: 'none',
-                background: isHovered
-                  ? 'var(--color-bg-hover, rgba(0, 0, 0, 0.05))'
-                  : 'transparent',
-                color: isHovered
-                  ? 'var(--color-text, #0f172a)'
-                  : 'var(--color-text-secondary, #64748b)',
-                cursor: 'pointer',
-                flexShrink: 0,
-                marginTop: subtitle ? 0 : 0,
-                alignSelf: subtitle ? 'flex-start' : 'center',
-                transition: 'background-color 0.15s ease, color 0.15s ease',
-              }}
-            >
-              <svg
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
+          {/* Left Title Area */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+            {isBackVisible && (
+              <button
+                type="button"
+                onClick={handleBack}
+                aria-label="Go back"
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
                 style={{
-                  transform: isHovered ? 'translateX(-2px)' : 'translateX(0)',
-                  transition: 'transform 0.15s ease',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: 38,
+                  height: 38,
+                  borderRadius: 10,
+                  border: '1px solid rgba(6, 95, 70, 0.2)',
+                  background: isHovered ? 'rgba(255, 255, 255, 0.4)' : 'rgba(255, 255, 255, 0.25)',
+                  color: '#064e3b',
+                  cursor: 'pointer',
+                  transition: 'all 0.15s ease',
                 }}
               >
-                <path d="M19 12H5M12 19l-7-7 7-7" />
-              </svg>
-            </button>
-          )}
-
-          <div style={{ flex: '1 1 auto', minWidth: 0 }}>
-            {title && (
-              <h1
-                style={{
-                  color: 'var(--color-primary, #39ff6a)',
-                  fontSize: 24,
-                  lineHeight: '32px',
-                  letterSpacing: 1.5,
-                  margin: 0,
-                  fontWeight: 700,
-                  textShadow: '0 0 10px rgba(57, 255, 106, 0.35)',
-                  wordBreak: 'break-word',
-                  ...titleStyle,
-                }}
-              >
-                {title}
-              </h1>
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  style={{
+                    transform: isHovered ? 'translateX(-2px)' : 'translateX(0)',
+                    transition: 'transform 0.15s ease',
+                  }}
+                >
+                  <path d="M19 12H5M12 19l-7-7 7-7" />
+                </svg>
+              </button>
             )}
 
-            {subtitle && (
-              <p
+            {icon && (
+              <div
                 style={{
-                  color: 'var(--color-secondary, #888)',
-                  fontSize: 12,
-                  marginTop: 4,
-                  marginBottom: 0,
-                  lineHeight: 1.4,
-                  ...subtitleStyle,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: 44,
+                  height: 44,
+                  borderRadius: 10,
+                  background: 'rgba(255, 255, 255, 0.35)',
+                  border: '1px solid rgba(6, 95, 70, 0.15)',
+                  color: '#047857',
+                  fontSize: 22,
+                  backdropFilter: 'blur(4px)',
                 }}
               >
-                {subtitle}
-              </p>
+                {icon}
+              </div>
             )}
+
+            <div>
+              {title && (
+                <h1
+                  style={{
+                    margin: 0,
+                    fontSize: 24,
+                    fontWeight: 800,
+                    letterSpacing: 2,
+                    color: '#065f46',
+                    textTransform: 'uppercase',
+                  }}
+                >
+                  {title}
+                </h1>
+              )}
+              {subtitle && (
+                <p
+                  style={{
+                    margin: '4px 0 0',
+                    fontSize: 13,
+                    color: '#064e3b',
+                    letterSpacing: 0.8,
+                    fontWeight: 500,
+                    opacity: 0.9,
+                  }}
+                >
+                  {subtitle}
+                </p>
+              )}
+            </div>
           </div>
+
+          {extra && <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>{extra}</div>}
         </div>
+      </div>
 
-        {extra && (
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 10,
-              flexWrap: 'wrap',
-              marginLeft: 'auto',
-            }}
-          >
-            {extra}
-          </div>
-        )}
+      {/* Main Page Body Card Area */}
+      <div
+        style={{
+          padding: '24px 28px',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 20,
+          background: '#ffffff',
+        }}
+      >
+        {children}
       </div>
     </div>
   )

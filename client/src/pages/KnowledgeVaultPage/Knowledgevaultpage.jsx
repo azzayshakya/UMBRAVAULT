@@ -4,6 +4,7 @@ import {
   CalendarOutlined,
   FileTextOutlined,
   PlusOutlined,
+  SearchOutlined,
 } from '@ant-design/icons'
 import EmptyState from '@devStack/components/EmptyState/EmptyState'
 import PageHeader from '@devStack/components/PageHeader'
@@ -73,46 +74,48 @@ const KnowledgeVaultPage = () => {
   }
 
   return (
-    <div style={{ fontFamily: 'var(--term-font)' }}>
-      <PageHeader
-        title="KNOWLEDGE VAULT"
-        subtitle="root@vault:~# ls ./topics"
-        extra={
-          <button
-            type="button"
-            onClick={() => setNewTopicOpen(true)}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 6,
-              border: '1px solid var(--color-border-secondary)',
-              background: 'rgba(57,255,106,0.08)',
-              color: 'var(--color-primary)',
-              borderRadius: 6,
-              padding: '8px 16px',
-              fontSize: 12,
-              letterSpacing: 1,
-              cursor: 'pointer',
-            }}
-          >
-            <PlusOutlined /> NEW TOPIC
-          </button>
-        }
-      />
-
+    <PageHeader
+      title="KNOWLEDGE VAULT"
+      subtitle="root@vault:~# ls -la ./topics"
+      icon={<FolderOutlined />}
+      extra={
+        <button
+          type="button"
+          onClick={() => setNewTopicOpen(true)}
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: 6,
+            border: '1.5px solid #10b981',
+            background: 'rgba(255, 255, 255, 0.45)',
+            color: '#065f46',
+            borderRadius: 8,
+            padding: '8px 18px',
+            fontSize: 12,
+            fontWeight: 700,
+            letterSpacing: 1,
+            cursor: 'pointer',
+            backdropFilter: 'blur(4px)',
+            transition: 'all 0.15s ease',
+          }}
+        >
+          <PlusOutlined /> NEW TOPIC
+        </button>
+      }
+    >
+      {/* 1. Stat Summary Cards */}
       <div
         style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
           gap: 14,
-          marginBottom: 20,
         }}
       >
         <StatCard
           icon={<FolderOutlined />}
           label="TOTAL TOPICS"
           value={stats?.totalTopics}
-          color="#39ff6a"
+          color="#10b981"
           loading={statsLoading}
         />
         <StatCard
@@ -138,19 +141,31 @@ const KnowledgeVaultPage = () => {
         />
       </div>
 
-      <div style={{ marginBottom: 16 }}>
+      {/* 2. Search & Filter Bar */}
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'flex-start',
+          alignItems: 'center',
+          gap: 12,
+        }}
+      >
         <Input
+          prefix={<SearchOutlined style={{ color: '#059669' }} />}
           placeholder="Search topics..."
           value={search}
           allowClear
           onChange={(e) => setSearch(e.target.value)}
           style={{
-            width: isMobile ? '100%' : 260,
-            border: '1px var(--term-border) solid',
+            width: isMobile ? '100%' : 280,
+            borderRadius: 8,
+            borderColor: '#a7f3d0',
+            fontFamily: 'var(--term-font, monospace)',
           }}
         />
       </div>
 
+      {/* 3. Topics Grid / Empty State */}
       {loading ? (
         <div style={responsiveGridStyle}>
           {Array.from({ length: 8 }).map((_, i) => (
@@ -181,6 +196,7 @@ const KnowledgeVaultPage = () => {
         </div>
       )}
 
+      {/* 4. Modals */}
       <NewTopicModal
         open={newTopicOpen || !!editingTopic}
         onClose={() => {
@@ -207,7 +223,7 @@ const KnowledgeVaultPage = () => {
             : handleCreateTopic
         }
       />
-    </div>
+    </PageHeader>
   )
 }
 

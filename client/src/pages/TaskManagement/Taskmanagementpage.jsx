@@ -35,10 +35,10 @@ const actionBtnStyle = {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  border: '1px solid var(--term-border)',
-  borderRadius: 5,
-  background: 'transparent',
-  color: 'var(--color-primary)',
+  border: '1px solid #d1fae5',
+  borderRadius: 6,
+  background: '#f0fdf4',
+  color: '#059669',
   cursor: 'pointer',
 }
 
@@ -51,7 +51,7 @@ const TaskManagementPage = () => {
   const [newTaskOpen, setNewTaskOpen] = useState(false)
   const [paramObj, setParamObj] = useState({ limit: 10, offset: 0, total: 0 })
 
-  const isMobile = useIsMobile() // 👈 Track mobile breakpoint (768px default)
+  const isMobile = useIsMobile()
 
   const filters = useMemo(
     () => ({ search: search || undefined, status, priority, project }),
@@ -74,7 +74,7 @@ const TaskManagementPage = () => {
     fetchActivity,
   } = useTaskManagementApi(filters, paramObj)
 
-  const selectedTask = tasks.find((t) => t._id === selectedTaskId) || null
+  const selectedTask = tasks?.find((t) => t._id === selectedTaskId) || null
 
   const clearFilters = () => {
     setSearch('')
@@ -96,23 +96,21 @@ const TaskManagementPage = () => {
       title: 'ID',
       dataIndex: '_id',
       key: '_id',
-      width: 90,
+      width: 95,
       render: (v) => (
-        <span style={{ color: 'var(--color-primary)' }}>#{v.slice(-6).toUpperCase()}</span>
+        <span style={{ color: '#059669', fontWeight: 600 }}>#{v?.slice(-6).toUpperCase()}</span>
       ),
     },
     {
       title: ':TITLE',
       dataIndex: 'title',
       key: 'title',
-      width: 220, // Added fixed width so table respects scrolling bounds on mobile
+      width: 240,
       render: (v, record) => (
         <div>
-          <div style={{ color: 'var(--color-primary)', fontWeight: 600 }}>{v}</div>
+          <div style={{ color: '#065f46', fontWeight: 700 }}>{v}</div>
           {record.description && (
-            <div style={{ color: 'var(--color-secondary)', fontSize: 11 }}>
-              {record.description}
-            </div>
+            <div style={{ color: '#64748b', fontSize: 11, marginTop: 2 }}>{record.description}</div>
           )}
         </div>
       ),
@@ -121,8 +119,8 @@ const TaskManagementPage = () => {
       title: ':PROJECT',
       dataIndex: 'project',
       key: 'project',
-      width: 140,
-      render: (v) => <span style={{ color: 'var(--color-secondary)' }}>{v || '—'}</span>,
+      width: 130,
+      render: (v) => <span style={{ color: '#475569' }}>{v || '—'}</span>,
     },
     {
       title: ':STATUS',
@@ -144,7 +142,7 @@ const TaskManagementPage = () => {
       key: 'dueDate',
       width: 120,
       render: (v) => (
-        <span style={{ color: 'var(--color-secondary)', fontSize: 12 }}>
+        <span style={{ color: '#475569', fontSize: 12 }}>
           {v ? dayjs(v).format('YYYY-MM-DD') : '—'}
         </span>
       ),
@@ -153,16 +151,17 @@ const TaskManagementPage = () => {
       title: ':TAGS',
       dataIndex: 'tags',
       key: 'tags',
-      width: 180,
+      width: 170,
       render: (tags) => (
         <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
           {tags?.map((t) => (
             <Tag
               key={t}
               style={{
-                background: 'transparent',
-                borderColor: 'var(--term-border)',
-                color: 'var(--color-secondary)',
+                background: '#f8fafc',
+                borderColor: '#e2e8f0',
+                color: '#475569',
+                borderRadius: 4,
               }}
             >
               {t}
@@ -175,14 +174,19 @@ const TaskManagementPage = () => {
       title: 'ACTIONS',
       key: 'actions',
       width: 90,
-      fixed: isMobile ? false : 'right', // Freeze actions column on desktop for better usability
+      fixed: isMobile ? false : 'right',
       render: (_, record) => (
         <div style={{ display: 'flex', gap: 8 }}>
           <button style={actionBtnStyle} onClick={() => setSelectedTaskId(record._id)}>
             <EyeOutlined style={{ fontSize: 12 }} />
           </button>
           <button
-            style={{ ...actionBtnStyle, color: '#ef4444' }}
+            style={{
+              ...actionBtnStyle,
+              color: '#ef4444',
+              borderColor: '#fee2e2',
+              background: '#fef2f2',
+            }}
             onClick={() => handleDelete(record._id)}
           >
             <DeleteOutlined style={{ fontSize: 12 }} />
@@ -193,19 +197,17 @@ const TaskManagementPage = () => {
   ]
 
   return (
-    <div style={{ fontFamily: 'var(--term-font)' }}>
-      <PageHeader
-        title="TASK MANAGEMENT"
-        titleStyle={{ letterSpacing: 2 }}
-        subtitle="root@mission-control:~# tail -f ./tasks"
-      />
-
+    <PageHeader
+      title="TASK MANAGEMENT"
+      subtitle="root@mission-control → tail -f ./tasks"
+      icon={<UnorderedListOutlined />}
+    >
+      {/* 1. Stat Summary Cards */}
       <div
         style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(170px, 1fr))',
           gap: 14,
-          marginBottom: 20,
         }}
       >
         <StatCard
@@ -245,15 +247,16 @@ const TaskManagementPage = () => {
         />
       </div>
 
+      {/* 2. Table Section Card */}
       <div
         style={{
-          border: '1px solid var(--term-border)',
-          borderRadius: 10,
-          padding: isMobile ? 12 : 20,
-          background: 'var(--color-bg-container)',
-          overflowX: 'hidden',
+          border: '1.5px solid #d1fae5',
+          borderRadius: 16,
+          padding: isMobile ? 14 : 20,
+          background: '#ffffff',
         }}
       >
+        {/* Table Controls Header */}
         <div
           style={{
             display: 'flex',
@@ -261,25 +264,34 @@ const TaskManagementPage = () => {
             alignItems: 'center',
             marginBottom: 16,
             flexWrap: 'wrap',
-            gap: 10,
+            gap: 12,
           }}
         >
-          <span style={{ color: 'var(--color-secondary)', fontSize: 12, letterSpacing: 1 }}>
+          <span
+            style={{
+              color: '#065f46',
+              fontSize: 13,
+              fontWeight: 700,
+              letterSpacing: 1.2,
+            }}
+          >
             TASKS // TABLE VIEW
           </span>
+
           <button
             type="button"
             onClick={() => setNewTaskOpen(true)}
             style={{
-              display: 'flex',
+              display: 'inline-flex',
               alignItems: 'center',
               gap: 6,
-              border: '1px solid var(--color-border-secondary)',
-              background: 'rgba(57,255,106,0.08)',
-              color: 'var(--color-primary)',
-              borderRadius: 6,
-              padding: '6px 14px',
+              border: '1.5px solid #10b981',
+              background: '#ecfdf5',
+              color: '#047857',
+              borderRadius: 8,
+              padding: '7px 16px',
               fontSize: 12,
+              fontWeight: 700,
               letterSpacing: 1,
               cursor: 'pointer',
             }}
@@ -288,21 +300,26 @@ const TaskManagementPage = () => {
           </button>
         </div>
 
+        {/* Filter Toolbar */}
         <div
           style={{
             display: 'flex',
             gap: 10,
-            marginBottom: 16,
+            marginBottom: 18,
             flexWrap: 'wrap',
             justifyContent: isMobile ? 'stretch' : 'flex-end',
           }}
         >
           <Input
-            prefix={<SearchOutlined style={{ color: 'var(--color-primary-light)' }} />}
+            prefix={<SearchOutlined style={{ color: '#059669' }} />}
             placeholder="Search tasks..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            style={{ width: isMobile ? '100%' : 200, border: '1px var(--term-border) solid' }}
+            style={{
+              width: isMobile ? '100%' : 200,
+              borderRadius: 8,
+              borderColor: '#a7f3d0',
+            }}
           />
           <Select
             placeholder="ALL STATUS"
@@ -310,7 +327,9 @@ const TaskManagementPage = () => {
             value={status}
             options={TASK_STATUS_OPTIONS}
             onChange={setStatus}
-            style={{ width: isMobile ? '100%' : 150, border: '1px var(--term-border) solid' }}
+            style={{
+              width: isMobile ? '100%' : 140,
+            }}
           />
           <Select
             placeholder="ALL PRIORITY"
@@ -318,29 +337,36 @@ const TaskManagementPage = () => {
             value={priority}
             options={TASK_PRIORITY_OPTIONS}
             onChange={setPriority}
-            style={{ width: isMobile ? '100%' : 150, border: '1px var(--term-border) solid' }}
+            style={{
+              width: isMobile ? '100%' : 140,
+            }}
           />
           <Input
             placeholder="Project..."
             allowClear
             value={project}
             onChange={(e) => setProject(e.target.value || undefined)}
-            style={{ width: isMobile ? '100%' : 150, border: '1px var(--term-border) solid' }}
+            style={{
+              width: isMobile ? '100%' : 140,
+              borderRadius: 8,
+              borderColor: '#a7f3d0',
+            }}
           />
           <button
             type="button"
             onClick={clearFilters}
             style={{
-              display: 'flex',
+              display: 'inline-flex',
               alignItems: 'center',
               justifyContent: 'center',
               gap: 6,
-              border: '1px solid var(--color-border-secondary)',
-              background: 'rgba(57,255,106,0.08)',
-              color: 'var(--color-primary)',
-              borderRadius: 6,
-              padding: '6px 25px',
+              border: '1px solid #a7f3d0',
+              background: '#f0fdf4',
+              color: '#047857',
+              borderRadius: 8,
+              padding: '6px 18px',
               fontSize: 12,
+              fontWeight: 600,
               letterSpacing: 1,
               cursor: 'pointer',
               width: isMobile ? '100%' : 'auto',
@@ -350,6 +376,7 @@ const TaskManagementPage = () => {
           </button>
         </div>
 
+        {/* Table View */}
         <div style={{ width: '100%', overflowX: 'auto' }}>
           <CrudTable
             tableData={tasks}
@@ -358,11 +385,12 @@ const TaskManagementPage = () => {
             paramObj={{ ...paramObj, total }}
             setParamObj={setParamObj}
             setRefreshCounter={() => refetch()}
-            scroll={{ x: 900 }}
+            scroll={{ x: 950 }}
           />
         </div>
       </div>
 
+      {/* Modals & Drawers */}
       {selectedTask && (
         <TaskDetailPanel
           task={selectedTask}
@@ -370,7 +398,7 @@ const TaskManagementPage = () => {
           onStatusChange={(id, v) => editTask(id, { status: v }).then(refetch)}
           onPriorityChange={(id, v) => editTask(id, { priority: v }).then(refetch)}
           onDueDateChange={(id, v) => editTask(id, { dueDate: v }).then(refetch)}
-          onAddSubtask={(id, title) => addTaskSubtask(id, title).then(refetch)}
+          onAddSubtask={(id, t) => addTaskSubtask(id, t).then(refetch)}
           onToggleSubtask={(id, subId, done) => toggleSubtask(id, subId, done).then(refetch)}
           onDeleteSubtask={(id, subId) => removeSubtask(id, subId).then(refetch)}
           fetchActivity={fetchActivity}
@@ -383,7 +411,7 @@ const TaskManagementPage = () => {
         onCreate={addTask}
         submitting={submitting}
       />
-    </div>
+    </PageHeader>
   )
 }
 

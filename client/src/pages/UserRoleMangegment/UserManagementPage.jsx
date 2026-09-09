@@ -1,11 +1,10 @@
 import {
-  CheckCircleOutlined,
   ClearOutlined,
-  DeleteOutlined,
   EyeOutlined,
   FilterOutlined,
   MoreOutlined,
   SearchOutlined,
+  TeamOutlined,
 } from '@ant-design/icons'
 import ReusableAntdTag from '@devStack/components/AntdTag/ReusableAntdTag'
 import PageHeader from '@devStack/components/PageHeader'
@@ -24,10 +23,10 @@ const actionBtnStyle = {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  border: '1px solid var(--term-border)',
-  borderRadius: 5,
-  background: 'transparent',
-  color: 'var(--color-primary)',
+  border: '1px solid #d1fae5',
+  borderRadius: 6,
+  background: '#f0fdf4',
+  color: '#059669',
   cursor: 'pointer',
 }
 
@@ -37,7 +36,7 @@ const UserManagementPage = () => {
   const [activeUser, setActiveUser] = useState(null)
   const [paramObj, setParamObj] = useState({ limit: 10, offset: 0, total: 0 })
 
-  const isMobile = useIsMobile() // 👈 Track mobile screen state
+  const isMobile = useIsMobile()
 
   const filteredUsers = useMemo(() => {
     if (!search.trim()) return users
@@ -46,6 +45,7 @@ const UserManagementPage = () => {
       (u) =>
         u.username?.toLowerCase().includes(query) ||
         u.email?.toLowerCase().includes(query) ||
+        u._id?.toString().toLowerCase().includes(query) ||
         u.id?.toString().toLowerCase().includes(query)
     )
   }, [users, search])
@@ -59,29 +59,33 @@ const UserManagementPage = () => {
       title: 'USER ID',
       dataIndex: '_id',
       key: '_id',
-      width: 100,
-      render: (v) => <span style={{ color: 'var(--color-secondary)' }}>{v}</span>,
+      width: 110,
+      render: (v) => (
+        <span style={{ color: '#059669', fontWeight: 600 }}>
+          #{v ? v.slice(-6).toUpperCase() : '—'}
+        </span>
+      ),
     },
     {
       title: ':USERNAME',
       dataIndex: 'username',
       key: 'username',
       width: 140,
-      render: (v) => <span style={{ color: 'var(--color-primary)' }}>{v}</span>,
+      render: (v) => <span style={{ color: '#065f46', fontWeight: 700 }}>{v}</span>,
     },
     {
       title: ':NAME',
       dataIndex: 'name',
       key: 'name',
-      width: 140,
-      render: (v) => <span style={{ color: 'var(--color-primary)' }}>{v}</span>,
+      width: 150,
+      render: (v) => <span style={{ color: '#065f46', fontWeight: 600 }}>{v}</span>,
     },
     {
       title: ':EMAIL',
       dataIndex: 'email',
       key: 'email',
-      width: 200,
-      render: (v) => <span style={{ color: 'var(--color-secondary)' }}>{v}</span>,
+      width: 210,
+      render: (v) => <span style={{ color: '#475569', fontSize: 12 }}>{v}</span>,
     },
     {
       title: ':ROLE',
@@ -94,13 +98,13 @@ const UserManagementPage = () => {
       title: 'ACTIONS',
       key: 'actions',
       width: 90,
-      fixed: isMobile ? false : 'right', // Freeze actions column on larger viewports
+      fixed: isMobile ? false : 'right',
       render: (_, record) => (
         <div style={{ display: 'flex', gap: 8 }}>
-          <button style={actionBtnStyle} onClick={() => {}}>
+          <button style={actionBtnStyle} onClick={() => {}} title="View User">
             <EyeOutlined style={{ fontSize: 12 }} />
           </button>
-          <button style={actionBtnStyle} onClick={() => setActiveUser(record)}>
+          <button style={actionBtnStyle} onClick={() => setActiveUser(record)} title="Edit Role">
             <MoreOutlined style={{ fontSize: 12 }} />
           </button>
         </div>
@@ -109,64 +113,111 @@ const UserManagementPage = () => {
   ]
 
   return (
-    <div style={{ fontFamily: 'var(--term-font)' }}>
-      <PageHeader
-        title="USER MANAGEMENT"
-        titleStyle={{ letterSpacing: 2 }}
-        subtitle="Manage system users and their roles"
-      />
-
+    <PageHeader
+      title="USER MANAGEMENT"
+      subtitle="root@auth:~# cat /etc/passwd | grep -E 'users|roles'"
+      icon={<TeamOutlined />}
+    >
+      {/* Table & Filtering Shell */}
       <div
         style={{
-          border: '1px solid var(--term-border)',
-          borderRadius: 10,
-          padding: isMobile ? 12 : 20, // Scaled down padding for mobile
-          background: 'var(--color-bg-container)',
-          overflowX: 'hidden',
+          border: '1.5px solid #d1fae5',
+          borderRadius: 16,
+          padding: isMobile ? 14 : 20,
+          background: '#ffffff',
         }}
       >
+        {/* Table Controls Header */}
         <div
           style={{
             display: 'flex',
-            justifyContent: isMobile ? 'stretch' : 'flex-end',
-            gap: 10,
+            justifyContent: 'space-between',
+            alignItems: 'center',
             marginBottom: 16,
             flexWrap: 'wrap',
+            gap: 12,
           }}
         >
-          <Input
-            prefix={<SearchOutlined style={{ color: 'var(--color-primary-light)' }} />}
-            placeholder="Search users..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
+          <span
             style={{
-              width: isMobile ? '100%' : 220,
-              // background: 'rgba(6, 18, 10, 0.6)',
-              border: '1px solid var(--term-border)',
-              color: 'var(--color-secondary-hover)',
-            }}
-          />
-          <button
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: 6,
-              padding: '0 14px',
-              border: '1px solid var(--term-border)',
-              borderRadius: 6,
-              background: 'transparent',
-              color: 'var(--color-primary)',
-              fontFamily: 'var(--term-font)',
-              fontSize: 12,
-              letterSpacing: 1,
-              cursor: 'pointer',
-              width: isMobile ? '100%' : 'auto',
-              height: isMobile ? 36 : 'auto',
+              color: '#065f46',
+              fontSize: 13,
+              fontWeight: 700,
+              letterSpacing: 1.2,
             }}
           >
-            <FilterOutlined /> FILTER
-          </button>
+            USERS // DIRECTORY VIEW
+          </span>
+
+          <div
+            style={{
+              display: 'flex',
+              gap: 10,
+              flexWrap: 'wrap',
+              width: isMobile ? '100%' : 'auto',
+            }}
+          >
+            <Input
+              prefix={<SearchOutlined style={{ color: '#059669' }} />}
+              placeholder="Search users..."
+              value={search}
+              allowClear
+              onChange={(e) => setSearch(e.target.value)}
+              style={{
+                width: isMobile ? '100%' : 240,
+                borderRadius: 8,
+                borderColor: '#a7f3d0',
+                fontFamily: 'var(--term-font, monospace)',
+              }}
+            />
+
+            {search && (
+              <button
+                type="button"
+                onClick={() => setSearch('')}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: 6,
+                  border: '1px solid #a7f3d0',
+                  background: '#f0fdf4',
+                  color: '#047857',
+                  borderRadius: 8,
+                  padding: '6px 14px',
+                  fontSize: 12,
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                }}
+              >
+                <ClearOutlined /> CLEAR
+              </button>
+            )}
+
+            <button
+              type="button"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: 6,
+                padding: '6px 16px',
+                border: '1.5px solid #10b981',
+                borderRadius: 8,
+                background: '#ecfdf5',
+                color: '#047857',
+                fontFamily: 'var(--term-font, monospace)',
+                fontSize: 12,
+                fontWeight: 700,
+                letterSpacing: 1,
+                cursor: 'pointer',
+                width: isMobile ? '100%' : 'auto',
+                height: isMobile ? 38 : 'auto',
+              }}
+            >
+              <FilterOutlined /> FILTER
+            </button>
+          </div>
         </div>
 
         {/* Scroll wrapper for CrudTable */}
@@ -175,21 +226,22 @@ const UserManagementPage = () => {
             tableData={filteredUsers}
             columns={columns}
             loading={loading}
-            paramObj={paramObj}
+            paramObj={{ ...paramObj, total: filteredUsers.length }}
             setParamObj={setParamObj}
-            setRefreshCounter={() => {}}
-            scroll={{ x: 800 }} // 👈 Enables horizontal scroll bounds cleanly on mobile
+            setRefreshCounter={refetch}
+            scroll={{ x: 800 }}
           />
         </div>
       </div>
 
+      {/* Role Modification Modal */}
       <ChangeRoleModal
         open={!!activeUser}
         user={activeUser}
         onClose={() => setActiveUser(null)}
         onRoleChanged={refetch}
       />
-    </div>
+    </PageHeader>
   )
 }
 

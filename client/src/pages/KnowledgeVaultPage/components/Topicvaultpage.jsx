@@ -1,4 +1,4 @@
-import { PlusOutlined, SearchOutlined } from '@ant-design/icons'
+import { PlusOutlined, SearchOutlined, FolderOpenOutlined } from '@ant-design/icons'
 import EmptyState from '@devStack/components/EmptyState/EmptyState'
 import PageHeader from '@devStack/components/PageHeader'
 import { Skeleton } from '@devStack/components/Skelton/Skeleton'
@@ -64,61 +64,75 @@ const TopicVaultPage = () => {
   }
 
   return (
-    <div style={{ fontFamily: 'var(--term-font)' }}>
-      <PageHeader
-        title={topic?.name || 'LOADING...'}
-        titleStyle={{ fontSize: 22, letterSpacing: 1 }}
-        subtitle={`${notes.length} notes`}
-        extra={
-          <button
-            type="button"
-            onClick={() => setNewNoteOpen(true)}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 6,
-              border: '1px solid var(--color-border-secondary)',
-              background: 'rgba(57,255,106,0.08)',
-              color: 'var(--color-primary)',
-              borderRadius: 6,
-              padding: '8px 16px',
-              fontSize: 12,
-              letterSpacing: 1,
-              cursor: 'pointer',
-            }}
-          >
-            <PlusOutlined /> NEW NOTE
-          </button>
-        }
-      />
-
-      <div style={{ marginBottom: 16 }}>
+    <PageHeader
+      showBack={true}
+      icon={<FolderOpenOutlined />}
+      title={topic?.name || 'LOADING TOPIC...'}
+      subtitle={`root@vault:~# cat ./topics/${topic?.name?.toLowerCase().replace(/\s+/g, '-') || topicId || 'current'} → ${notes?.length || 0} notes indexed`}
+      extra={
+        <button
+          type="button"
+          onClick={() => setNewNoteOpen(true)}
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: 6,
+            border: '1.5px solid #10b981',
+            background: 'rgba(255, 255, 255, 0.45)',
+            color: '#065f46',
+            borderRadius: 8,
+            padding: '8px 18px',
+            fontSize: 12,
+            fontWeight: 700,
+            letterSpacing: 1,
+            cursor: 'pointer',
+            backdropFilter: 'blur(4px)',
+            transition: 'all 0.15s ease',
+          }}
+        >
+          <PlusOutlined /> NEW NOTE
+        </button>
+      }
+    >
+      {/* Search Toolbar */}
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'flex-start',
+          alignItems: 'center',
+          gap: 12,
+        }}
+      >
         <Input
-          prefix={<SearchOutlined style={{ color: 'var(--color-primary-light)' }} />}
+          prefix={<SearchOutlined style={{ color: '#059669' }} />}
           placeholder="Search notes in this topic..."
           value={search}
           allowClear
           onChange={(e) => setSearch(e.target.value)}
           style={{
-            width: isMobile ? '100%' : 260,
-            border: '2px var(--term-border) solid',
+            width: isMobile ? '100%' : 280,
+            borderRadius: 8,
+            borderColor: '#a7f3d0',
+            fontFamily: 'var(--term-font, monospace)',
           }}
         />
       </div>
 
+      {/* Main Content Area: Notes Grid + Editor Drawer */}
       <div
         style={{
           display: 'flex',
           flexDirection: isMobile ? 'column' : 'row',
           gap: 16,
           alignItems: 'flex-start',
+          width: '100%',
         }}
       >
         <div style={{ flex: 1, minWidth: 0, width: '100%' }}>
           {loading ? (
             <div style={responsiveGridStyle}>
               {Array.from({ length: 8 }).map((_, i) => (
-                <Skeleton key={i} height={150} borderRadius={4} />
+                <Skeleton key={i} height={150} borderRadius={10} />
               ))}
             </div>
           ) : notes.length === 0 ? (
@@ -156,13 +170,14 @@ const TopicVaultPage = () => {
         )}
       </div>
 
+      {/* New Note Creation Modal */}
       <NewNoteModal
         open={newNoteOpen}
         onClose={() => setNewNoteOpen(false)}
         onCreate={handleCreateNote}
         submitting={submitting}
       />
-    </div>
+    </PageHeader>
   )
 }
 

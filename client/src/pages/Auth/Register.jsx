@@ -1,4 +1,4 @@
-import { UserOutlined, LockOutlined, MailFilled } from '@ant-design/icons'
+import { UserOutlined, LockOutlined, MailFilled, UserAddOutlined } from '@ant-design/icons'
 import { CreateAccount } from '@devStack/apiServices/accounts-auth-apis'
 import { handleApiError } from '@devStack/apiServices/utils/handle-api-error'
 import PageHeader from '@devStack/components/PageHeader'
@@ -39,6 +39,7 @@ const SignupPage = () => {
         name: values.name,
       })
       message.success(res?.message)
+      form.resetFields()
     } catch (err) {
       handleApiError(err, 'Account Creation failed. Check your credentials and try again.')
     } finally {
@@ -47,36 +48,25 @@ const SignupPage = () => {
   }
 
   return (
-    <div
-      style={
-        {
-          // display: 'flex',
-          // flexDirection: 'column',
-          // minHeight: '100%',
-          // padding: 'var(--page-padding)',
-          // flex: 1,
-        }
-      }
+    <PageHeader
+      title="CREATE USER ACCOUNT"
+      subtitle="root@auth:~# provision --new-user --elevated-access"
+      icon={<UserAddOutlined />}
+      showBack={true}
     >
-      <PageHeader
-        title="Create User Account"
-        subtitle="Provision a new user access credential into the system"
-        showBack={true}
-      />
-
       <div
         style={{
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          flex: 1,
-          padding: '24px 0',
+          width: '100%',
+          padding: '28px 0',
         }}
       >
         <TerminalCard
           title="Add User"
           prompt="root@auth:~#"
-          maxWidth={420}
+          maxWidth={440}
           footer={
             <Text
               style={{
@@ -184,7 +174,7 @@ const SignupPage = () => {
           </Form>
         </TerminalCard>
       </div>
-    </div>
+    </PageHeader>
   )
 }
 
