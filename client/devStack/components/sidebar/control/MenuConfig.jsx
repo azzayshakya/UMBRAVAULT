@@ -6,6 +6,7 @@ import {
   SafetyCertificateOutlined,
   CheckSquareOutlined,
   DatabaseOutlined,
+  FolderOpenOutlined,
 } from '@ant-design/icons'
 
 import MENU_KEYS from '../constants/MenuKeys'
@@ -76,7 +77,7 @@ export const MENU_CONFIG = [
   {
     key: MENU_KEYS.DOCUMENT_VAULT,
     label: MENU_LABELS.document_vault,
-    icon: createColoredIcon(DatabaseOutlined, '#22C55E', 'rgba(34, 197, 94, 0.18)'), // Lime / Matrix Green
+    icon: createColoredIcon(FolderOpenOutlined, '#6366F1', 'rgba(99, 102, 241, 0.18)'), // Indigo / Secure Vault
   },
 ]
 

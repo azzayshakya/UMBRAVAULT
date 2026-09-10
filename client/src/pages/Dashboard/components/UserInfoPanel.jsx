@@ -50,7 +50,7 @@ const UserInfoPanel = () => {
   const { user, loading } = useUserInfo()
   const authenticUser = useSelector((state) => state.user?.user)
   const isMobile = useIsMobile()
-  const contentBgUrl = '/images/global/my-profile.jpg'
+  const contentBgUrl = authenticUser?.avatar || '/images/global/my-profile.jpg'
 
   const wrapStyle = {
     position: 'relative',

@@ -203,7 +203,7 @@ export default function AssetVaultPage() {
         </div>
       ) : assets.length === 0 ? (
         <EmptyState
-          variant={search || typeFilter || categoryFilter ? 'search' : 'terminal'}
+          variant={search || typeFilter || categoryFilter ? 'search' : 'default'}
           query={search}
           actionText="INDEX FIRST ASSET"
           onAction={() => setUploadModalOpen(true)}

@@ -1,4 +1,6 @@
+import { useState } from 'react'
 import { useIsMobile } from '@devStack/utils/useIsMobile'
+import { Skeleton } from '@devStack/components/Skelton/Skeleton'
 
 import CenterBrandText from './components/CenterBrandText'
 import LiveSystemFeed from './components/LiveSystemFeed'
@@ -16,28 +18,47 @@ const pageStyle = {
   overflow: 'hidden',
   color: 'var(--color-secondary-hover, #d7ffe4)',
 }
-const DashboardHeaderUrl = '/images/global/dashboard_header.png'
+
+const DashboardHeaderUrl =
+  'https://res.cloudinary.com/dehqq4vrf/image/upload/v1789050978/umbra_vault/umbra-vault/krugyitsmgqqrglfmvof.png'
+
 const Dashboard = () => {
   const { statusList, stats, loading: statusLoading } = useSystemStatus()
   const isMobile = useIsMobile()
+  const [imageLoaded, setImageLoaded] = useState(false)
 
   return (
     <div style={pageStyle}>
+      {/* Top Banner with Skeleton fallback */}
       <div
         style={{
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-          backgroundAttachment: 'fixed',
-          borderRadius: 'var(--radius)',
-          // padding: 'var(--page-padding)',
+          position: 'relative',
+          borderRadius: 'var(--radius, 8px)',
           border: '1px solid var(--term-border)',
-          flex: 1,
           overflow: 'hidden',
+          width: '100%',
+          minHeight: imageLoaded ? 'auto' : 160,
+          background: 'var(--term-bg-panel, #06120a)',
         }}
       >
-        <img style={{ width: '100%' }} src={DashboardHeaderUrl} />
+        {!imageLoaded && (
+          <Skeleton width="100%" height={160} borderRadius={0} style={{ display: 'block' }} />
+        )}
+
+        <img
+          src={DashboardHeaderUrl}
+          alt="Dashboard Header"
+          onLoad={() => setImageLoaded(true)}
+          style={{
+            width: '100%',
+            height: 'auto',
+            display: 'block',
+            opacity: imageLoaded ? 1 : 0,
+            transition: 'opacity 0.3s ease-in-out',
+          }}
+        />
       </div>
+
       <div
         style={{
           display: 'grid',
@@ -56,22 +77,6 @@ const Dashboard = () => {
               }}
             >
               <CenterBrandText />
-              {/* <div
-                style={{
-                  backgroundSize: 'cover',
-                  backgroundPosition: 'center',
-                  backgroundRepeat: 'no-repeat',
-                  backgroundAttachment: 'fixed',
-                  borderRadius: 'var(--radius)',
-                  // padding: 'var(--page-padding)',
-                  border: '1px solid var(--term-border)',
-                  flex: 1,
-                  overflow: 'hidden',
-                }}
-              >
-                <img style={{ width: '100%' }} src={DashboardHeaderUrl} />
-              </div> */}
-              {/* <GlobeVisual /> */}
             </div>
             <SystemStatusPanel statusList={statusList} loading={statusLoading} />
           </>
@@ -85,6 +90,7 @@ const Dashboard = () => {
       )}
 
       <ProjectsGrid />
+
       {!isMobile && (
         <div
           style={{
