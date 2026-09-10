@@ -8,13 +8,14 @@ const uploadSingleFile = async (req, res, next) => {
       throw ApiError.badRequest("No file provided");
     }
 
-    const result = await cloudinaryService.uploadFile(req.file, {
-      folder: "avatars",
-    });
+    // Allows the client to pass a target folder (e.g., 'avatars', 'documents', 'vault')
+    const folder = req.body.folder || "general";
+
+    const result = await cloudinaryService.uploadFile(req.file, { folder });
 
     res
       .status(201)
-      .json(new ApiResponse(201, result, "File uploaded successfully"));
+      .json(ApiResponse(201, result, "File uploaded successfully"));
   } catch (error) {
     next(error);
   }
@@ -26,13 +27,15 @@ const uploadMultipleFilesHandler = async (req, res, next) => {
       throw ApiError.badRequest("No files provided");
     }
 
+    const folder = req.body.folder || "general";
+
     const results = await cloudinaryService.uploadMultipleFiles(req.files, {
-      folder: "gallery",
+      folder,
     });
 
     res
       .status(201)
-      .json(new ApiResponse(201, results, "Files uploaded successfully"));
+      .json(ApiResponse(201, results, "Files uploaded successfully"));
   } catch (error) {
     next(error);
   }
@@ -40,17 +43,15 @@ const uploadMultipleFilesHandler = async (req, res, next) => {
 
 const deleteFileHandler = async (req, res, next) => {
   try {
-    const { publicId } = req.body;
+    const { publicId, resourceType = "image" } = req.body;
 
     if (!publicId) {
       throw ApiError.badRequest("publicId is required");
     }
 
-    await cloudinaryService.deleteFile(publicId);
+    await cloudinaryService.deleteFile(publicId, resourceType);
 
-    res
-      .status(200)
-      .json(new ApiResponse(200, null, "File deleted successfully"));
+    res.status(200).json(ApiResponse(200, null, "File deleted successfully"));
   } catch (error) {
     next(error);
   }

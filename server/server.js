@@ -18,6 +18,7 @@ const aiRoutes = require("./routes/ai.routes");
 const noteRoutes = require("./routes/note.routes");
 const topicRoutes = require("./routes/topic.routes");
 const fileRoutes = require("./routes/file.routes");
+const assetRoutes = require("./routes/asset.routes");
 
 const app = express();
 
@@ -63,6 +64,7 @@ app.use("/api/task", taskRoutes);
 app.use("/api/topic", topicRoutes);
 app.use("/api/note", noteRoutes);
 app.use("/api/files", fileRoutes);
+app.use("/api/assets", assetRoutes);
 
 app.use(notFoundHandler);
 app.use(errorHandler);

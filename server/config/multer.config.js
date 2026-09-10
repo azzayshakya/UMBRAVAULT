@@ -1,34 +1,50 @@
 const multer = require("multer");
+const ApiError = require("../utils/apiError");
 
-// Memory storage = no disk writes, no temp-file cleanup, and it works the
-// same whether you're running one instance or many behind a load balancer.
-// req.file.buffer / req.files[i].buffer is handed straight to Cloudinary.
 const storage = multer.memoryStorage();
 
-const ALLOWED_MIME_TYPES = new Set([
+// Allowed MIME types across images, documents, and archives
+const ALLOWED_MIME_TYPES = [
+  // Images
   "image/jpeg",
   "image/png",
   "image/webp",
   "image/gif",
+  "image/svg+xml",
+  // Documents
   "application/pdf",
-]);
-
-const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024; // 10MB — tune per use case
-const MAX_FILES_PER_REQUEST = 5;
+  "application/msword",
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  "application/vnd.ms-excel",
+  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  "text/plain",
+  "text/csv",
+  "application/json",
+  // Archives
+  "application/zip",
+  "application/x-zip-compressed",
+  "application/x-tar",
+  "application/gzip",
+];
 
 const fileFilter = (req, file, cb) => {
-  if (!ALLOWED_MIME_TYPES.has(file.mimetype)) {
-    return cb(new Error(`Unsupported file type: ${file.mimetype}`));
+  if (ALLOWED_MIME_TYPES.includes(file.mimetype)) {
+    cb(null, true);
+  } else {
+    cb(
+      ApiError.badRequest(
+        `Unsupported file type (${file.mimetype}). Allowed types include images, PDFs, office documents, and archives.`,
+      ),
+      false,
+    );
   }
-  cb(null, true);
 };
 
 const upload = multer({
   storage,
   fileFilter,
   limits: {
-    fileSize: MAX_FILE_SIZE_BYTES,
-    files: MAX_FILES_PER_REQUEST,
+    fileSize: 40 * 1024 * 1024, // 25 MB max limit
   },
 });
 
