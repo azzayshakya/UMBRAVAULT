@@ -1,46 +1,49 @@
-import { DeleteOutlined, LaptopOutlined, LogoutOutlined } from '@ant-design/icons'
+import { DeleteOutlined, LaptopOutlined, LoadingOutlined, LogoutOutlined } from '@ant-design/icons'
 import { logOutAllSession, logOutUser } from '@devStack/apiServices/accounts-auth-apis'
 import { handleApiError } from '@devStack/apiServices/utils/handle-api-error'
 import { clearUserSession } from '@devStack/store/userSlice'
 import { redirectToLoginUtil } from '@devStack/utils/redirect-utils'
 import { removeUserSessionLocally } from '@devStack/utils/user-session-utils'
+import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 export const ProfileTerminal = ({ user }) => {
   const authenticUser = useSelector((state) => state.user.user)
   const dispatch = useDispatch()
+  const [terminatingTarget, setTerminatingTarget] = useState(null) // 'single' | 'all' | null
+
   const handleLogout = async () => {
+    if (terminatingTarget) return
+    setTerminatingTarget('single')
     try {
       await logOutUser()
-
-      dispatch(clearUserSession())
-      removeUserSessionLocally()
-
-      redirectToLoginUtil()
     } catch (error) {
       handleApiError(error)
-
+    } finally {
       dispatch(clearUserSession())
       removeUserSessionLocally()
       redirectToLoginUtil()
     }
   }
+
   const handleLogoutAllSession = async () => {
+    if (terminatingTarget) return
+    setTerminatingTarget('all')
     try {
       await logOutAllSession()
-
-      dispatch(clearUserSession())
-      removeUserSessionLocally()
-
-      redirectToLoginUtil()
     } catch (error) {
       handleApiError(error)
-
+    } finally {
       dispatch(clearUserSession())
       removeUserSessionLocally()
       redirectToLoginUtil()
     }
   }
+
+  const isLoggingOut = terminatingTarget === 'single'
+  const isPurgingAll = terminatingTarget === 'all'
+  const isBusy = Boolean(terminatingTarget)
+
   return (
     <div
       style={{
@@ -57,11 +60,9 @@ export const ProfileTerminal = ({ user }) => {
       }}
     >
       {/* Header */}
-
       <div
         style={{
           color: 'var(--color-primary)',
-          //   fontWeight: 700,
           fontSize: 11,
           marginBottom: 5,
           letterSpacing: 1,
@@ -223,8 +224,7 @@ export const ProfileTerminal = ({ user }) => {
         </div>
       </div>
 
-      {/* Buttons */}
-
+      {/* Action Buttons with Cyberpunk/Hacker Terminal Loaders */}
       <div
         style={{
           display: 'flex',
@@ -233,50 +233,83 @@ export const ProfileTerminal = ({ user }) => {
         }}
       >
         <button
+          type="button"
+          disabled={isBusy}
           onClick={handleLogoutAllSession}
           style={{
             flex: 1,
             height: 40,
-            background: 'transparent',
+            background: isPurgingAll ? 'rgba(57,255,106,.1)' : 'transparent',
             border: '1px solid var(--term-border)',
             borderRadius: 8,
             color: 'var(--color-primary)',
             display: 'flex',
-            gap: 10,
+            gap: 8,
             alignItems: 'center',
             justifyContent: 'center',
-            cursor: 'pointer',
+            cursor: isBusy ? 'not-allowed' : 'pointer',
+            opacity: isBusy && !isPurgingAll ? 0.45 : 1,
             boxShadow: 'var(--color-glow)',
+            fontSize: 11,
+            fontWeight: 700,
+            letterSpacing: 0.8,
+            fontFamily: 'var(--term-font, monospace)',
+            transition: 'all 0.2s ease',
           }}
         >
-          <DeleteOutlined />
-          CLEAR SESSION
+          {isPurgingAll ? (
+            <>
+              <LoadingOutlined style={{ fontSize: 13 }} />
+              PURGING...
+            </>
+          ) : (
+            <>
+              <DeleteOutlined />
+              CLEAR SESSION
+            </>
+          )}
         </button>
 
         <button
+          type="button"
+          disabled={isBusy}
           onClick={handleLogout}
           style={{
             flex: 1,
             height: 40,
-            background: 'transparent',
+            background: isLoggingOut ? 'rgba(255,77,79,.12)' : 'transparent',
             border: '1px solid rgba(255,77,79,.5)',
             borderRadius: 8,
             color: '#ff4d4f',
             display: 'flex',
-            gap: 10,
+            gap: 8,
             alignItems: 'center',
             justifyContent: 'center',
-            cursor: 'pointer',
+            cursor: isBusy ? 'not-allowed' : 'pointer',
+            opacity: isBusy && !isLoggingOut ? 0.45 : 1,
             boxShadow: '0 0 15px rgba(255,77,79,.15)',
+            fontSize: 11,
+            fontWeight: 700,
+            letterSpacing: 0.8,
+            fontFamily: 'var(--term-font, monospace)',
+            transition: 'all 0.2s ease',
           }}
         >
-          <LogoutOutlined />
-          LOGOUT
+          {isLoggingOut ? (
+            <>
+              <LoadingOutlined style={{ fontSize: 13 }} />
+              KILL_SIG...
+            </>
+          ) : (
+            <>
+              <LogoutOutlined />
+              LOGOUT
+            </>
+          )}
         </button>
       </div>
 
       {/* Footer */}
-
       <div
         style={{
           marginTop: 20,
@@ -286,7 +319,9 @@ export const ProfileTerminal = ({ user }) => {
           letterSpacing: 0.5,
         }}
       >
-        &gt; Stay curious. Stay sharp. Stay in control.
+        {isBusy
+          ? '> [SYS_SIGNAL]: TERMINATING SOCKETS...'
+          : '> Stay curious. Stay sharp. Stay in control.'}
       </div>
     </div>
   )
