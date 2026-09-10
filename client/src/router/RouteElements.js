@@ -25,6 +25,7 @@ import MENU_KEYS from '@devStack/components/sidebar/constants/MenuKeys'
 import About from '@/pages/About/About'
 import Register from '@/pages/Auth/Register'
 import Dashboard from '@/pages/Dashboard/Dashboard'
+import DocumentVault from '@/pages/DocumentVault/DocumentVault'
 import Topicvaultpage from '@/pages/KnowledgeVaultPage/components/NoteVaultPage'
 import Knowledgevaultpage from '@/pages/KnowledgeVaultPage/Knowledgevaultpage'
 import MyProfile from '@/pages/MyProfile/MyProfile'
@@ -40,6 +41,7 @@ export const ROUTE_ELEMENTS = {
   [MENU_KEYS.TASK_MANAGEMENT]: Taskmanagementpage,
   [MENU_KEYS.KNOWLEDGE_VAULT]: Knowledgevaultpage,
   [MENU_KEYS.KNOWLEDGE_VAULT_NOTE]: Topicvaultpage,
+  [MENU_KEYS.DOCUMENT_VAULT]: DocumentVault,
 }
 
 export default ROUTE_ELEMENTS

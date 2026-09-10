@@ -7,6 +7,7 @@ export const MENU_KEYS = {
   TASK_MANAGEMENT: 'task_management',
   KNOWLEDGE_VAULT: 'knowledge_vault',
   KNOWLEDGE_VAULT_NOTE: 'knowledge_vault_note',
+  DOCUMENT_VAULT: 'document_vault',
 }
 
 export default MENU_KEYS

@@ -6,6 +6,7 @@ export const MENU_LABELS = {
   role_management: 'Role Management',
   task_management: 'Task Management',
   Knowledge_vault: 'Knowledge Vault',
+  document_vault: 'Document Vault',
 }
 
 export const getMenuLabel = (key) => {

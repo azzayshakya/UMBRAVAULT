@@ -73,6 +73,11 @@ export const MENU_CONFIG = [
     label: MENU_LABELS.Knowledge_vault,
     icon: createColoredIcon(DatabaseOutlined, '#22C55E', 'rgba(34, 197, 94, 0.18)'), // Lime / Matrix Green
   },
+  {
+    key: MENU_KEYS.DOCUMENT_VAULT,
+    label: MENU_LABELS.document_vault,
+    icon: createColoredIcon(DatabaseOutlined, '#22C55E', 'rgba(34, 197, 94, 0.18)'), // Lime / Matrix Green
+  },
 ]
 
 export default MENU_CONFIG

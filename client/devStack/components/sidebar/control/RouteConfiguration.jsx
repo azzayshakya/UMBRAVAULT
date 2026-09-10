@@ -9,6 +9,7 @@ export const ROUTES = {
   [MENU_KEYS.TASK_MANAGEMENT]: '/task-management',
   [MENU_KEYS.KNOWLEDGE_VAULT]: '/knowledge-vault',
   [MENU_KEYS.KNOWLEDGE_VAULT_NOTE]: '/knowledge-vault/:topicId',
+  [MENU_KEYS.DOCUMENT_VAULT]: '/document-vault',
 }
 
 export const getRoute = (key) => {
