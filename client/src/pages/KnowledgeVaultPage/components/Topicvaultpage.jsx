@@ -2,9 +2,12 @@ import { PlusOutlined, SearchOutlined, FolderOpenOutlined } from '@ant-design/ic
 import EmptyState from '@devStack/components/EmptyState/EmptyState'
 import PageHeader from '@devStack/components/PageHeader'
 import { Skeleton } from '@devStack/components/Skelton/Skeleton'
+import { Theme } from '@devStack/constants/theme-constants'
+import { resolveTheme } from '@devStack/utils/theme-utils'
 import { useIsMobile } from '@devStack/utils/useIsMobile'
 import { Input, message, Modal } from 'antd'
 import { useMemo, useState } from 'react'
+import { useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 
 import NoteCard from '../components/Notecard'
@@ -20,6 +23,8 @@ const TopicVaultPage = () => {
   const [selectedNoteId, setSelectedNoteId] = useState(null)
   const [newNoteOpen, setNewNoteOpen] = useState(false)
 
+  const theme = useSelector((s) => s?.preference?.theme)
+  const isDark = resolveTheme(theme) === Theme.DARK
   const isMobile = useIsMobile()
 
   const filters = useMemo(() => ({ search: search || undefined }), [search])
@@ -77,16 +82,17 @@ const TopicVaultPage = () => {
             display: 'inline-flex',
             alignItems: 'center',
             gap: 6,
-            border: '1.5px solid #10b981',
-            background: 'rgba(255, 255, 255, 0.45)',
-            color: '#065f46',
-            borderRadius: 8,
-            padding: '8px 18px',
+            border: isDark ? '1px solid var(--term-border)' : '1px solid rgba(6, 95, 70, 0.25)',
+            background: isDark ? 'rgba(57, 255, 106, 0.08)' : 'rgba(255, 255, 255, 0.45)',
+            color: isDark ? 'var(--term-green)' : '#065f46',
+            borderRadius: 'var(--radius, 8px)',
+            padding: '8px 16px',
             fontSize: 12,
             fontWeight: 700,
             letterSpacing: 1,
             cursor: 'pointer',
             backdropFilter: 'blur(4px)',
+            fontFamily: 'var(--term-font, monospace)',
             transition: 'all 0.15s ease',
           }}
         >
@@ -104,15 +110,21 @@ const TopicVaultPage = () => {
         }}
       >
         <Input
-          prefix={<SearchOutlined style={{ color: '#059669' }} />}
+          prefix={
+            <SearchOutlined
+              style={{ color: isDark ? 'var(--term-green)' : 'var(--color-primary)' }}
+            />
+          }
           placeholder="Search notes in this topic..."
           value={search}
           allowClear
           onChange={(e) => setSearch(e.target.value)}
           style={{
             width: isMobile ? '100%' : 280,
-            borderRadius: 8,
-            borderColor: '#a7f3d0',
+            borderRadius: 'var(--radius, 8px)',
+            border: isDark ? '1px solid var(--term-border)' : '1px solid var(--color-border)',
+            background: 'var(--color-bg-container)',
+            color: 'var(--color-text)',
             fontFamily: 'var(--term-font, monospace)',
           }}
         />

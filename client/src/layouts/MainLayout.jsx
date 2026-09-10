@@ -200,8 +200,8 @@ const MainLayout = ({ userRole, userData = null }) => {
         <div
           style={{
             background: 'var(--color-bg)',
-            borderRadius: 'var(--radius)',
-            padding: 'var(--page-padding)',
+            // borderRadius: 'var(--radius)',
+            padding: '10px',
             flex: 1,
           }}
         >

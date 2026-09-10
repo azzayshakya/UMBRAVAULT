@@ -14,33 +14,23 @@ import ReusableAntdTag from '@devStack/components/AntdTag/ReusableAntdTag'
 import PageHeader from '@devStack/components/PageHeader'
 import { StatCard } from '@devStack/components/StateCard'
 import CrudTable from '@devStack/components/table/CrudTable'
+import { Theme } from '@devStack/constants/theme-constants'
 import {
   TASK_PRIORITY_BADGE_CONFIG,
   TASK_PRIORITY_OPTIONS,
   TASK_STATUS_BADGE_CONFIG,
   TASK_STATUS_OPTIONS,
 } from '@devStack/enums/task-page-enums'
+import { resolveTheme } from '@devStack/utils/theme-utils'
 import { useIsMobile } from '@devStack/utils/useIsMobile'
 import { Input, Select, Tag } from 'antd'
 import dayjs from 'dayjs'
 import { useMemo, useState } from 'react'
+import { useSelector } from 'react-redux'
 
 import NewTaskModal from './components/Newtaskmodal'
 import TaskDetailPanel from './components/Taskdetailpanel'
 import { useTaskManagementApi } from './hooks/Usetaskmanagementapi'
-
-const actionBtnStyle = {
-  width: 28,
-  height: 28,
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  border: '1px solid #d1fae5',
-  borderRadius: 6,
-  background: '#f0fdf4',
-  color: '#059669',
-  cursor: 'pointer',
-}
 
 const TaskManagementPage = () => {
   const [search, setSearch] = useState('')
@@ -51,6 +41,8 @@ const TaskManagementPage = () => {
   const [newTaskOpen, setNewTaskOpen] = useState(false)
   const [paramObj, setParamObj] = useState({ limit: 10, offset: 0, total: 0 })
 
+  const theme = useSelector((s) => s?.preference?.theme)
+  const isDark = resolveTheme(theme) === Theme.DARK
   const isMobile = useIsMobile()
 
   const filters = useMemo(
@@ -91,6 +83,20 @@ const TaskManagementPage = () => {
     }
   }
 
+  const actionBtnStyle = {
+    width: 28,
+    height: 28,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    border: isDark ? '1px solid var(--term-border)' : '1px solid var(--color-border)',
+    borderRadius: 'var(--radius-sm, 6px)',
+    background: isDark ? 'rgba(57, 255, 106, 0.06)' : 'var(--color-bg-hover)',
+    color: 'var(--color-primary)',
+    cursor: 'pointer',
+    transition: 'all 0.15s ease',
+  }
+
   const columns = [
     {
       title: 'ID',
@@ -98,7 +104,9 @@ const TaskManagementPage = () => {
       key: '_id',
       width: 95,
       render: (v) => (
-        <span style={{ color: '#059669', fontWeight: 600 }}>#{v?.slice(-6).toUpperCase()}</span>
+        <span style={{ color: 'var(--color-primary)', fontWeight: 600 }}>
+          #{v?.slice(-6).toUpperCase()}
+        </span>
       ),
     },
     {
@@ -108,9 +116,17 @@ const TaskManagementPage = () => {
       width: 240,
       render: (v, record) => (
         <div>
-          <div style={{ color: '#065f46', fontWeight: 700 }}>{v}</div>
+          <div style={{ color: 'var(--color-primary)', fontWeight: 700 }}>{v}</div>
           {record.description && (
-            <div style={{ color: '#64748b', fontSize: 11, marginTop: 2 }}>{record.description}</div>
+            <div
+              style={{
+                color: 'var(--color-text-secondary)',
+                fontSize: 11,
+                marginTop: 2,
+              }}
+            >
+              {record.description}
+            </div>
           )}
         </div>
       ),
@@ -120,7 +136,7 @@ const TaskManagementPage = () => {
       dataIndex: 'project',
       key: 'project',
       width: 130,
-      render: (v) => <span style={{ color: '#475569' }}>{v || '—'}</span>,
+      render: (v) => <span style={{ color: 'var(--color-text-secondary)' }}>{v || '—'}</span>,
     },
     {
       title: ':STATUS',
@@ -142,7 +158,7 @@ const TaskManagementPage = () => {
       key: 'dueDate',
       width: 120,
       render: (v) => (
-        <span style={{ color: '#475569', fontSize: 12 }}>
+        <span style={{ color: 'var(--color-text-secondary)', fontSize: 12 }}>
           {v ? dayjs(v).format('YYYY-MM-DD') : '—'}
         </span>
       ),
@@ -158,10 +174,11 @@ const TaskManagementPage = () => {
             <Tag
               key={t}
               style={{
-                background: '#f8fafc',
-                borderColor: '#e2e8f0',
-                color: '#475569',
-                borderRadius: 4,
+                background: isDark ? 'transparent' : 'var(--primitive-gray-50)',
+                borderColor: isDark ? 'var(--term-border)' : 'var(--color-border)',
+                color: 'var(--color-text-secondary)',
+                borderRadius: 'var(--radius-sm, 4px)',
+                fontFamily: 'var(--term-font, monospace)',
               }}
             >
               {t}
@@ -177,17 +194,22 @@ const TaskManagementPage = () => {
       fixed: isMobile ? false : 'right',
       render: (_, record) => (
         <div style={{ display: 'flex', gap: 8 }}>
-          <button style={actionBtnStyle} onClick={() => setSelectedTaskId(record._id)}>
+          <button
+            style={actionBtnStyle}
+            onClick={() => setSelectedTaskId(record._id)}
+            aria-label="View task details"
+          >
             <EyeOutlined style={{ fontSize: 12 }} />
           </button>
           <button
             style={{
               ...actionBtnStyle,
-              color: '#ef4444',
-              borderColor: '#fee2e2',
-              background: '#fef2f2',
+              color: 'var(--color-error)',
+              borderColor: isDark ? 'rgba(239, 68, 68, 0.4)' : '#fee2e2',
+              background: isDark ? 'rgba(239, 68, 68, 0.1)' : '#fef2f2',
             }}
             onClick={() => handleDelete(record._id)}
+            aria-label="Delete task"
           >
             <DeleteOutlined style={{ fontSize: 12 }} />
           </button>
@@ -228,14 +250,14 @@ const TaskManagementPage = () => {
           icon={<LockOutlined />}
           label="BLOCKED"
           value={stats?.blocked}
-          color="#ef4444"
+          color="var(--color-error)"
           loading={loading}
         />
         <StatCard
           icon={<CheckCircleOutlined />}
           label="DONE"
           value={stats?.done}
-          color="green"
+          color={isDark ? 'var(--term-green)' : 'var(--primitive-emerald-500)'}
           loading={loading}
         />
         <StatCard
@@ -250,10 +272,11 @@ const TaskManagementPage = () => {
       {/* 2. Table Section Card */}
       <div
         style={{
-          border: '1.5px solid #d1fae5',
-          borderRadius: 16,
+          border: isDark ? '1px solid var(--term-border)' : '1.5px solid var(--color-border)',
+          borderRadius: 'var(--term-radius, 10px)',
           padding: isMobile ? 14 : 20,
-          background: '#ffffff',
+          background: 'var(--color-bg-container)',
+          boxShadow: isDark ? 'none' : '0 1px 3px rgba(0, 0, 0, 0.02)',
         }}
       >
         {/* Table Controls Header */}
@@ -269,7 +292,7 @@ const TaskManagementPage = () => {
         >
           <span
             style={{
-              color: '#065f46',
+              color: 'var(--color-primary)',
               fontSize: 13,
               fontWeight: 700,
               letterSpacing: 1.2,
@@ -285,15 +308,18 @@ const TaskManagementPage = () => {
               display: 'inline-flex',
               alignItems: 'center',
               gap: 6,
-              border: '1.5px solid #10b981',
-              background: '#ecfdf5',
-              color: '#047857',
-              borderRadius: 8,
+              border: isDark ? '1px solid var(--term-border)' : '1px solid rgba(6, 95, 70, 0.25)',
+              background: isDark ? 'rgba(57, 255, 106, 0.08)' : 'rgba(255, 255, 255, 0.45)',
+              color: isDark ? 'var(--term-green)' : '#065f46',
+              borderRadius: 'var(--radius, 8px)',
               padding: '7px 16px',
               fontSize: 12,
               fontWeight: 700,
               letterSpacing: 1,
               cursor: 'pointer',
+              backdropFilter: 'blur(4px)',
+              fontFamily: 'var(--term-font, monospace)',
+              transition: 'all 0.15s ease',
             }}
           >
             <PlusOutlined /> NEW TASK
@@ -311,14 +337,22 @@ const TaskManagementPage = () => {
           }}
         >
           <Input
-            prefix={<SearchOutlined style={{ color: '#059669' }} />}
+            prefix={
+              <SearchOutlined
+                style={{ color: isDark ? 'var(--term-green)' : 'var(--color-primary)' }}
+              />
+            }
             placeholder="Search tasks..."
             value={search}
+            allowClear
             onChange={(e) => setSearch(e.target.value)}
             style={{
               width: isMobile ? '100%' : 200,
-              borderRadius: 8,
-              borderColor: '#a7f3d0',
+              borderRadius: 'var(--radius, 8px)',
+              border: isDark ? '1px solid var(--term-border)' : '1px solid var(--color-border)',
+              background: 'var(--color-bg-container)',
+              color: 'var(--color-text)',
+              fontFamily: 'var(--term-font, monospace)',
             }}
           />
           <Select
@@ -336,7 +370,7 @@ const TaskManagementPage = () => {
             allowClear
             value={priority}
             options={TASK_PRIORITY_OPTIONS}
-            onChange={setPriority}
+            onChange={setStatus}
             style={{
               width: isMobile ? '100%' : 140,
             }}
@@ -348,8 +382,11 @@ const TaskManagementPage = () => {
             onChange={(e) => setProject(e.target.value || undefined)}
             style={{
               width: isMobile ? '100%' : 140,
-              borderRadius: 8,
-              borderColor: '#a7f3d0',
+              borderRadius: 'var(--radius, 8px)',
+              border: isDark ? '1px solid var(--term-border)' : '1px solid var(--color-border)',
+              background: 'var(--color-bg-container)',
+              color: 'var(--color-text)',
+              fontFamily: 'var(--term-font, monospace)',
             }}
           />
           <button
@@ -360,16 +397,19 @@ const TaskManagementPage = () => {
               alignItems: 'center',
               justifyContent: 'center',
               gap: 6,
-              border: '1px solid #a7f3d0',
-              background: '#f0fdf4',
-              color: '#047857',
-              borderRadius: 8,
+              border: isDark
+                ? '1px solid var(--color-border-secondary)'
+                : '1px solid var(--color-border)',
+              background: isDark ? 'rgba(57, 255, 106, 0.08)' : 'var(--color-bg-hover)',
+              color: 'var(--color-primary)',
+              borderRadius: 'var(--radius, 8px)',
               padding: '6px 18px',
               fontSize: 12,
               fontWeight: 600,
               letterSpacing: 1,
               cursor: 'pointer',
               width: isMobile ? '100%' : 'auto',
+              transition: 'all 0.15s ease',
             }}
           >
             <ClearOutlined /> CLEAR
