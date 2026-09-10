@@ -16,18 +16,21 @@ const { signupSchema, loginSchema } = require("../validator/auth.validate");
 
 const authController = require("../controllers/auth.controller");
 
+// ── Public Authentication Routes ──────────────────────────────────────
 router.post(
   "/signup",
   // authLimiter,
   validateRequest(signupSchema),
   authController.signup,
 );
+
 router.post(
   "/login",
   // authLimiter,
   validateRequest(loginSchema),
   authController.login,
 );
+
 router.post(
   "/refresh-token",
   // authLimiter,
@@ -35,14 +38,34 @@ router.post(
   authController.refreshToken,
 );
 
+// ── Authenticated User Profile Routes ─────────────────────────────────
+// Both use authenticateAccessToken so only the token owner's id (req.user.id) is used
 router.get(
-  "/my-session",
+  "/profile",
   authenticateAccessToken,
-  // checkTokenBlacklist,
-  // checkUserBlockedStatus,
+  checkTokenBlacklist,
+  checkUserBlockedStatus,
   authController.getMyProfile,
 );
 
+router.put(
+  "/profile",
+  authenticateAccessToken,
+  checkTokenBlacklist,
+  checkUserBlockedStatus,
+  authController.updateMyProfile,
+);
+
+// Retained for backward-compatibility with session verification
+router.get(
+  "/my-session",
+  authenticateAccessToken,
+  checkTokenBlacklist,
+  checkUserBlockedStatus,
+  authController.getMyProfile,
+);
+
+// ── Logout Routes ─────────────────────────────────────────────────────
 router.post(
   "/logout",
   authenticateAccessToken,
@@ -58,6 +81,7 @@ router.post(
   authController.logoutAllSessions,
 );
 
+// ── Administrative Routes ─────────────────────────────────────────────
 router.post(
   "/admin/users/:id/block",
   authenticateAccessToken,

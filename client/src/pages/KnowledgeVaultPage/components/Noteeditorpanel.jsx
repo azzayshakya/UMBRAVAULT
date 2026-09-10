@@ -90,7 +90,6 @@ const NoteEditorPanel = ({ noteId, onClose, onDeleted }) => {
             minHeight: 340,
             borderRadius: 8,
             border: '1px dashed rgba(57, 255, 106, 0.15)',
-            background: 'rgba(6, 18, 10, 0.4)',
             gap: 12,
           }}
         >
@@ -112,7 +111,7 @@ const NoteEditorPanel = ({ noteId, onClose, onDeleted }) => {
             onChange={(e) => saveDebounced({ title: e.target.value })}
             placeholder="Note title..."
             style={{
-              background: 'rgba(6, 18, 10, 0.6)',
+              // background: 'rgba(6, 18, 10, 0.6)',
               border: '1px solid var(--term-border)',
               color: 'var(--color-secondary-hover)',
               fontWeight: 600,
@@ -142,7 +141,6 @@ const NoteEditorPanel = ({ noteId, onClose, onDeleted }) => {
             placeholder="Write your notes here (markdown supported)..."
             autoSize={{ minRows: 15, maxRows: 25 }}
             style={{
-              background: 'rgba(6, 18, 10, 0.6)',
               border: '1px solid var(--term-border)',
               color: 'var(--color-secondary-hover)',
               fontSize: 13,

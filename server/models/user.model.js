@@ -16,13 +16,14 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true,
-      // uppercase: true,
+      // trim: true,
+      // lowercase: true,
       index: true,
     },
     email: {
       type: String,
       required: [true, "Email is required"],
-      unique: true, // creates a unique index — fast lookup + prevents duplicate signups
+      unique: true,
       trim: true,
       lowercase: true,
       match: [/^\S+@\S+\.\S+$/, "Please enter a valid email"],
@@ -31,7 +32,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: [true, "Password is required"],
       minlength: 8,
-      select: false, // never returned by default on .find()/.findOne() — must opt in with .select("+password")
+      select: false,
     },
     role: {
       type: String,
@@ -40,22 +41,42 @@ const userSchema = new mongoose.Schema(
     },
     isBlocked: {
       type: Boolean,
-      default: false, // persisted source of truth; Redis "blocked_user:*" key is the fast-path cache of this
+      default: false,
+    },
+
+    // ── Profile Extension Keys ──────────────────────────────────────────
+    avatar: {
+      type: String,
+      default: "/images/global/my-profile.jpg",
+      trim: true,
+    },
+    phone: {
+      type: String,
+      trim: true,
+      default: "",
+    },
+    bio: {
+      type: String,
+      trim: true,
+      maxlength: [300, "Bio cannot exceed 300 characters"],
+      default: "",
+    },
+    interests: {
+      type: [String],
+      default: [],
     },
   },
-  { timestamps: true }, // adds createdAt / updatedAt automatically
+  { timestamps: true },
 );
 
 // ── Auto-hash password before saving ────────────────────────────────
-// Runs on User.create() AND user.save() — so no code path can accidentally
-// save a plaintext password, regardless of which controller touches it.
 userSchema.pre("save", async function () {
   if (!this.isModified("password")) return;
 
   this.password = await bcrypt.hash(this.password, SALT_ROUNDS);
 });
-// ── Instance method: compare a plaintext candidate against the stored hash ──
-// Keeps bcrypt logic out of controllers — controllers just call user.comparePassword(pw).
+
+// ── Instance method: compare password hash ──────────────────────────
 userSchema.methods.comparePassword = async function comparePassword(
   candidatePassword,
 ) {

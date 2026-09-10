@@ -14,6 +14,14 @@ const getMySession = () => {
   return axiosInstance.get(`${baseAPIURL}/auth/my-session`).then((res) => res.data)
 }
 
+const getUserProfile = () => {
+  return axiosInstance.get(`${baseAPIURL}/auth/profile`).then((res) => res.data)
+}
+
+const updateUserProfile = (payload) => {
+  return axiosInstance.put(`${baseAPIURL}/auth/profile`, payload).then((res) => res.data)
+}
+
 const refreshSession = () => {
   const session = localStorage.getItem(StorageKey.USER_SESSION)
   const data = session ? JSON.parse(session) : null
@@ -28,8 +36,16 @@ const refreshSession = () => {
       return null
     })
 }
+
 const logoffFromCurrentSession = () => {
   return axiosInstance.put(`${baseAPIURL}/logoff`).then((res) => res.data)
 }
 
-export { getMySession, logoffFromCurrentSession, refreshSession, terminateUserSessions }
+export {
+  getMySession,
+  getUserProfile,
+  logoffFromCurrentSession,
+  refreshSession,
+  terminateUserSessions,
+  updateUserProfile,
+}

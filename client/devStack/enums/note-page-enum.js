@@ -26,12 +26,11 @@ export const TOPIC_CARD_PALETTE = [
   { accent: '#f97316', bg: 'rgba(249, 115, 22, 0.08)' },
   { accent: '#ec4899', bg: 'rgba(236, 72, 153, 0.08)' },
 ]
-
 export const NOTE_CARD_PALETTE = [
-  { bg: '#e9d873', text: '#2a2205' },
-  { bg: '#9fe6a0', text: '#0c2b0d' },
-  { bg: '#f2a6c1', text: '#3a0f22' },
-  { bg: '#9cd6f0', text: '#082430' },
-  { bg: '#c9b6f2', text: '#26123f' },
-  { bg: '#f0b978', text: '#3a1e04' },
+  { bg: '#e0f2fe', text: '#0369a1', border: '#bae6fd' }, // Sky Blue
+  { bg: '#dcfce7', text: '#15803d', border: '#bbf7d0' }, // Mint / Emerald
+  { bg: '#f3e8ff', text: '#7e22ce', border: '#e9d5ff' }, // Iris / Lavender
+  { bg: '#ffe4e6', text: '#be123c', border: '#fecdd3' }, // Rose Tint
+  { bg: '#ccfbf1', text: '#0f766e', border: '#99f6e4' }, // Modern Teal
+  { bg: '#fef3c7', text: '#b45309', border: '#fde68a' }, // Warm Amber (Balanced)
 ]

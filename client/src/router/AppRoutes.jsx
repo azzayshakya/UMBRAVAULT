@@ -28,10 +28,8 @@ const flattenMenu = (items) =>
 
 const AppRoutes = () => {
   const { user } = useSelector((state) => state.user)
-
   const flatMenu = flattenMenu(MENU_CONFIG)
 
-  // Grab the component for the dynamic note page
   const NotePageElement = ROUTE_ELEMENTS[MENU_KEYS.KNOWLEDGE_VAULT_NOTE]
 
   return (

@@ -10,11 +10,11 @@ import { useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 
-import NoteCard from '../components/Notecard'
-import NoteEditorPanel from '../components/Noteeditorpanel'
 import { useTopicNotesApi } from '../hooks/Usetopicnotesapi'
 
 import NewNoteModal from './NewTopicModal'
+import NoteCard from './Notecard'
+import NoteEditorPanel from './Noteeditorpanel'
 
 const TopicVaultPage = () => {
   const { topicId } = useParams()
@@ -112,7 +112,7 @@ const TopicVaultPage = () => {
         <Input
           prefix={
             <SearchOutlined
-              style={{ color: isDark ? 'var(--term-green)' : 'var(--color-primary)' }}
+            // style={{ color: isDark ? 'var(--term-green)' : 'var(--color-primary)' }}
             />
           }
           placeholder="Search notes in this topic..."
@@ -123,8 +123,8 @@ const TopicVaultPage = () => {
             width: isMobile ? '100%' : 280,
             borderRadius: 'var(--radius, 8px)',
             border: isDark ? '1px solid var(--term-border)' : '1px solid var(--color-border)',
-            background: 'var(--color-bg-container)',
-            color: 'var(--color-text)',
+            // background: 'var(--color-bg-container)',
+            // color: 'var(--color-text)',
             fontFamily: 'var(--term-font, monospace)',
           }}
         />

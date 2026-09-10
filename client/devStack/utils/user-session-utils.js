@@ -15,7 +15,6 @@ const getUserSessionLocally = () => {
 const setUserSessionLocally = (userSession) => {
   const { user = {}, accessToken, refreshToken, deviceId } = userSession
   const existing = getUserSessionLocally()
-
   const sessionToSave = {
     name: user.name,
     username: user.username,
@@ -32,7 +31,6 @@ const setUserSessionLocally = (userSession) => {
 
   localStorage.setItem(StorageKey.USER_SESSION, JSON.stringify(sessionToSave))
   setUserPreferencesLocally()
-
   return sessionToSave
 }
 

@@ -27,13 +27,20 @@ function sendTokens(res, { accessToken, refreshToken, deviceId }) {
   return { accessToken, refreshToken };
 }
 
-function toSafeUser(user) {
+function toProfileUser(user) {
   return {
+    _id: user._id,
     id: user._id,
     name: user.name,
     email: user.email,
-    role: user.role,
     username: user.username,
+    role: user.role,
+    avatar: user.avatar || "/images/global/my-profile.jpg",
+    phone: user.phone || "",
+    bio: user.bio || "",
+    interests: user.interests || [],
+    createdAt: user.createdAt,
+    updatedAt: user.updatedAt,
   };
 }
 
@@ -71,7 +78,7 @@ const signup = async (req, res) => {
     .json(
       ApiResponse(
         201,
-        { user: toSafeUser(user), deviceId, accessToken, refreshToken },
+        { user: toProfileUser(user), deviceId, accessToken, refreshToken },
         "Account created successfully",
       ),
     );
@@ -99,7 +106,7 @@ const login = async (req, res) => {
     ApiResponse(
       200,
       {
-        user: toSafeUser(user),
+        user: toProfileUser(user),
         accessToken,
         refreshToken,
         deviceId: finalDeviceId,
@@ -126,19 +133,57 @@ const refreshToken = async (req, res) => {
     .json(
       ApiResponse(
         200,
-        { user: toSafeUser(user), accessToken, refreshToken, deviceId },
+        { user: toProfileUser(user), accessToken, refreshToken, deviceId },
         "Token refreshed",
       ),
     );
 };
 
+// GET /api/v1/auth/profile - Fetches strictly the authenticated caller's profile
 const getMyProfile = async (req, res) => {
   const user = await User.findById(req.user.id);
   if (!user) throw ApiError.notFound("User not found");
 
   return res
     .status(200)
-    .json(ApiResponse(200, { user: toSafeUser(user) }, "Profile fetched"));
+    .json(
+      ApiResponse(
+        200,
+        { user: toProfileUser(user) },
+        "Profile fetched successfully",
+      ),
+    );
+};
+
+// PUT or PATCH /api/v1/auth/profile - Updates strictly the authenticated caller's profile
+const updateMyProfile = async (req, res) => {
+  const { name, phone, bio, interests, avatar } = req.body;
+
+  // Build clean payload with strict whitelisting
+  const updatePayload = {};
+  if (name !== undefined) updatePayload.name = name.trim();
+  if (phone !== undefined) updatePayload.phone = phone.trim();
+  if (bio !== undefined) updatePayload.bio = bio.trim();
+  if (interests !== undefined && Array.isArray(interests)) {
+    updatePayload.interests = interests
+      .map((item) => String(item).trim())
+      .filter(Boolean);
+  }
+  if (avatar !== undefined) updatePayload.avatar = avatar.trim();
+
+  const user = await User.findByIdAndUpdate(req.user.id, updatePayload, {
+    new: true,
+    runValidators: true,
+  });
+
+  if (!user) throw ApiError.notFound("User not found");
+
+  logger.info(`Profile updated for user: ${user._id}`);
+  return res
+    .status(200)
+    .json(
+      ApiResponse(200, toProfileUser(user), "Profile updated successfully"),
+    );
 };
 
 const logout = async (req, res) => {
@@ -219,6 +264,7 @@ module.exports = {
   login,
   refreshToken,
   getMyProfile,
+  updateMyProfile,
   logout,
   logoutAllSessions,
   blockUser,
