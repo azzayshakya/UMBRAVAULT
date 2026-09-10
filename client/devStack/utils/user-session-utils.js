@@ -54,7 +54,7 @@ const setUserPreferencesLocally = (userPreferences) => {
 
 const removeUserSessionLocally = () => {
   localStorage.removeItem(StorageKey.USER_SESSION)
-  localStorage.removeItem(StorageKey.USER_PREFERENCES)
+  // localStorage.removeItem(StorageKey.USER_PREFERENCES)
 }
 
 export {
