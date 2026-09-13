@@ -1,11 +1,11 @@
 import { MoonOutlined, SunOutlined, MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons'
 import HeaderUserProfile from '@devStack/components/userProfile/HeaderUserProfile'
 import { Theme } from '@devStack/constants/theme-constants'
-import { toggleTheme } from '@devStack/store/preferenceSlice'
+import { useTheme } from '@devStack/hooks/useTheme'
 import { resolveTheme } from '@devStack/utils/theme-utils'
 import { useIsMobile } from '@devStack/utils/useIsMobile'
 import { Breadcrumb, Layout } from 'antd'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 
 const { Header } = Layout
 
@@ -15,13 +15,12 @@ export default function AdminHeaderComponent({
   collapsed,
   breadcrumbItems,
 }) {
-  const dispatch = useDispatch()
   const isMobile = useIsMobile()
   const theme = useSelector((s) => s.preference.theme)
   const isDark = resolveTheme(theme) === Theme.DARK
-
+  const { toggleTheme } = useTheme()
   const handleToggleTheme = () => {
-    dispatch(toggleTheme())
+    toggleTheme()
   }
 
   return (
@@ -37,6 +36,7 @@ export default function AdminHeaderComponent({
           position: 'sticky',
           top: 0,
           zIndex: 1,
+          border: '2px red solid',
         }}
       >
         <div

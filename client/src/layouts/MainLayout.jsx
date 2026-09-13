@@ -4,8 +4,9 @@ import useMenu from '@devStack/components/sidebar/hooks/UseMenu'
 import { buildBreadcrumbs } from '@devStack/components/sidebar/utilities/breadCrumbBuilder'
 import { buildMenuItems } from '@devStack/components/sidebar/utilities/MenuBuilder'
 import SidebarQuoteCard from '@devStack/components/Sidebarquotecard'
-import { App_Name, App_ShortName } from '@devStack/constants'
-import { setSidebarCollapsed } from '@devStack/store/preferenceSlice'
+import { App_Name } from '@devStack/constants'
+import { useTheme } from '@devStack/hooks/useTheme'
+import { sidebarCollapseChanged } from '@devStack/store/preferenceSlice'
 import { useIsMobile } from '@devStack/utils/useIsMobile'
 import { ConfigProvider, Layout, Menu, Typography } from 'antd'
 import { useMemo, useEffect } from 'react'
@@ -15,45 +16,56 @@ import { Outlet } from 'react-router-dom'
 const { Sider } = Layout
 const { Text } = Typography
 
+// Matches Ant Design's own Sider width-transition curve so the content
+// pane and sidebar move in lockstep instead of drifting apart.
+const SIDER_TRANSITION = 'margin-left 0.2s cubic-bezier(0.2, 0, 0, 1)'
+
+const antdMenuTheme = {
+  components: {
+    Menu: {
+      itemSelectedColor: 'var(--color-primary)',
+      itemSelectedBg: 'var(--color-bg-hover)',
+      itemHoverColor: 'var(--color-primary)',
+      itemActiveBg: 'var(--color-bg-hover)',
+      darkItemSelectedColor: 'var(--color-primary)',
+      darkItemSelectedBg: 'var(--color-bg-hover)',
+      darkItemHoverColor: 'var(--color-primary)',
+      darkItemHoverBg: 'var(--color-bg-hover)',
+    },
+  },
+}
+
 const MainLayout = ({ userRole, userData = null }) => {
   const dispatch = useDispatch()
-
-  const collapsed = useSelector((s) => s.preference.sidebarCollapsed)
-  const scheme = useSelector((s) => s.preference.colorScheme)
-
   const isMobile = useIsMobile()
 
+  const collapsed = useSelector((s) => s.preference.sidebarCollapsed)
+  const { resolvedTheme } = useTheme() // 'light' | 'dark' — 'system' already resolved
+  const isDark = resolvedTheme === 'dark'
+  console.log('babu', isDark)
   useEffect(() => {
-    if (isMobile) {
-      dispatch(setSidebarCollapsed(true))
-    }
+    if (isMobile) dispatch(sidebarCollapseChanged(true))
   }, [isMobile, dispatch])
 
-  const userPreference = useSelector((s) => s.preference)
-  const isDark = userPreference.colorScheme === 'dark'
   const { selectedKeys, openKeys, handleMenuClick, handleOpenChange } = useMenu({
     defaultSelectedKey: 'dashboard',
     persistState: true,
   })
-  const image = '/images/global/my-profile.jpg'
-  const menuItems = useMemo(() => {
-    return buildMenuItems(MENU_CONFIG, userRole)
-  }, [userRole])
 
-  const breadcrumbItems = useMemo(() => {
-    return buildBreadcrumbs(selectedKeys[0])
-  }, [selectedKeys])
+  const menuItems = useMemo(() => buildMenuItems(MENU_CONFIG, userRole), [userRole])
+  const breadcrumbItems = useMemo(() => buildBreadcrumbs(selectedKeys[0]), [selectedKeys])
 
-  const handleCollapse = (value) => {
-    dispatch(setSidebarCollapsed(value))
-  }
+  const handleCollapse = (value) => dispatch(sidebarCollapseChanged(value))
+
+  const showBrand = !collapsed && !isMobile
+
   const avatarFrameStyle = {
     position: 'relative',
     width: 36,
     height: 36,
     flexShrink: 0,
     borderRadius: '50%',
-    border: '1.5px solid var(--color-primary, var(--color-primary))',
+    border: '1.5px solid var(--color-primary)',
     boxShadow: '0 0 10px rgba(34, 224, 122, 0.4)',
     overflow: 'hidden',
     background: 'var(--color-bg-container)',
@@ -64,6 +76,16 @@ const MainLayout = ({ userRole, userData = null }) => {
     height: '100%',
     objectFit: 'cover',
     display: 'block',
+  }
+
+  const brandTextStyle = {
+    color: 'var(--color-primary)',
+    fontSize: '20px',
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    transition: 'opacity 0.15s ease',
+    opacity: showBrand ? 1 : 0,
   }
 
   return (
@@ -84,13 +106,7 @@ const MainLayout = ({ userRole, userData = null }) => {
           zIndex: 100,
         }}
       >
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            height: '100vh',
-          }}
-        >
+        <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
           <div
             style={{
               height: 64,
@@ -103,13 +119,14 @@ const MainLayout = ({ userRole, userData = null }) => {
               padding: collapsed || isMobile ? '0' : '0 16px',
               borderRadius: 'var(--radius)',
               flexShrink: 0,
+              transition: 'padding 0.2s ease',
             }}
           >
             <div style={avatarFrameStyle}>
-              <img style={avatarImgStyle} src={image} alt={'user avatar'} />
+              <img style={avatarImgStyle} src="/images/global/my-profile.jpg" alt="user avatar" />
             </div>
 
-            {!collapsed && !isMobile && (
+            {showBrand && (
               <Text
                 strong
                 style={{
@@ -125,21 +142,8 @@ const MainLayout = ({ userRole, userData = null }) => {
             )}
           </div>
 
-          <div
-            style={{
-              flex: 1,
-              display: 'flex',
-              flexDirection: 'column',
-              overflow: 'hidden',
-            }}
-          >
-            <div
-              style={{
-                flex: 1,
-                overflowY: 'auto',
-                overflowX: 'hidden',
-              }}
-            >
+          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+            <div style={{ flex: 1, overflowY: 'auto', overflowX: 'hidden' }}>
               <ConfigProvider
                 theme={{
                   components: {
@@ -158,17 +162,14 @@ const MainLayout = ({ userRole, userData = null }) => {
                 }}
               >
                 <Menu
-                  theme={scheme === 'dark' ? 'dark' : 'light'}
+                  theme={isDark ? 'dark' : 'light'}
                   mode="inline"
                   selectedKeys={selectedKeys}
                   openKeys={openKeys}
                   items={menuItems}
                   onClick={handleMenuClick}
                   onOpenChange={handleOpenChange}
-                  style={{
-                    background: 'transparent',
-                    borderInlineEnd: 'none',
-                  }}
+                  style={{ background: 'transparent', borderInlineEnd: 'none' }}
                 />
               </ConfigProvider>
             </div>
@@ -183,7 +184,7 @@ const MainLayout = ({ userRole, userData = null }) => {
       <Layout
         style={{
           marginLeft: collapsed ? 80 : 250,
-          transition: 'margin-left 0.2s ease',
+          transition: SIDER_TRANSITION,
           minHeight: '100vh',
           display: 'flex',
           flexDirection: 'column',
@@ -197,14 +198,7 @@ const MainLayout = ({ userRole, userData = null }) => {
           breadcrumbItems={breadcrumbItems}
         />
 
-        <div
-          style={{
-            background: 'var(--color-bg)',
-            // borderRadius: 'var(--radius)',
-            padding: '10px',
-            flex: 1,
-          }}
-        >
+        <div style={{ background: 'var(--color-bg)', padding: '10px', flex: 1 }}>
           <Outlet />
         </div>
       </Layout>

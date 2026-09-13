@@ -5,5 +5,4 @@ export const Theme = Object.freeze({
 })
 
 export const PREFS_STORAGE_KEY = 'user_preferences'
-
 export const SYSTEM_DARK_QUERY = '(prefers-color-scheme: dark)'

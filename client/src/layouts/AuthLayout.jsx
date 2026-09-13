@@ -1,12 +1,6 @@
-import { Theme } from '@devStack/constants/theme-constants'
-import { toggleTheme } from '@devStack/store/preferenceSlice'
-import { resolveTheme } from '@devStack/utils/theme-utils'
-import { useDispatch, useSelector } from 'react-redux'
-import { Outlet, NavLink, useNavigate } from 'react-router-dom'
+import { Outlet } from 'react-router-dom'
 
 const AuthLayout = () => {
-  const theme = useSelector((state) => state.preference?.theme)
-  const isDark = resolveTheme(theme) === Theme.DARK
   return (
     <div
       style={{

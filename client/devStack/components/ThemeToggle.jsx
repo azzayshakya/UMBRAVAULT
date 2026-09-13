@@ -1,7 +1,4 @@
-import { Theme } from '@devStack/constants/theme-constants'
-import { toggleTheme } from '@devStack/store/preferenceSlice'
-import { resolveTheme } from '@devStack/utils/theme-utils'
-import { useDispatch, useSelector } from 'react-redux'
+import { useTheme } from '@devStack/hooks/useTheme'
 
 const SunIcon = () => (
   <svg
@@ -41,33 +38,14 @@ const MoonIcon = () => (
   </svg>
 )
 
-const S = {
-  btn: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '34px',
-    height: '34px',
-    borderRadius: '8px',
-    border: 'none',
-    cursor: 'pointer',
-    background: 'var(--toggle-bg)',
-    color: 'var(--toggle-icon-color)',
-    flexShrink: 0,
-  },
-}
-
 export default function ThemeToggle() {
-  const dispatch = useDispatch()
-  const theme = useSelector((state) => state.preference.theme)
-
-  const activeTheme = resolveTheme(theme)
-  const isDark = activeTheme === Theme.DARK
+  const { resolvedTheme, toggleTheme } = useTheme()
+  const isDark = resolvedTheme === 'dark'
 
   return (
     <button
-      onClick={() => dispatch(toggleTheme())}
-      style={S.btn}
+      onClick={toggleTheme}
+      className="flex h-[34px] w-[34px] shrink-0 items-center justify-center rounded-lg border-none bg-[var(--toggle-bg)] text-[var(--toggle-icon-color)] cursor-pointer"
       title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
       aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
     >
