@@ -1,10 +1,10 @@
-import { useState } from 'react'
-import { Modal, Upload, Input, Select, Progress } from 'antd'
 import { InboxOutlined, CloudUploadOutlined, CloseOutlined } from '@ant-design/icons'
 import Loader from '@devStack/components/spinners/Loader'
-import { useSelector } from 'react-redux'
 import { Theme } from '@devStack/constants/theme-constants'
 import { resolveTheme } from '@devStack/utils/theme-utils'
+import { Modal, Upload, Input, Select, Progress } from 'antd'
+import { useState } from 'react'
+import { useSelector } from 'react-redux'
 
 const { Dragger } = Upload
 

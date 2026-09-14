@@ -30,6 +30,7 @@ const Dashboard = () => {
   return (
     <div style={pageStyle}>
       {/* Top Banner with Skeleton fallback */}
+      {/* Top Banner with Cross-Fade */}
       <div
         style={{
           position: 'relative',
@@ -37,21 +38,39 @@ const Dashboard = () => {
           border: '1px solid var(--term-border)',
           overflow: 'hidden',
           width: '100%',
-          minHeight: imageLoaded ? 'auto' : 160,
+          aspectRatio: '16 / 4', // Preserves exact banner proportions to eliminate layout shifts
+          minHeight: 160,
           background: 'var(--term-bg-panel, #06120a)',
         }}
       >
-        {!imageLoaded && (
-          <Skeleton width="100%" height={160} borderRadius={0} style={{ display: 'block' }} />
-        )}
+        {/* Skeleton stays pinned in the background until the image fully fades in */}
+        <div
+          style={{
+            position: 'absolute',
+            inset: 0,
+            width: '100%',
+            height: '100%',
+            opacity: imageLoaded ? 0 : 1,
+            pointerEvents: 'none',
+            transition: 'opacity 0.25s ease-out',
+            zIndex: 1,
+          }}
+        >
+          <Skeleton width="100%" height="100%" borderRadius={0} style={{ display: 'block' }} />
+        </div>
 
+        {/* Image sits over the skeleton and fades in smoothly */}
         <img
           src={DashboardHeaderUrl}
           alt="Dashboard Header"
+          decoding="async"
           onLoad={() => setImageLoaded(true)}
           style={{
+            position: 'relative',
+            zIndex: 2,
             width: '100%',
-            height: 'auto',
+            height: '100%',
+            // objectFit: 'cover',
             display: 'block',
             opacity: imageLoaded ? 1 : 0,
             transition: 'opacity 0.3s ease-in-out',

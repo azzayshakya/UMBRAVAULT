@@ -42,9 +42,10 @@ const UserManagementPage = () => {
     )
   }, [users, search])
 
-  useEffect(() => {
+  const handleSearchChange = (value) => {
+    setSearch(value)
     setParamObj((prev) => (prev.offset === 0 ? prev : { ...prev, offset: 0 }))
-  }, [search])
+  }
 
   const actionBtnStyle = {
     width: 28,
@@ -185,7 +186,7 @@ const UserManagementPage = () => {
               placeholder="Search users..."
               value={search}
               allowClear
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={(e) => handleSearchChange(e.target.value)}
               style={{
                 width: isMobile ? '100%' : 240,
                 borderRadius: 'var(--radius, 8px)',

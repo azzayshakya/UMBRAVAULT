@@ -36,7 +36,6 @@ export default function AdminHeaderComponent({
           position: 'sticky',
           top: 0,
           zIndex: 1,
-          border: '2px red solid',
         }}
       >
         <div

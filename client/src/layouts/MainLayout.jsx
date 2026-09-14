@@ -42,7 +42,6 @@ const MainLayout = ({ userRole, userData = null }) => {
   const collapsed = useSelector((s) => s.preference.sidebarCollapsed)
   const { resolvedTheme } = useTheme() // 'light' | 'dark' — 'system' already resolved
   const isDark = resolvedTheme === 'dark'
-  console.log('babu', isDark)
   useEffect(() => {
     if (isMobile) dispatch(sidebarCollapseChanged(true))
   }, [isMobile, dispatch])

@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import {
   UserOutlined,
   EditOutlined,
@@ -22,14 +21,15 @@ import {
   FileTextOutlined,
   InfoCircleOutlined,
 } from '@ant-design/icons'
-import { Tag, Tooltip, message } from 'antd'
-import { useSelector } from 'react-redux'
-import PageHeader from '@devStack/components/PageHeader'
-import { StatCard } from '@devStack/components/StateCard'
-import { Skeleton } from '@devStack/components/Skelton/Skeleton'
 import EmptyState from '@devStack/components/EmptyState/EmptyState'
+import PageHeader from '@devStack/components/PageHeader'
+import { Skeleton } from '@devStack/components/Skelton/Skeleton'
+import { StatCard } from '@devStack/components/StateCard'
 import { Theme } from '@devStack/constants/theme-constants'
 import { resolveTheme } from '@devStack/utils/theme-utils'
+import { Tag, Tooltip, message } from 'antd'
+import { useState } from 'react'
+import { useSelector } from 'react-redux'
 
 import { EditProfileForm } from './components/EditProfileForm'
 import { useUserProfileApi } from './hooks/useUserProfileApi'

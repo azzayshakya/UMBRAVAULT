@@ -1,8 +1,8 @@
-import { useState } from 'react'
-import { Modal, Upload, Progress, message } from 'antd'
 import { InboxOutlined, CloudUploadOutlined, CheckCircleOutlined } from '@ant-design/icons'
-import Loader from '@devStack/components/spinners/Loader'
 import { uploadFileToStorage } from '@devStack/apiServices/asset-vault.apis'
+import Loader from '@devStack/components/spinners/Loader'
+import { Modal, Upload, Progress, message } from 'antd'
+import { useState } from 'react'
 
 const { Dragger } = Upload
 

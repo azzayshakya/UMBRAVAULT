@@ -1,4 +1,3 @@
-import { Drawer, Tag, Modal, message } from 'antd'
 import {
   DownloadOutlined,
   CopyOutlined,
@@ -6,9 +5,11 @@ import {
   DeleteOutlined,
   FileTextOutlined,
 } from '@ant-design/icons'
-import { useSelector } from 'react-redux'
 import { Theme } from '@devStack/constants/theme-constants'
 import { resolveTheme } from '@devStack/utils/theme-utils'
+import { Drawer, Tag, Modal, message } from 'antd'
+import { useSelector } from 'react-redux'
+
 import { ASSET_STATUS_BADGES } from '../constants/asset-vault.constants'
 
 export default function AssetDetailsDrawer({ asset, open, onClose, onDelete }) {

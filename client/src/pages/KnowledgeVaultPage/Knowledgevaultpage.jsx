@@ -141,7 +141,7 @@ const KnowledgeVaultPage = () => {
         <StatCard
           icon={<CalendarOutlined />}
           label="LAST UPDATED"
-          value={stats?.lastUpdated ? 'Recently' : '—'}
+          value={stats?.lastUpdated ? 'NA' : '—'}
           color="#f5c542"
           loading={statsLoading}
         />
