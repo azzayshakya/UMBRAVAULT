@@ -2,12 +2,11 @@ import { PlusOutlined, SearchOutlined, FolderOpenOutlined } from '@ant-design/ic
 import EmptyState from '@devStack/components/EmptyState/EmptyState'
 import PageHeader from '@devStack/components/PageHeader'
 import { Skeleton } from '@devStack/components/Skelton/Skeleton'
-import { Theme } from '@devStack/store/theme/utils/theme-constants'
-import { resolveTheme } from '@devStack/store/theme/utils/theme-utils'
 import { useIsMobile } from '@devStack/hooks/useIsMobile'
+import { useTheme } from '@devStack/store/theme/hooks/useTheme'
+import { Theme } from '@devStack/store/theme/utils/theme-constants'
 import { Input, message, Modal } from 'antd'
 import { useMemo, useState } from 'react'
-import { useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 
 import { useTopicNotesApi } from '../hooks/Usetopicnotesapi'
@@ -23,8 +22,8 @@ const TopicVaultPage = () => {
   const [selectedNoteId, setSelectedNoteId] = useState(null)
   const [newNoteOpen, setNewNoteOpen] = useState(false)
 
-  const theme = useSelector((s) => s?.preference?.theme)
-  const isDark = resolveTheme(theme) === Theme.DARK
+  const { resolvedTheme } = useTheme()
+  const isDark = resolvedTheme === Theme.DARK
   const isMobile = useIsMobile()
 
   const filters = useMemo(() => ({ search: search || undefined }), [search])

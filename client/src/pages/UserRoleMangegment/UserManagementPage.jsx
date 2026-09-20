@@ -9,13 +9,12 @@ import {
 import ReusableAntdTag from '@devStack/components/AntdTag/ReusableAntdTag'
 import PageHeader from '@devStack/components/PageHeader'
 import CrudTable from '@devStack/components/table/CrudTable'
-import { Theme } from '@devStack/store/theme/utils/theme-constants'
 import { ROLE_BADGE_CONFIG } from '@devStack/enums/user-role-enums'
-import { resolveTheme } from '@devStack/store/theme/utils/theme-utils'
 import { useIsMobile } from '@devStack/hooks/useIsMobile'
+import { useTheme } from '@devStack/store/theme/hooks/useTheme'
+import { Theme } from '@devStack/store/theme/utils/theme-constants'
 import { Input } from 'antd'
-import { useEffect, useMemo, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useMemo, useState } from 'react'
 
 import ChangeRoleModal from './components/ChangeRoleModal'
 import { useUserManagementApi } from './hooks/useUserManagementApi'
@@ -26,8 +25,8 @@ const UserManagementPage = () => {
   const [activeUser, setActiveUser] = useState(null)
   const [paramObj, setParamObj] = useState({ limit: 10, offset: 0, total: 0 })
 
-  const theme = useSelector((s) => s?.preference?.theme)
-  const isDark = resolveTheme(theme) === Theme.DARK
+  const { resolvedTheme } = useTheme()
+  const isDark = resolvedTheme === Theme.DARK
   const isMobile = useIsMobile()
 
   const filteredUsers = useMemo(() => {

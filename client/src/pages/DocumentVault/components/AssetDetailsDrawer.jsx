@@ -5,16 +5,15 @@ import {
   DeleteOutlined,
   FileTextOutlined,
 } from '@ant-design/icons'
+import { useTheme } from '@devStack/store/theme/hooks/useTheme'
 import { Theme } from '@devStack/store/theme/utils/theme-constants'
-import { resolveTheme } from '@devStack/store/theme/utils/theme-utils'
 import { Drawer, Tag, Modal, message } from 'antd'
-import { useSelector } from 'react-redux'
 
 import { ASSET_STATUS_BADGES } from '../constants/asset-vault.constants'
 
 export default function AssetDetailsDrawer({ asset, open, onClose, onDelete }) {
-  const theme = useSelector((s) => s?.preference?.theme)
-  const isDark = resolveTheme(theme) === Theme.DARK
+  const { resolvedTheme } = useTheme()
+  const isDark = resolvedTheme === Theme.DARK
 
   if (!asset) return null
 

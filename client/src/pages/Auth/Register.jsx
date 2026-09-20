@@ -12,18 +12,17 @@ import { CreateAccount } from '@devStack/apiServices/accounts-auth-apis'
 import { handleApiError } from '@devStack/apiServices/utils/handle-api-error'
 import PageHeader from '@devStack/components/PageHeader'
 import Loader from '@devStack/components/spinners/Loader'
+import { useTheme } from '@devStack/store/theme/hooks/useTheme'
 import { Theme } from '@devStack/store/theme/utils/theme-constants'
-import { resolveTheme } from '@devStack/store/theme/utils/theme-utils'
 import { Form, Input, Button, message } from 'antd'
 import { useState } from 'react'
-import { useSelector } from 'react-redux'
 
 const SignupPage = () => {
   const [form] = Form.useForm()
   const [loading, setLoading] = useState(false)
 
-  const theme = useSelector((s) => s?.preference?.theme)
-  const isDark = resolveTheme(theme) === Theme.DARK
+  const { resolvedTheme } = useTheme()
+  const isDark = resolvedTheme === Theme.DARK
 
   const onFinish = async (values) => {
     setLoading(true)
@@ -144,7 +143,7 @@ const SignupPage = () => {
                   fontFamily: 'monospace',
                 }}
               >
-                //
+                <CheckCircleFilled />
               </div>
               <div>
                 <span

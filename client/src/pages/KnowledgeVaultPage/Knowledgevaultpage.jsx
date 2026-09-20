@@ -10,12 +10,11 @@ import EmptyState from '@devStack/components/EmptyState/EmptyState'
 import PageHeader from '@devStack/components/PageHeader'
 import { Skeleton } from '@devStack/components/Skelton/Skeleton'
 import { StatCard } from '@devStack/components/StateCard'
-import { Theme } from '@devStack/store/theme/utils/theme-constants'
-import { resolveTheme } from '@devStack/store/theme/utils/theme-utils'
 import { useIsMobile } from '@devStack/hooks/useIsMobile'
+import { useTheme } from '@devStack/store/theme/hooks/useTheme'
+import { Theme } from '@devStack/store/theme/utils/theme-constants'
 import { Input, message, Modal } from 'antd'
 import { useMemo, useState } from 'react'
-import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 import NewTopicModal from './components/Newnotemodal'
@@ -28,8 +27,8 @@ const KnowledgeVaultPage = () => {
   const [newTopicOpen, setNewTopicOpen] = useState(false)
   const [editingTopic, setEditingTopic] = useState(null)
 
-  const theme = useSelector((s) => s?.preference?.theme)
-  const isDark = resolveTheme(theme) === Theme.DARK
+  const { resolvedTheme } = useTheme()
+  const isDark = resolvedTheme === Theme.DARK
   const isMobile = useIsMobile()
 
   const filters = useMemo(() => ({ search: search || undefined }), [search])

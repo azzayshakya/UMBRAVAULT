@@ -12,11 +12,10 @@ import EmptyState from '@devStack/components/EmptyState/EmptyState'
 import PageHeader from '@devStack/components/PageHeader'
 import { Skeleton } from '@devStack/components/Skelton/Skeleton'
 import { StatCard } from '@devStack/components/StateCard'
-import { Theme } from '@devStack/store/theme/utils/theme-constants'
-import { resolveTheme } from '@devStack/store/theme/utils/theme-utils'
+import { Theme } from '@devStack/enums/theme-enums'
+import { useTheme } from '@devStack/store/theme/hooks/useTheme'
 import { Input, Select, Radio } from 'antd'
 import { useState, useMemo } from 'react'
-import { useSelector } from 'react-redux'
 
 import AssetDetailsDrawer from './components/AssetDetailsDrawer'
 import UploadAssetModal from './components/UploadAssetModal'
@@ -24,8 +23,8 @@ import { ASSET_TYPES, ASSET_CATEGORIES } from './constants/asset-vault.constants
 import { useAssetVaultApi } from './hooks/useAssetVaultApi'
 
 export default function AssetVaultPage() {
-  const theme = useSelector((s) => s?.preference?.theme)
-  const isDark = resolveTheme(theme) === Theme.DARK
+  const { resolvedTheme } = useTheme()
+  const isDark = resolvedTheme === Theme.DARK
 
   const [search, setSearch] = useState('')
   const [typeFilter, setTypeFilter] = useState(undefined)

@@ -25,11 +25,10 @@ import EmptyState from '@devStack/components/EmptyState/EmptyState'
 import PageHeader from '@devStack/components/PageHeader'
 import { Skeleton } from '@devStack/components/Skelton/Skeleton'
 import { StatCard } from '@devStack/components/StateCard'
+import { useTheme } from '@devStack/store/theme/hooks/useTheme'
 import { Theme } from '@devStack/store/theme/utils/theme-constants'
-import { resolveTheme } from '@devStack/store/theme/utils/theme-utils'
 import { Tag, Tooltip, message } from 'antd'
 import { useState } from 'react'
-import { useSelector } from 'react-redux'
 
 import { EditProfileForm } from './components/EditProfileForm'
 import { useUserProfileApi } from './hooks/useUserProfileApi'
@@ -81,8 +80,8 @@ export default function MyProfile() {
   const [isEditing, setIsEditing] = useState(false)
   const { profile, loading, updating, error, refetch, updateProfile } = useUserProfileApi()
 
-  const theme = useSelector((s) => s?.preference?.theme)
-  const isDark = resolveTheme(theme) === Theme.DARK
+  const { resolvedTheme } = useTheme()
+  const isDark = resolvedTheme === Theme.DARK
 
   const handleUpdate = async (formData) => {
     const res = await updateProfile(formData)

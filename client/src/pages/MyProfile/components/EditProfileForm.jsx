@@ -7,18 +7,18 @@ import {
   CameraOutlined,
 } from '@ant-design/icons'
 import Loader from '@devStack/components/spinners/Loader'
+import { useTheme } from '@devStack/store/theme/hooks/useTheme'
 import { Theme } from '@devStack/store/theme/utils/theme-constants'
-import { resolveTheme } from '@devStack/store/theme/utils/theme-utils'
 import { Form, Input, Tag } from 'antd'
 import { useState, useMemo } from 'react'
-import { useSelector } from 'react-redux'
 
 import { AvatarUploadModal } from './AvatarUploadModal'
 
 export const EditProfileForm = ({ initialValues, onSubmit, onCancel, submitting }) => {
   const [form] = Form.useForm()
-  const theme = useSelector((s) => s?.preference?.theme)
-  const isDark = resolveTheme(theme) === Theme.DARK
+
+  const { resolvedTheme } = useTheme()
+  const isDark = resolvedTheme === Theme.DARK
 
   // Track editable form values in real-time
   const watchedValues = Form.useWatch([], form)

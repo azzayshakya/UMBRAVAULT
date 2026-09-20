@@ -14,19 +14,18 @@ import ReusableAntdTag from '@devStack/components/AntdTag/ReusableAntdTag'
 import PageHeader from '@devStack/components/PageHeader'
 import { StatCard } from '@devStack/components/StateCard'
 import CrudTable from '@devStack/components/table/CrudTable'
-import { Theme } from '@devStack/store/theme/utils/theme-constants'
 import {
   TASK_PRIORITY_BADGE_CONFIG,
   TASK_PRIORITY_OPTIONS,
   TASK_STATUS_BADGE_CONFIG,
   TASK_STATUS_OPTIONS,
 } from '@devStack/enums/task-page-enums'
-import { resolveTheme } from '@devStack/store/theme/utils/theme-utils'
 import { useIsMobile } from '@devStack/hooks/useIsMobile'
+import { useTheme } from '@devStack/store/theme/hooks/useTheme'
+import { Theme } from '@devStack/store/theme/utils/theme-constants'
 import { Input, Select, Tag } from 'antd'
 import dayjs from 'dayjs'
 import { useMemo, useState } from 'react'
-import { useSelector } from 'react-redux'
 
 import NewTaskModal from './components/Newtaskmodal'
 import TaskDetailPanel from './components/Taskdetailpanel'
@@ -41,8 +40,8 @@ const TaskManagementPage = () => {
   const [newTaskOpen, setNewTaskOpen] = useState(false)
   const [paramObj, setParamObj] = useState({ limit: 10, offset: 0, total: 0 })
 
-  const theme = useSelector((s) => s?.preference?.theme)
-  const isDark = resolveTheme(theme) === Theme.DARK
+  const { resolvedTheme } = useTheme()
+  const isDark = resolvedTheme === Theme.DARK
   const isMobile = useIsMobile()
 
   const filters = useMemo(

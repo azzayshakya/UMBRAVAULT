@@ -3,9 +3,7 @@ import HeaderUserProfile from '@devStack/components/userProfile/HeaderUserProfil
 import { useIsMobile } from '@devStack/hooks/useIsMobile'
 import { useTheme } from '@devStack/store/theme/hooks/useTheme'
 import { Theme } from '@devStack/store/theme/utils/theme-constants'
-import { resolveTheme } from '@devStack/store/theme/utils/theme-utils'
 import { Breadcrumb, Layout } from 'antd'
-import { useSelector } from 'react-redux'
 
 const { Header } = Layout
 
@@ -16,8 +14,8 @@ export default function AdminHeaderComponent({
   breadcrumbItems,
 }) {
   const isMobile = useIsMobile()
-  const theme = useSelector((s) => s.preference.theme)
-  const isDark = resolveTheme(theme) === Theme.DARK
+  const { resolvedTheme } = useTheme()
+  const isDark = resolvedTheme === Theme.DARK
   const { toggleTheme } = useTheme()
   const handleToggleTheme = () => {
     toggleTheme()

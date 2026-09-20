@@ -1,17 +1,15 @@
 import { InboxOutlined, CloudUploadOutlined, CloseOutlined } from '@ant-design/icons'
 import Loader from '@devStack/components/spinners/Loader'
+import { useTheme } from '@devStack/store/theme/hooks/useTheme'
 import { Theme } from '@devStack/store/theme/utils/theme-constants'
-import { resolveTheme } from '@devStack/store/theme/utils/theme-utils'
 import { Modal, Upload, Input, Select, Progress } from 'antd'
 import { useState } from 'react'
-import { useSelector } from 'react-redux'
 
 const { Dragger } = Upload
 
 export default function UploadAssetModal({ open, onClose, onUpload, uploading, uploadProgress }) {
-  const theme = useSelector((s) => s?.preference?.theme)
-  const isDark = resolveTheme(theme) === Theme.DARK
-
+  const { resolvedTheme } = useTheme()
+  const isDark = resolvedTheme === Theme.DARK
   const [file, setFile] = useState(null)
   const [name, setName] = useState('')
   const [type, setType] = useState('ui')

@@ -1,9 +1,8 @@
 import { getUserProfile, updateUserProfile } from '@devStack/apiServices/accounts-me-apis'
+import { useTheme } from '@devStack/store/theme/hooks/useTheme'
 import { Theme } from '@devStack/store/theme/utils/theme-constants'
-import { resolveTheme } from '@devStack/store/theme/utils/theme-utils'
 import { message } from 'antd'
 import { useCallback, useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
 
 export const useUserProfileApi = () => {
   const [profile, setProfile] = useState(null)
@@ -11,9 +10,8 @@ export const useUserProfileApi = () => {
   const [updating, setUpdating] = useState(false)
   const [error, setError] = useState(null)
 
-  // ── Theme State Integration ────────────────────────────────────────────────
-  const theme = useSelector((state) => state?.preference?.theme)
-  const isDark = resolveTheme(theme) === Theme.DARK
+  const { resolvedTheme, theme } = useTheme()
+  const isDark = resolvedTheme === Theme.DARK
 
   const fetchProfile = useCallback(async () => {
     setLoading(true)
