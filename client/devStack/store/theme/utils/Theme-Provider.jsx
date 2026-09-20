@@ -1,6 +1,6 @@
 import { useSystemThemeSync } from '@devStack/store/theme/hooks/useSystemThemeSync'
+import getAntdTheme from '@devStack/store/theme/utils/theme-token'
 import { applyThemeToDOM } from '@devStack/store/theme/utils/theme-utils'
-import getAntdTheme from '@devStack/styles/theme-token'
 import { ConfigProvider } from 'antd'
 import { useLayoutEffect } from 'react'
 
