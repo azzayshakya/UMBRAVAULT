@@ -1,4 +1,4 @@
-import { useTheme } from '@devStack/hooks/useTheme'
+import { useTheme } from '@devStack/store/theme/hooks/useTheme'
 
 const SunIcon = () => (
   <svg

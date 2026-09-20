@@ -1,4 +1,4 @@
-import ThemeProvider from '@devStack/constants/Theme-Provider'
+import ThemeProvider from '@devStack/store/theme/utils/Theme-Provider'
 import { store } from '@devStack/store'
 import React from 'react'
 import ReactDOM from 'react-dom/client'

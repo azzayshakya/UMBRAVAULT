@@ -1,9 +1,9 @@
 import { MoonOutlined, SunOutlined, MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons'
 import HeaderUserProfile from '@devStack/components/userProfile/HeaderUserProfile'
-import { Theme } from '@devStack/constants/theme-constants'
-import { useTheme } from '@devStack/hooks/useTheme'
-import { resolveTheme } from '@devStack/utils/theme-utils'
-import { useIsMobile } from '@devStack/utils/useIsMobile'
+import { useIsMobile } from '@devStack/hooks/useIsMobile'
+import { useTheme } from '@devStack/store/theme/hooks/useTheme'
+import { Theme } from '@devStack/store/theme/utils/theme-constants'
+import { resolveTheme } from '@devStack/store/theme/utils/theme-utils'
 import { Breadcrumb, Layout } from 'antd'
 import { useSelector } from 'react-redux'
 

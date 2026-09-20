@@ -1,4 +1,4 @@
-import { Theme, PREFS_STORAGE_KEY, SYSTEM_DARK_QUERY } from '../constants/theme-constants'
+import { Theme, PREFS_STORAGE_KEY, SYSTEM_DARK_QUERY } from './theme-constants'
 const TRANSITION_CLASS = 'theme-transitions-enabled'
 const TRANSITION_DURATION_MS = 200
 let transitionTimeoutId = null

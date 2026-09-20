@@ -1,4 +1,4 @@
-import { useIsMobile } from '@devStack/utils/useIsMobile'
+import { useIsMobile } from '@devStack/hooks/useIsMobile'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 

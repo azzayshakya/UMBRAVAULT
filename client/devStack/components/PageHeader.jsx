@@ -1,5 +1,5 @@
-import { Theme } from '@devStack/constants/theme-constants'
-import { resolveTheme } from '@devStack/utils/theme-utils'
+import { Theme } from '@devStack/store/theme/utils/theme-constants'
+import { resolveTheme } from '@devStack/store/theme/utils/theme-utils'
 import { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'

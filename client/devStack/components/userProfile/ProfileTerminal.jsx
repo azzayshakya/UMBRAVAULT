@@ -3,7 +3,7 @@ import { logOutAllSession, logOutUser } from '@devStack/apiServices/accounts-aut
 import { handleApiError } from '@devStack/apiServices/utils/handle-api-error'
 import { clearUserSession } from '@devStack/store/userSlice'
 import { redirectToLoginUtil } from '@devStack/utils/redirect-utils'
-import { removeUserSessionLocally } from '@devStack/utils/user-session-utils'
+import { removeUserSessionLocally } from '@devStack/store/utils/user-session-utils'
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 

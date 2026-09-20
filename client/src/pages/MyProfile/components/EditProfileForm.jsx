@@ -7,8 +7,8 @@ import {
   CameraOutlined,
 } from '@ant-design/icons'
 import Loader from '@devStack/components/spinners/Loader'
-import { Theme } from '@devStack/constants/theme-constants'
-import { resolveTheme } from '@devStack/utils/theme-utils'
+import { Theme } from '@devStack/store/theme/utils/theme-constants'
+import { resolveTheme } from '@devStack/store/theme/utils/theme-utils'
 import { Form, Input, Tag } from 'antd'
 import { useState, useMemo } from 'react'
 import { useSelector } from 'react-redux'

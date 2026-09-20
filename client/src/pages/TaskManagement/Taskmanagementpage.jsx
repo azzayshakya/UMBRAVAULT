@@ -14,15 +14,15 @@ import ReusableAntdTag from '@devStack/components/AntdTag/ReusableAntdTag'
 import PageHeader from '@devStack/components/PageHeader'
 import { StatCard } from '@devStack/components/StateCard'
 import CrudTable from '@devStack/components/table/CrudTable'
-import { Theme } from '@devStack/constants/theme-constants'
+import { Theme } from '@devStack/store/theme/utils/theme-constants'
 import {
   TASK_PRIORITY_BADGE_CONFIG,
   TASK_PRIORITY_OPTIONS,
   TASK_STATUS_BADGE_CONFIG,
   TASK_STATUS_OPTIONS,
 } from '@devStack/enums/task-page-enums'
-import { resolveTheme } from '@devStack/utils/theme-utils'
-import { useIsMobile } from '@devStack/utils/useIsMobile'
+import { resolveTheme } from '@devStack/store/theme/utils/theme-utils'
+import { useIsMobile } from '@devStack/hooks/useIsMobile'
 import { Input, Select, Tag } from 'antd'
 import dayjs from 'dayjs'
 import { useMemo, useState } from 'react'

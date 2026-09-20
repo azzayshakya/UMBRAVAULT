@@ -1,7 +1,7 @@
 import { createListenerMiddleware } from '@reduxjs/toolkit'
 
-import { saveTheme, saveSidebarCollapsed } from '../../utils/theme-utils'
 import { sidebarCollapseChanged, themeChanged } from '../preferenceSlice'
+import { saveTheme, saveSidebarCollapsed } from '../theme/utils/theme-utils'
 
 export const preferenceMiddleware = createListenerMiddleware()
 

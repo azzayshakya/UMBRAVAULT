@@ -1,6 +1,6 @@
 import { getUserProfile, updateUserProfile } from '@devStack/apiServices/accounts-me-apis'
-import { Theme } from '@devStack/constants/theme-constants'
-import { resolveTheme } from '@devStack/utils/theme-utils'
+import { Theme } from '@devStack/store/theme/utils/theme-constants'
+import { resolveTheme } from '@devStack/store/theme/utils/theme-utils'
 import { message } from 'antd'
 import { useCallback, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'

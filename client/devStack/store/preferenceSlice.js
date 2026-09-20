@@ -71,7 +71,7 @@
 
 import { createSlice } from '@reduxjs/toolkit'
 
-import { getSavedTheme, getSavedSidebarCollapsed } from '../utils/theme-utils'
+import { getSavedTheme, getSavedSidebarCollapsed } from './theme/utils/theme-utils'
 
 const initialState = {
   theme: getSavedTheme(),

@@ -2,7 +2,7 @@ import { themeChanged } from '@devStack/store/preferenceSlice'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { Theme, SYSTEM_DARK_QUERY } from '../constants/theme-constants'
+import { Theme, SYSTEM_DARK_QUERY } from '../utils/theme-constants'
 
 /** Call once near the app root. Re-applies DOM when OS theme flips mid-session. */
 export function useSystemThemeSync() {

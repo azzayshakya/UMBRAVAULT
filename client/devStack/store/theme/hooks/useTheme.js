@@ -2,7 +2,7 @@ import { themeChanged } from '@devStack/store/preferenceSlice'
 import { useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { Theme } from '../constants/theme-constants'
+import { Theme } from '../utils/theme-constants'
 import { resolveTheme } from '../utils/theme-utils'
 
 export function useTheme() {

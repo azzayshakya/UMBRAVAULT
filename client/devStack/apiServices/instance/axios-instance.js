@@ -10,7 +10,7 @@ import {
   getUserSessionLocally,
   removeUserSessionLocally,
   setUserSessionLocally,
-} from '../../utils/user-session-utils'
+} from '../../store/utils/user-session-utils'
 import { refreshSession } from '../accounts-me-apis'
 import { parseApiError } from '../utils/parse-api-error'
 
@@ -96,13 +96,13 @@ axiosInstance.interceptors.response.use(
       case 422:
         return Promise.reject(error)
 
-      case 401:
+      case 401: // Unauthorized: identity unknown or invalid
         message.error(errorMessage)
         removeUserSessionLocally()
         redirectToLoginUtil()
         return Promise.reject(error)
 
-      case 403:
+      case 403: // Forbidden: authenticated, but unauthorized (identity known, but lacking permission).
         message.error(errorMessage)
         return Promise.reject(error)
 

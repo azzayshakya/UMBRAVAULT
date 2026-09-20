@@ -1,11 +1,11 @@
 import { getMySession } from '@devStack/apiServices/accounts-me-apis'
 import { clearUserSession, setUserSession } from '@devStack/store/userSlice'
-import { redirectToLoginUtil } from '@devStack/utils/redirect-utils'
 import {
   isUserSessionValid,
   removeUserSessionLocally,
   setUserSessionLocally,
-} from '@devStack/utils/user-session-utils'
+} from '@devStack/store/utils/user-session-utils'
+import { redirectToLoginUtil } from '@devStack/utils/redirect-utils'
 import { useEffect, useRef, useState } from 'react'
 import { useDispatch } from 'react-redux'
 

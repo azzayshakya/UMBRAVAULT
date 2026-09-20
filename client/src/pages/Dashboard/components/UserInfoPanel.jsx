@@ -6,7 +6,7 @@ import {
   KeyOutlined,
 } from '@ant-design/icons'
 import Loader from '@devStack/components/spinners/Loader'
-import { useIsMobile } from '@devStack/utils/useIsMobile'
+import { useIsMobile } from '@devStack/hooks/useIsMobile'
 import { useSelector } from 'react-redux'
 
 import useUserInfo from '../hooks/useUserInfo'

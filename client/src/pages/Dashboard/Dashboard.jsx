@@ -1,5 +1,5 @@
 import { Skeleton } from '@devStack/components/Skelton/Skeleton'
-import { useIsMobile } from '@devStack/utils/useIsMobile'
+import { useIsMobile } from '@devStack/hooks/useIsMobile'
 import { useState } from 'react'
 
 import CenterBrandText from './components/CenterBrandText'

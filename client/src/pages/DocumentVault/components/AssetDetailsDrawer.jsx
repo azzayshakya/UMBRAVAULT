@@ -5,8 +5,8 @@ import {
   DeleteOutlined,
   FileTextOutlined,
 } from '@ant-design/icons'
-import { Theme } from '@devStack/constants/theme-constants'
-import { resolveTheme } from '@devStack/utils/theme-utils'
+import { Theme } from '@devStack/store/theme/utils/theme-constants'
+import { resolveTheme } from '@devStack/store/theme/utils/theme-utils'
 import { Drawer, Tag, Modal, message } from 'antd'
 import { useSelector } from 'react-redux'
 
