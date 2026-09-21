@@ -41,6 +41,45 @@ const logoffFromCurrentSession = () => {
   return axiosInstance.put(`${baseAPIURL}/logoff`).then((res) => res.data)
 }
 
+// ── Password Management & Recovery APIs ───────────────────────────────
+
+// POST /api/auth/change-password
+const updatePassword = (payload) => {
+  return axiosInstance.post(`${baseAPIURL}/auth/change-password`, payload).then((res) => res.data)
+}
+
+// POST /api/auth/otp/send
+const requestPasswordReset = (payload) => {
+  return axiosInstance
+    .post(`${baseAPIURL}/auth/otp/send`, {
+      email: payload.email,
+      purpose: 'forgot-password',
+    })
+    .then((res) => res.data)
+}
+
+// POST /api/auth/forgot-password/verify-code
+const verifyRecoveryOtp = (payload) => {
+  return axiosInstance
+    .post(`${baseAPIURL}/auth/forgot-password/verify-code`, payload)
+    .then((res) => res.data)
+}
+
+// POST /api/auth/reset-password
+const executePasswordReset = (payload) => {
+  return axiosInstance.post(`${baseAPIURL}/auth/reset-password`, payload).then((res) => res.data)
+}
+
+// POST /api/auth/verify-email
+const verifyEmailOtp = (payload) => {
+  return axiosInstance.post(`${baseAPIURL}/auth/verify-email`, payload).then((res) => res.data)
+}
+
+// GET /api/auth/otp/status?email=...&purpose=...
+const getOtpStatus = (params) => {
+  return axiosInstance.get(`${baseAPIURL}/auth/otp/status`, { params }).then((res) => res.data)
+}
+
 export {
   getMySession,
   getUserProfile,
@@ -48,4 +87,10 @@ export {
   refreshSession,
   terminateUserSessions,
   updateUserProfile,
+  updatePassword,
+  requestPasswordReset,
+  verifyRecoveryOtp,
+  executePasswordReset,
+  verifyEmailOtp,
+  getOtpStatus,
 }

@@ -12,7 +12,15 @@ const {
 const checkTokenBlacklist = require("../middleware/auth/blackList.middleware");
 const checkUserBlockedStatus = require("../middleware/auth/blockCheck.middleware");
 const authorizeRoles = require("../middleware/rbac.middleware");
-const { signupSchema, loginSchema } = require("../validator/auth.validate");
+const {
+  signupSchema,
+  loginSchema,
+  requestOtpSchema,
+  verifyEmailSchema,
+  forgotPasswordVerifySchema,
+  resetPasswordSchema,
+  changePasswordSchema,
+} = require("../validator/auth.validate");
 
 const authController = require("../controllers/auth.controller");
 
@@ -36,6 +44,38 @@ router.post(
   // authLimiter,
   verifyRefreshToken,
   authController.refreshToken,
+);
+
+// ── OTP & Email Verification Routes ──────────────────────────────────
+router.post(
+  "/otp/send",
+  // authLimiter,
+  validateRequest(requestOtpSchema),
+  authController.requestOtp,
+);
+
+router.get("/otp/status", authController.getOtpStatus);
+
+router.post(
+  "/verify-email",
+  // authLimiter,
+  validateRequest(verifyEmailSchema),
+  authController.verifyEmail,
+);
+
+// ── Forgot Password Routes (Public) ──────────────────────────────────
+router.post(
+  "/forgot-password/verify-code",
+  // authLimiter,
+  validateRequest(forgotPasswordVerifySchema),
+  authController.verifyForgotPasswordOtp,
+);
+
+router.post(
+  "/reset-password",
+  // authLimiter,
+  validateRequest(resetPasswordSchema),
+  authController.resetPassword,
 );
 
 // ── Authenticated User Profile Routes ─────────────────────────────────
@@ -63,6 +103,17 @@ router.get(
   checkTokenBlacklist,
   checkUserBlockedStatus,
   authController.getMyProfile,
+);
+
+// ── Change Password Route (Authenticated) ────────────────────────────
+router.post(
+  "/change-password",
+  // authLimiter,
+  authenticateAccessToken,
+  checkTokenBlacklist,
+  checkUserBlockedStatus,
+  validateRequest(changePasswordSchema),
+  authController.changePassword,
 );
 
 // ── Logout Routes ─────────────────────────────────────────────────────

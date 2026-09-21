@@ -1,8 +1,13 @@
 const jwt = require("jsonwebtoken");
 
 const User = require("../models/user.model");
+const PasswordHistory = require("../models/passwordHistory.model");
 const { generateTokenPair } = require("../utils/tokenUtils/tokenSigner");
 const tokenService = require("../services/token.service");
+const otpService = require("../services/otp.service");
+const passwordService = require("../services/password.service");
+const { sendMail } = require("../services/mail.service");
+const mailTemplates = require("../utils/mailTemplates/mail.templates");
 const ApiError = require("../utils/apiError");
 const ApiResponse = require("../utils/apiResponse");
 const logger = require("../utils/logger");
@@ -35,6 +40,8 @@ function toProfileUser(user) {
     email: user.email,
     username: user.username,
     role: user.role,
+    isEmailVerified: user.isEmailVerified || false,
+    emailVerifiedAt: user.emailVerifiedAt || null,
     avatar: user.avatar || "/images/global/my-profile.jpg",
     phone: user.phone || "",
     bio: user.bio || "",
@@ -66,7 +73,37 @@ const signup = async (req, res) => {
     password,
     username,
     role: "user",
+    isEmailVerified: false,
   });
+
+  // Initial password history record
+  await PasswordHistory.create({
+    userId: user._id,
+    passwordHash: user.password,
+    method: "initial",
+    ip: req.ip,
+    userAgent: req.headers["user-agent"] || "",
+  });
+
+  // Generate and send initial verification email in background
+  try {
+    const { rawOtp, expiresInSeconds } = await otpService.generateAndSaveOtp({
+      email: user.email,
+      purpose: "verify-email",
+    });
+
+    const template = mailTemplates.otpEmail({
+      code: rawOtp,
+      purpose: "verify-email",
+      expiresInMinutes: Math.floor(expiresInSeconds / 60),
+    });
+
+    sendMail({ to: user.email, ...template }).catch((err) =>
+      logger.error(`Signup mail dispatch failed: ${err.message}`),
+    );
+  } catch (err) {
+    logger.warn(`Could not dispatch signup OTP: ${err.message}`);
+  }
 
   const deviceId = req.body.deviceId || `device_${Date.now()}`;
   const tokens = await generateTokenPair(user, deviceId);
@@ -79,7 +116,7 @@ const signup = async (req, res) => {
       ApiResponse(
         201,
         { user: toProfileUser(user), deviceId, accessToken, refreshToken },
-        "Account created successfully",
+        "Account created successfully. Verification code sent.",
       ),
     );
 };
@@ -159,7 +196,6 @@ const getMyProfile = async (req, res) => {
 const updateMyProfile = async (req, res) => {
   const { name, phone, bio, interests, avatar } = req.body;
 
-  // Build clean payload with strict whitelisting
   const updatePayload = {};
   if (name !== undefined) updatePayload.name = name.trim();
   if (phone !== undefined) updatePayload.phone = phone.trim();
@@ -184,6 +220,192 @@ const updateMyProfile = async (req, res) => {
     .json(
       ApiResponse(200, toProfileUser(user), "Profile updated successfully"),
     );
+};
+
+// ── OTP & Email Verification ──────────────────────────────────────────
+
+const requestOtp = async (req, res) => {
+  const { email, purpose } = req.body;
+  const user = await User.findOne({ email });
+
+  // Prevent account enumeration: generic response if account does not exist
+  if (!user && purpose === "forgot-password") {
+    return res
+      .status(200)
+      .json(
+        ApiResponse(
+          200,
+          { expiresInSeconds: 300, resendInSeconds: 60 },
+          "If this email exists, a code was sent.",
+        ),
+      );
+  }
+
+  // Idempotency: skip re-issuing if already verified
+  if (purpose === "verify-email" && user?.isEmailVerified) {
+    return res
+      .status(200)
+      .json(ApiResponse(200, null, "Email is already verified."));
+  }
+
+  const { rawOtp, expiresInSeconds, resendInSeconds } =
+    await otpService.generateAndSaveOtp({ email, purpose });
+
+  const template = mailTemplates.otpEmail({
+    code: rawOtp,
+    purpose,
+    expiresInMinutes: Math.floor(expiresInSeconds / 60),
+  });
+
+  await sendMail({ to: email, ...template });
+
+  return res
+    .status(200)
+    .json(
+      ApiResponse(
+        200,
+        { expiresInSeconds, resendInSeconds },
+        "Code sent successfully",
+      ),
+    );
+};
+
+const getOtpStatus = async (req, res) => {
+  const { email, purpose } = req.query;
+  const status = await otpService.getOtpStatus({ email, purpose });
+  return res.status(200).json(ApiResponse(200, status, "OTP status retrieved"));
+};
+
+const verifyEmail = async (req, res) => {
+  const { email, code } = req.body;
+  const user = await User.findOne({ email });
+  if (!user) throw ApiError.notFound("User not found");
+
+  // Idempotent success response
+  if (user.isEmailVerified) {
+    return res
+      .status(200)
+      .json(
+        ApiResponse(
+          200,
+          { user: toProfileUser(user) },
+          "Email is already verified.",
+        ),
+      );
+  }
+
+  await otpService.verifyOtp({
+    email,
+    purpose: "verify-email",
+    rawOtp: code,
+  });
+
+  user.isEmailVerified = true;
+  user.emailVerifiedAt = new Date();
+  await user.save();
+
+  logger.info(`Email verified: ${user.email}`);
+  return res
+    .status(200)
+    .json(
+      ApiResponse(
+        200,
+        { user: toProfileUser(user) },
+        "Email verified successfully",
+      ),
+    );
+};
+
+// ── Forgot Password ───────────────────────────────────────────────────
+
+const verifyForgotPasswordOtp = async (req, res) => {
+  const { email, code } = req.body;
+  const user = await User.findOne({ email });
+  if (!user) throw ApiError.badRequest("Invalid code or request expired");
+
+  await otpService.verifyOtp({
+    email,
+    purpose: "forgot-password",
+    rawOtp: code,
+  });
+
+  const resetToken = await otpService.createPasswordResetToken(user._id);
+
+  return res
+    .status(200)
+    .json(ApiResponse(200, { resetToken }, "Code verified successfully"));
+};
+
+const resetPassword = async (req, res) => {
+  const { resetToken, newPassword } = req.body;
+
+  const userId = await otpService.consumePasswordResetToken(resetToken);
+  const user = await User.findById(userId).select("+password");
+  if (!user) throw ApiError.notFound("User not found");
+
+  await passwordService.recordPasswordChange({
+    user,
+    newPlainPassword: newPassword,
+    method: "email_reset",
+    ip: req.ip,
+    userAgent: req.headers["user-agent"] || "",
+  });
+
+  const mailData = mailTemplates.passwordChangedEmail({
+    changedAt: new Date(),
+    ip: req.ip,
+    userAgent: req.headers["user-agent"] || "",
+  });
+  sendMail({ to: user.email, ...mailData }).catch(() => {});
+
+  // Clear cookies as all sessions are revoked
+  res.clearCookie("refreshToken", { path: refreshCookieOptions.path });
+  res.clearCookie("deviceId", { path: refreshCookieOptions.path });
+
+  logger.info(`Password reset completed for: ${user.email}`);
+  return res
+    .status(200)
+    .json(
+      ApiResponse(
+        200,
+        null,
+        "Password reset successfully. Please log in again with your new credentials.",
+      ),
+    );
+};
+
+// ── Change Password ───────────────────────────────────────────────────
+
+const changePassword = async (req, res) => {
+  const { currentPassword, newPassword } = req.body;
+  const deviceId = req.cookies?.deviceId || req.body?.deviceId;
+
+  const user = await User.findById(req.user.id).select("+password");
+  if (!user) throw ApiError.notFound("User not found");
+
+  const isMatch = await user.comparePassword(currentPassword);
+  if (!isMatch) throw ApiError.badRequest("Current password is incorrect");
+
+  await passwordService.recordPasswordChange({
+    user,
+    newPlainPassword: newPassword,
+    method: "direct_change",
+    ip: req.ip,
+    userAgent: req.headers["user-agent"] || "",
+    currentDeviceId: deviceId,
+  });
+
+  const mailData = mailTemplates.passwordChangedEmail({
+    changedAt: new Date(),
+    ip: req.ip,
+    userAgent: req.headers["user-agent"] || "",
+  });
+  sendMail({ to: user.email, ...mailData }).catch(() => {});
+
+  logger.info(`Password changed directly for user: ${user._id}`);
+  return res
+    .status(200)
+    .json(ApiResponse(200, null, "Password updated successfully"));
 };
 
 const logout = async (req, res) => {
@@ -265,6 +487,12 @@ module.exports = {
   refreshToken,
   getMyProfile,
   updateMyProfile,
+  requestOtp,
+  getOtpStatus,
+  verifyEmail,
+  verifyForgotPasswordOtp,
+  resetPassword,
+  changePassword,
   logout,
   logoutAllSessions,
   blockUser,

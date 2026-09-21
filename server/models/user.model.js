@@ -43,7 +43,14 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-
+    isEmailVerified: {
+      type: Boolean,
+      default: false,
+    },
+    emailVerifiedAt: {
+      type: Date,
+      default: null,
+    },
     // ── Profile Extension Keys ──────────────────────────────────────────
     avatar: {
       type: String,
