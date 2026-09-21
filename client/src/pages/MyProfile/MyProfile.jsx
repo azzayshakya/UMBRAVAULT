@@ -32,8 +32,8 @@ import { Tag, Tooltip, message } from 'antd'
 import { useState } from 'react'
 
 import { EditProfileForm } from './components/EditProfileForm'
-import { useUserProfileApi } from './hooks/useUserProfileApi'
 import { PasswordManagementModal } from './components/PasswordManagementModal'
+import { useUserProfileApi } from './hooks/useUserProfileApi'
 
 const SOCIAL_NETWORKS = [
   {
@@ -128,16 +128,17 @@ export default function MyProfile() {
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: 8,
-                padding: '8px 16px',
+                padding: '8px 20px',
                 borderRadius: 'var(--radius, 8px)',
-                border: isDark ? '1px solid var(--term-border)' : '1px solid var(--color-border)',
-                background: isDark ? 'var(--term-bg-panel)' : 'var(--color-bg-container)',
-                color: isDark ? 'var(--term-green)' : 'var(--color-text)',
+                border: isDark ? '1px solid var(--term-border)' : '1px solid var(--color-primary)',
+                background: isDark ? 'rgba(57, 255, 106, 0.08)' : 'var(--color-primary)',
+                color: isDark ? 'var(--term-green)' : '#ffffff',
                 fontFamily: 'var(--term-font, monospace)',
                 fontWeight: 700,
                 fontSize: 12,
                 cursor: 'pointer',
                 transition: 'all 0.15s ease',
+                boxShadow: isDark ? 'var(--term-glow)' : 'var(--color-glow)',
               }}
             >
               <KeyOutlined /> SECURITY_CREDENTIALS

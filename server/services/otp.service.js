@@ -59,7 +59,7 @@ class OtpService {
     const cooldownActive = await redisClient.get(cooldownKey);
     if (cooldownActive) {
       const remainingCooldown = await redisClient.ttl(cooldownKey);
-      throw ApiError.tooManyRequests(
+      throw ApiError.tooMany(
         `Please wait ${remainingCooldown > 0 ? remainingCooldown : 60} seconds before requesting another code.`,
       );
     }

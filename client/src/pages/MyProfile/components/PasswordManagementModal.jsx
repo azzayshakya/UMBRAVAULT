@@ -1,5 +1,3 @@
-import React, { useState } from 'react'
-import { message } from 'antd'
 import {
   updatePassword,
   requestPasswordReset,
@@ -7,6 +5,10 @@ import {
   executePasswordReset,
 } from '@devStack/apiServices/accounts-me-apis'
 import TerminalModal from '@devStack/components/Terminalmodal'
+import { Theme } from '@devStack/enums/theme-enums'
+import { useTheme } from '@devStack/store/theme/hooks/useTheme'
+import { message } from 'antd'
+import React, { useState } from 'react'
 
 export const PasswordManagementModal = ({ open, onClose, userEmail = '' }) => {
   const [activeTab, setActiveTab] = useState('change') // 'change' | 'forgot'
@@ -27,6 +29,8 @@ export const PasswordManagementModal = ({ open, onClose, userEmail = '' }) => {
   const [recoveryNewPassword, setRecoveryNewPassword] = useState('')
   const [recoveryConfirmPassword, setRecoveryConfirmPassword] = useState('')
 
+  const { resolvedTheme } = useTheme()
+  const isDark = resolvedTheme === Theme.DARK
   const resetForm = () => {
     setCurrentPassword('')
     setNewPassword('')
@@ -182,14 +186,18 @@ export const PasswordManagementModal = ({ open, onClose, userEmail = '' }) => {
   const inputStyle = {
     width: '100%',
     boxSizing: 'border-box',
-    backgroundColor: 'var(--term-bg-panel, #0a0f0d)',
-    color: 'var(--color-text, #e6edf3)',
-    border: '1px solid var(--color-border, #30363d)',
-    borderRadius: '4px',
-    padding: '8px 12px',
+    // backgroundColor: 'var(--term-bg-panel, #0a0f0d)',
+    // color: 'var(--color-text, #e6edf3)',
+    // border: '1px solid var(--color-border, #30363d)',
+    // borderRadius: '4px',
     outline: 'none',
     fontFamily: 'var(--term-font, monospace)',
-    fontSize: '12px',
+    padding: '8px 12px',
+
+    background: 'var(--color-bg-container)',
+    border: isDark ? '1px solid var(--term-border)' : '1px solid var(--color-border)',
+    color: 'var(--color-text)',
+    borderRadius: 'var(--radius, 8px)',
   }
 
   const labelStyle = {
