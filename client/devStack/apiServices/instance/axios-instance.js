@@ -1,14 +1,13 @@
 import { REQUEST_TIMEOUT } from '@devStack/constants'
 import { store } from '@devStack/store'
 import { setUserSession } from '@devStack/store/userSlice'
-import { redirectToLoginUtil } from '@devStack/utils/redirect-utils'
 import { sleep } from '@devStack/utils/sleep-util'
 import { message } from 'antd'
 import axios from 'axios'
 
 import {
   getUserSessionLocally,
-  removeUserSessionLocally,
+  removeCompleteSessionAndRedirectToLogin,
   setUserSessionLocally,
 } from '../../store/utils/user-session-utils'
 import { refreshSession } from '../accounts-me-apis'
@@ -78,9 +77,8 @@ axiosInstance.interceptors.response.use(
         return axiosInstance(originalRequest)
       } catch (refreshError) {
         flushQueue(refreshError, null)
-        removeUserSessionLocally()
+        removeCompleteSessionAndRedirectToLogin()
         message.error('Your session has expired. Please log in again.')
-        redirectToLoginUtil()
         return Promise.reject(refreshError)
       } finally {
         isRefreshing = false
@@ -98,8 +96,7 @@ axiosInstance.interceptors.response.use(
 
       case 401: // Unauthorized: identity unknown or invalid
         message.error(errorMessage)
-        removeUserSessionLocally()
-        redirectToLoginUtil()
+        removeCompleteSessionAndRedirectToLogin()
         return Promise.reject(error)
 
       case 403: // Forbidden: authenticated, but unauthorized (identity known, but lacking permission).
@@ -124,29 +121,3 @@ axiosInstance.interceptors.response.use(
 )
 
 export { axiosInstance }
-
-// GEMINI_API_KEY=AQ.
-// Ab8RN6IGYjs59lG1CYbRmDNlHlhWxo1hQt-HKH10d01-U2XVEg
-// GEMINI_MODEL=gemini-3.5-flash
-// MONGO_URI=mongodb+srv://ajayajay:ajayajay@cluster0.agfg3rb.mongodb.net/?appName=Cluster0
-// # MONGO_URI=mongodb://127.0.0.1:27017/assetflow
-
-// MONGO_URI=mongodb://
-// ajayajay:ajayajay@ac-zbpkf2z-shard-00-00.agfg3rb.mongodb.net:27017,ac-zbpkf2z-shard-00-01.agfg3rb.
-// mongodb.
-// net:27017,ac-zbpkf2z-shard-00-02.agfg3rb.mongodb.
-// net:27017/umbravault?ssl=true&replicaSet=atlas-pytax1-shard-0&authSource=admin&appName=Cluster0
-
-// JWT_ACCESS_SECRET=azx
-// JWT_REFRESH_SECRET=asd
-// JWT_ISSUER=lskjdf
-
-// UPSTASH_REDIS_URL=rediss://default:
-// gQAAAAAAAqzbAAIgcDI5YTcyZDBjMDgwMjY0ZWMyYjU0NDQ2MzU2ZDM4ZDA3Mw@deciding-starfish-175323.upstash.io:6379
-
-// SMTP_HOST=in-v3.mailjet.com
-// SMTP_PORT=587
-// SMTP_SECURE=false
-// SMTP_USER=91d5eb109a815dfef528e26b607bffea
-// SMTP_PASS=053dc478394e59808441624d3ff42848
-// MAIL_FROM="UmbraVault <ajayshakya7376@gmail.com>"

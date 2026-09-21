@@ -1,11 +1,10 @@
 import { getMySession } from '@devStack/apiServices/accounts-me-apis'
-import { clearUserSession, setUserSession } from '@devStack/store/userSlice'
+import { setUserSession } from '@devStack/store/userSlice'
 import {
   isUserSessionValid,
-  removeUserSessionLocally,
+  removeCompleteSessionAndRedirectToLogin,
   setUserSessionLocally,
 } from '@devStack/store/utils/user-session-utils'
-import { redirectToLoginUtil } from '@devStack/utils/redirect-utils'
 import { useEffect, useRef, useState } from 'react'
 import { useDispatch } from 'react-redux'
 
@@ -26,13 +25,11 @@ export const useValidateUserSession = () => {
     const validate = async () => {
       // cheap local check first — skip the network call entirely if
       // there's nothing (or an expired-by-our-own-TTL) session saved
-      if (!isUserSessionValid()) {
-        dispatch(clearUserSession())
-        removeUserSessionLocally()
-        setIsPending(false)
-        redirectToLoginUtil()
-        return
-      }
+      // if (!isUserSessionValid()) {
+      //   removeCompleteSessionAndRedirectToLogin()
+      //   setIsPending(false)
+      //   return
+      // }
 
       // locally-valid session → confirm with the server and pick up any
       // changes (role change, name change, etc.)
@@ -40,7 +37,7 @@ export const useValidateUserSession = () => {
       // header from localStorage automatically — nothing to pass manually here.
       try {
         const httpResponse = await getMySession()
-        const sessionData = setUserSessionLocally(httpResponse.data)
+        const sessionData = setUserSessionLocally(httpResponse?.data)
         dispatch(
           setUserSession({
             user: sessionData,
@@ -49,13 +46,7 @@ export const useValidateUserSession = () => {
           })
         )
       } catch (error) {
-        // getMySession already went through the response interceptor's
-        // 401 → refresh → retry flow if it was a token issue. If we're
-        // still in catch, refresh also failed (or it's a non-401 error) —
-        // either way, the session isn't valid, so clear and redirect.
-        dispatch(clearUserSession())
-        removeUserSessionLocally()
-        redirectToLoginUtil()
+        console.error('Session validation failed:', error)
       } finally {
         setIsPending(false)
       }

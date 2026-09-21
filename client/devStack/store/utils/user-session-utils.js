@@ -1,7 +1,10 @@
 import { StorageKey } from '@devStack/enums/storage-key-enums'
 import { Theme } from '@devStack/enums/theme-enums'
+import { store } from '@devStack/store'
+import { clearUserSession } from '@devStack/store/userSlice'
+import { redirectToLoginUtil } from '@devStack/utils/redirect-utils'
 
-const SESSION_TTL_MS = 24 * 60 * 60 * 1000 // 24h — local gating only, not tied to the JWT's real expiry
+// const SESSION_TTL_MS = 24 * 60 * 60 * 1000 // 24h — local gating only, not tied to the JWT's real expiry
 
 const getUserSessionLocally = () => {
   try {
@@ -30,7 +33,7 @@ const setUserSessionLocally = (userSession) => {
     accessToken: accessToken ?? existing?.accessToken ?? null,
     refreshToken: refreshToken ?? existing?.refreshToken ?? null,
     deviceId: deviceId ?? existing?.deviceId ?? null,
-    expiresOn: new Date(Date.now() + SESSION_TTL_MS),
+    // expiresOn: Date.now() + SESSION_TTL_MS,
   }
 
   localStorage.setItem(StorageKey.USER_SESSION, JSON.stringify(sessionToSave))
@@ -56,7 +59,12 @@ const setUserPreferencesLocally = (userPreferences) => {
 
 const removeUserSessionLocally = () => {
   localStorage.removeItem(StorageKey.USER_SESSION)
-  // localStorage.removeItem(StorageKey.USER_PREFERENCES)
+}
+
+const removeCompleteSessionAndRedirectToLogin = () => {
+  removeUserSessionLocally()
+  store?.dispatch(clearUserSession())
+  redirectToLoginUtil()
 }
 
 export {
@@ -65,4 +73,5 @@ export {
   removeUserSessionLocally,
   setUserPreferencesLocally,
   setUserSessionLocally,
+  removeCompleteSessionAndRedirectToLogin,
 }
