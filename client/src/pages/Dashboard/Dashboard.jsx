@@ -1,5 +1,6 @@
 import { Skeleton } from '@devStack/components/Skelton/Skeleton'
 import { useIsMobile } from '@devStack/hooks/useIsMobile'
+import { useAuth } from '@devStack/store/hooks/useAuth'
 import { useState } from 'react'
 
 import CenterBrandText from './components/CenterBrandText'
@@ -26,7 +27,8 @@ const Dashboard = () => {
   const { statusList, stats, loading: statusLoading } = useSystemStatus()
   const isMobile = useIsMobile()
   const [imageLoaded, setImageLoaded] = useState(false)
-
+  const { user } = useAuth()
+  console.log(user)
   return (
     <div style={pageStyle}>
       {/* Top Banner with Skeleton fallback */}

@@ -3,11 +3,14 @@ import { loginUser } from '@devStack/apiServices/accounts-auth-apis'
 import { handleApiError } from '@devStack/apiServices/utils/handle-api-error'
 import Loader from '@devStack/components/spinners/Loader'
 import TerminalCard from '@devStack/components/Terminalcard'
-import { setUserSession } from '@devStack/store/userSlice'
+import { setUserSession, clearUserSession } from '@devStack/store/userSlice'
+import {
+  setUserSessionLocally,
+  removeUserSessionLocally,
+} from '@devStack/store/utils/user-session-utils'
 import { getPostLoginRedirectPath } from '@devStack/utils/redirect-utils'
-import { setUserSessionLocally } from '@devStack/store/utils/user-session-utils'
 import { Form, Input, Button, Typography } from 'antd'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
@@ -35,6 +38,11 @@ const LoginPage = () => {
   const [loading, setLoading] = useState(false)
   const dispatch = useDispatch()
   const navigate = useNavigate()
+
+  useEffect(() => {
+    removeUserSessionLocally()
+    dispatch(clearUserSession())
+  }, [dispatch])
 
   const onFinish = async (values) => {
     setLoading(true)

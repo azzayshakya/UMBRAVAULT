@@ -60,7 +60,10 @@ const setUserPreferencesLocally = (userPreferences) => {
 const removeUserSessionLocally = () => {
   localStorage.removeItem(StorageKey.USER_SESSION)
 }
-
+const removeCompleteUserSession = () => {
+  removeUserSessionLocally()
+  store?.dispatch(clearUserSession())
+}
 const removeCompleteSessionAndRedirectToLogin = () => {
   removeUserSessionLocally()
   store?.dispatch(clearUserSession())
@@ -73,5 +76,6 @@ export {
   removeUserSessionLocally,
   setUserPreferencesLocally,
   setUserSessionLocally,
+  removeCompleteUserSession,
   removeCompleteSessionAndRedirectToLogin,
 }

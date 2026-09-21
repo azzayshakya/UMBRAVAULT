@@ -27,5 +27,5 @@ const userSlice = createSlice({
   },
 })
 
-export const { setUserSession, clearUserSession } = userSlice.actions
+export const { setUserSession, setAccessToken, clearUserSession } = userSlice.actions
 export default userSlice.reducer
