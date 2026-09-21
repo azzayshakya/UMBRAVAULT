@@ -21,11 +21,15 @@ import {
   FileTextOutlined,
   InfoCircleOutlined,
   KeyOutlined,
+  // ShieldCheckOutlined,
+  ThunderboltOutlined,
+  ClusterOutlined,
 } from '@ant-design/icons'
 import EmptyState from '@devStack/components/EmptyState/EmptyState'
 import PageHeader from '@devStack/components/PageHeader'
 import { Skeleton } from '@devStack/components/Skelton/Skeleton'
 import { StatCard } from '@devStack/components/StateCard'
+import { useIsMobile } from '@devStack/hooks/useIsMobile'
 import { useTheme } from '@devStack/store/theme/hooks/useTheme'
 import { Theme } from '@devStack/store/theme/utils/theme-constants'
 import { Tag, Tooltip, message } from 'antd'
@@ -85,6 +89,7 @@ export default function MyProfile() {
 
   const { resolvedTheme } = useTheme()
   const isDark = resolvedTheme === Theme.DARK
+  const isMobile = useIsMobile()
 
   const handleUpdate = async (formData) => {
     const res = await updateProfile(formData)
@@ -102,7 +107,7 @@ export default function MyProfile() {
   const handlePlatformClick = (platform, handle) => {
     if (!handle) {
       message.info({
-        content: `${platform.label} link not provided yet. Click "Edit Profile" to connect your handle.`,
+        content: `${platform.label} link not configured. Tap 'Edit Profile' to link account.`,
         icon: <InfoCircleOutlined style={{ color: 'var(--color-primary)' }} />,
       })
       return
@@ -119,7 +124,15 @@ export default function MyProfile() {
       icon={<UserOutlined />}
       extra={
         !isEditing && profile ? (
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 10,
+              flexWrap: 'wrap',
+              width: isMobile ? '100%' : 'auto',
+            }}
+          >
             {/* Security / Password Action Button */}
             <button
               type="button"
@@ -127,21 +140,24 @@ export default function MyProfile() {
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
+                justifyContent: 'center',
                 gap: 8,
-                padding: '8px 20px',
-                borderRadius: 'var(--radius, 8px)',
-                border: isDark ? '1px solid var(--term-border)' : '1px solid var(--color-primary)',
-                background: isDark ? 'rgba(57, 255, 106, 0.08)' : 'var(--color-primary)',
-                color: isDark ? 'var(--term-green)' : '#ffffff',
+                padding: isMobile ? '8px 14px' : '8px 18px',
+                flex: isMobile ? 1 : 'initial',
+                borderRadius: 'var(--radius, 10px)',
+                border: isDark ? '1px solid var(--term-border)' : '1px solid var(--color-border)',
+                background: isDark ? 'var(--term-bg-panel, #08110b)' : 'var(--color-bg-container)',
+                color: isDark ? 'var(--term-green, #39ff6a)' : 'var(--color-text)',
                 fontFamily: 'var(--term-font, monospace)',
                 fontWeight: 700,
-                fontSize: 12,
+                fontSize: 11,
                 cursor: 'pointer',
-                transition: 'all 0.15s ease',
-                boxShadow: isDark ? 'var(--term-glow)' : 'var(--color-glow)',
+                transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+                boxShadow: isDark ? '0 2px 10px rgba(0,0,0,0.5)' : '0 2px 6px rgba(0,0,0,0.04)',
               }}
             >
-              <KeyOutlined /> SECURITY_CREDENTIALS
+              <KeyOutlined style={{ fontSize: 13 }} />
+              <span>SECURITY_KEY</span>
             </button>
 
             {/* Primary Edit Profile Button */}
@@ -151,21 +167,24 @@ export default function MyProfile() {
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
+                justifyContent: 'center',
                 gap: 8,
-                padding: '8px 20px',
-                borderRadius: 'var(--radius, 8px)',
+                padding: isMobile ? '8px 16px' : '8px 20px',
+                flex: isMobile ? 1 : 'initial',
+                borderRadius: 'var(--radius, 10px)',
                 border: isDark ? '1px solid var(--term-border)' : '1px solid var(--color-primary)',
-                background: isDark ? 'rgba(57, 255, 106, 0.08)' : 'var(--color-primary)',
-                color: isDark ? 'var(--term-green)' : '#ffffff',
+                background: isDark ? 'rgba(57, 255, 106, 0.12)' : 'var(--color-primary)',
+                color: isDark ? 'var(--term-green, #39ff6a)' : '#ffffff',
                 fontFamily: 'var(--term-font, monospace)',
                 fontWeight: 700,
-                fontSize: 12,
+                fontSize: 11,
                 cursor: 'pointer',
-                transition: 'all 0.15s ease',
+                transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
                 boxShadow: isDark ? 'var(--term-glow)' : 'var(--color-glow)',
               }}
             >
-              <EditOutlined /> EDIT PROFILE
+              <EditOutlined style={{ fontSize: 13 }} />
+              <span>EDIT PROFILE</span>
             </button>
           </div>
         ) : null
@@ -178,12 +197,12 @@ export default function MyProfile() {
           <div
             style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
+              gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fit, minmax(180px, 1fr))',
               gap: 14,
             }}
           >
             {Array.from({ length: 3 }).map((_, i) => (
-              <Skeleton key={i} height={90} borderRadius={10} />
+              <Skeleton key={i} height={90} borderRadius={12} />
             ))}
           </div>
           <Skeleton height={320} borderRadius={16} />
@@ -197,8 +216,8 @@ export default function MyProfile() {
           style={{
             background: 'var(--color-bg-container)',
             border: isDark ? '1px solid var(--term-border)' : '1.5px solid var(--color-border)',
-            borderRadius: 16,
-            padding: 28,
+            borderRadius: isMobile ? 16 : 24,
+            padding: isMobile ? '20px 16px' : 32,
             maxWidth: 860,
             margin: '0 auto',
             width: '100%',
@@ -211,8 +230,8 @@ export default function MyProfile() {
                 display: 'inline-flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                width: 24,
-                height: 24,
+                width: 26,
+                height: 26,
                 borderRadius: '50%',
                 background: isDark ? 'rgba(57,255,106,0.1)' : 'var(--color-bg-hover)',
                 color: 'var(--color-primary)',
@@ -226,8 +245,8 @@ export default function MyProfile() {
               style={{
                 color: 'var(--color-primary)',
                 fontWeight: 700,
-                letterSpacing: 1,
-                fontSize: 13,
+                letterSpacing: 1.2,
+                fontSize: 12,
                 fontFamily: 'var(--term-font, monospace)',
               }}
             >
@@ -248,7 +267,7 @@ export default function MyProfile() {
           <div
             style={{
               background: 'var(--color-bg-container)',
-              borderRadius: 18,
+              borderRadius: isMobile ? 18 : 24,
               border: isDark ? '1px solid var(--term-border)' : '1.5px solid var(--color-border)',
               overflow: 'hidden',
               boxShadow: isDark ? 'var(--term-glow)' : '0 8px 30px rgba(0,0,0,0.03)',
@@ -256,10 +275,10 @@ export default function MyProfile() {
           >
             <div
               style={{
-                height: 120,
+                height: isMobile ? 96 : 130,
                 background: isDark
-                  ? 'radial-gradient(ellipse at 80% 20%, rgba(57, 255, 106, 0.18), transparent 60%), linear-gradient(135deg, #020603 0%, #06180c 100%)'
-                  : 'radial-gradient(ellipse at 80% 20%, var(--primitive-green-100), transparent 65%), linear-gradient(135deg, var(--primitive-green-50) 0%, var(--primitive-gray-100) 100%)',
+                  ? 'radial-gradient(ellipse at 85% 20%, rgba(57, 255, 106, 0.22), transparent 60%), linear-gradient(135deg, #020603 0%, #06180c 100%)'
+                  : 'radial-gradient(ellipse at 85% 20%, var(--primitive-green-100), transparent 65%), linear-gradient(135deg, var(--primitive-green-50) 0%, var(--primitive-gray-100) 100%)',
                 borderBottom: isDark
                   ? '1px solid var(--term-border)'
                   : '1px solid var(--color-border)',
@@ -269,12 +288,17 @@ export default function MyProfile() {
               <div
                 style={{
                   position: 'absolute',
-                  top: 14,
-                  right: 20,
+                  top: 12,
+                  right: 16,
                   fontFamily: 'var(--term-font, monospace)',
-                  fontSize: 11,
+                  fontSize: 10,
                   color: isDark ? 'var(--term-green-dim)' : 'var(--primitive-green-700)',
-                  fontWeight: 600,
+                  fontWeight: 700,
+                  background: isDark ? 'rgba(0,0,0,0.4)' : 'rgba(255,255,255,0.7)',
+                  padding: '4px 10px',
+                  borderRadius: 12,
+                  border: isDark ? '1px solid var(--term-border)' : '1px solid var(--color-border)',
+                  backdropFilter: 'blur(8px)',
                 }}
               >
                 UID: #{profile?._id?.slice(-6)?.toUpperCase()}
@@ -283,23 +307,32 @@ export default function MyProfile() {
 
             <div
               style={{
-                padding: '0 28px 24px',
+                padding: isMobile ? '0 16px 20px' : '0 28px 24px',
                 position: 'relative',
                 display: 'flex',
-                flexWrap: 'wrap',
-                alignItems: 'flex-end',
+                flexDirection: isMobile ? 'column' : 'row',
+                alignItems: isMobile ? 'flex-start' : 'flex-end',
                 justifyContent: 'space-between',
                 gap: 16,
               }}
             >
-              <div style={{ display: 'flex', alignItems: 'flex-end', gap: 20, marginTop: -48 }}>
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: isMobile ? 'column' : 'row',
+                  alignItems: isMobile ? 'flex-start' : 'flex-end',
+                  gap: isMobile ? 12 : 20,
+                  marginTop: isMobile ? -38 : -50,
+                  width: isMobile ? '100%' : 'auto',
+                }}
+              >
                 <div style={{ position: 'relative' }}>
                   <img
                     src={profile?.avatar || '/images/global/my-profile.jpg'}
                     alt="User Avatar"
                     style={{
-                      width: 96,
-                      height: 96,
+                      width: isMobile ? 76 : 96,
+                      height: isMobile ? 76 : 96,
                       borderRadius: '50%',
                       objectFit: 'cover',
                       border: `4px solid var(--color-bg-container)`,
@@ -311,21 +344,21 @@ export default function MyProfile() {
                       position: 'absolute',
                       bottom: 4,
                       right: 4,
-                      width: 18,
-                      height: 18,
+                      width: isMobile ? 14 : 18,
+                      height: isMobile ? 14 : 18,
                       borderRadius: '50%',
-                      background: 'var(--primitive-emerald-500)',
+                      background: 'var(--primitive-emerald-500, #10b981)',
                       border: '3px solid var(--color-bg-container)',
                     }}
                   />
                 </div>
 
-                <div style={{ paddingBottom: 4 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                <div style={{ paddingBottom: 4, width: '100%' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
                     <h2
                       style={{
                         margin: 0,
-                        fontSize: 22,
+                        fontSize: isMobile ? 20 : 24,
                         fontWeight: 800,
                         color: 'var(--color-primary)',
                         letterSpacing: -0.5,
@@ -337,23 +370,27 @@ export default function MyProfile() {
                       style={{
                         padding: '2px 8px',
                         borderRadius: 20,
-                        fontSize: 11,
+                        fontSize: 10,
                         fontWeight: 700,
                         fontFamily: 'var(--term-font, monospace)',
                         background: isDark ? 'rgba(57,255,106,0.1)' : 'var(--color-bg-hover)',
                         color: 'var(--color-primary)',
                         border: '1px solid var(--color-border)',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: 4,
                       }}
                     >
-                      {profile?.role?.toUpperCase() || 'USER'}
+                      <LinkOutlined /> {profile?.role?.toUpperCase() || 'USER'}
                     </span>
                   </div>
                   <div
                     style={{
-                      fontSize: 12,
+                      fontSize: 11,
                       color: 'var(--color-text-secondary)',
-                      marginTop: 2,
+                      marginTop: 3,
                       fontFamily: 'var(--term-font, monospace)',
+                      wordBreak: 'break-all',
                     }}
                   >
                     @{profile?.username} · {profile?.email}
@@ -361,7 +398,7 @@ export default function MyProfile() {
                 </div>
               </div>
 
-              <div style={{ display: 'flex', gap: 10, paddingBottom: 6 }}>
+              <div style={{ display: 'flex', gap: 10, width: isMobile ? '100%' : 'auto' }}>
                 <div
                   style={{
                     display: 'inline-flex',
@@ -373,6 +410,8 @@ export default function MyProfile() {
                     border: '1px solid var(--color-border)',
                     fontSize: 11,
                     fontFamily: 'var(--term-font, monospace)',
+                    width: isMobile ? '100%' : 'auto',
+                    justifyContent: isMobile ? 'center' : 'flex-start',
                   }}
                 >
                   <CalendarOutlined style={{ color: 'var(--color-primary)' }} />
@@ -392,26 +431,26 @@ export default function MyProfile() {
           <div
             style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
+              gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fit, minmax(180px, 1fr))',
               gap: 14,
             }}
           >
             <StatCard
               icon={<CompassOutlined />}
               label="TOTAL SESSIONS"
-              value={profile?.stats?.sessions ?? 47}
+              value={profile?.stats?.sessions ?? 'NA'}
               color={isDark ? 'var(--term-green)' : 'var(--primitive-emerald-500)'}
             />
             <StatCard
               icon={<ProjectOutlined />}
               label="LINKED PROJECTS"
-              value={profile?.stats?.projects ?? 12}
+              value={profile?.stats?.projects ?? 'NA'}
               color="#38bdf8"
             />
             <StatCard
               icon={<CheckCircleOutlined />}
               label="COMMITTED TASKS"
-              value={profile?.stats?.tasksCompleted ?? 108}
+              value={profile?.stats?.tasksCompleted ?? 'NA'}
               color="#a78bfa"
             />
           </div>
@@ -420,7 +459,7 @@ export default function MyProfile() {
           <div
             style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))',
+              gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fit, minmax(360px, 1fr))',
               gap: 20,
               alignItems: 'start',
             }}
@@ -430,11 +469,12 @@ export default function MyProfile() {
               style={{
                 background: 'var(--color-bg-container)',
                 border: isDark ? '1px solid var(--term-border)' : '1.5px solid var(--color-border)',
-                borderRadius: 16,
-                padding: 24,
+                borderRadius: isMobile ? 16 : 20,
+                padding: isMobile ? 18 : 24,
                 display: 'flex',
                 flexDirection: 'column',
                 gap: 22,
+                boxShadow: isDark ? '0 4px 20px rgba(0,0,0,0.5)' : '0 4px 16px rgba(0,0,0,0.02)',
               }}
             >
               {/* Biography */}
@@ -444,7 +484,7 @@ export default function MyProfile() {
                     display: 'flex',
                     alignItems: 'center',
                     gap: 8,
-                    fontSize: 12,
+                    fontSize: 11,
                     fontWeight: 700,
                     color: 'var(--color-primary)',
                     fontFamily: 'var(--term-font, monospace)',
@@ -455,11 +495,11 @@ export default function MyProfile() {
                 </div>
                 <div
                   style={{
-                    fontSize: 13,
+                    fontSize: 12,
                     lineHeight: 1.65,
                     color: 'var(--color-text)',
                     background: 'var(--color-bg-hover)',
-                    padding: '14px 16px',
+                    padding: '12px 14px',
                     borderRadius: 10,
                     border: '1px solid var(--color-border)',
                   }}
@@ -476,7 +516,7 @@ export default function MyProfile() {
                     display: 'flex',
                     alignItems: 'center',
                     gap: 8,
-                    fontSize: 12,
+                    fontSize: 11,
                     fontWeight: 700,
                     color: 'var(--color-primary)',
                     fontFamily: 'var(--term-font, monospace)',
@@ -496,24 +536,18 @@ export default function MyProfile() {
                         display: 'inline-flex',
                         alignItems: 'center',
                         gap: 6,
-                        padding: '4px 12px',
-                        borderRadius: 8,
+                        padding: '4px 10px',
+                        borderRadius: 6,
                         background: isDark ? 'rgba(57,255,106,0.06)' : 'var(--color-bg-hover)',
                         borderColor: isDark ? 'var(--term-border)' : 'var(--color-border)',
                         color: 'var(--color-primary)',
-                        fontSize: 12,
+                        fontSize: 11,
                         fontWeight: 600,
                         fontFamily: 'var(--term-font, monospace)',
+                        margin: 0,
                       }}
                     >
-                      <span
-                        style={{
-                          width: 6,
-                          height: 6,
-                          borderRadius: '50%',
-                          background: 'var(--color-primary)',
-                        }}
-                      />
+                      <ThunderboltOutlined style={{ fontSize: 10 }} />
                       {tag}
                     </Tag>
                   ))}
@@ -527,25 +561,25 @@ export default function MyProfile() {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
-                    fontSize: 12,
+                    fontSize: 11,
                     fontWeight: 700,
                     color: 'var(--color-primary)',
                     fontFamily: 'var(--term-font, monospace)',
                     marginBottom: 12,
                   }}
                 >
-                  <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                    <LinkOutlined /> DEVELOPER PLATFORMS &amp; LINKS
+                  <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                    <ClusterOutlined /> PORTAL CONNECTORS
                   </span>
-                  <span style={{ fontSize: 11, color: 'var(--color-text-muted)', fontWeight: 500 }}>
-                    PORTAL CONNECTORS
+                  <span style={{ fontSize: 10, color: 'var(--color-text-muted)', fontWeight: 500 }}>
+                    CROSS-NETWORK
                   </span>
                 </div>
 
                 <div
                   style={{
                     display: 'grid',
-                    gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
+                    gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fit, minmax(140px, 1fr))',
                     gap: 10,
                   }}
                 >
@@ -578,31 +612,9 @@ export default function MyProfile() {
                               ? '1px dashed rgba(255, 255, 255, 0.12)'
                               : '1px dashed rgba(0, 0, 0, 0.15)',
                           cursor: 'pointer',
-                          transition: 'all 0.2s ease',
+                          transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
                           position: 'relative',
                           overflow: 'hidden',
-                        }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.borderColor = hasLink
-                            ? network.brandColor
-                            : 'var(--color-text-muted)'
-                          e.currentTarget.style.transform = 'translateY(-2px)'
-                          if (hasLink) {
-                            e.currentTarget.style.boxShadow = isDark
-                              ? `0 4px 14px ${network.brandColor}22`
-                              : '0 4px 12px rgba(0,0,0,0.06)'
-                          }
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.borderColor = hasLink
-                            ? isDark
-                              ? 'var(--term-border)'
-                              : 'var(--color-border)'
-                            : isDark
-                              ? 'rgba(255, 255, 255, 0.12)'
-                              : 'rgba(0, 0, 0, 0.15)'
-                          e.currentTarget.style.transform = 'translateY(0)'
-                          e.currentTarget.style.boxShadow = 'none'
                         }}
                       >
                         <div
@@ -621,7 +633,7 @@ export default function MyProfile() {
                           <div style={{ minWidth: 0 }}>
                             <div
                               style={{
-                                fontSize: 12,
+                                fontSize: 11,
                                 fontWeight: 700,
                                 color: hasLink ? 'var(--color-text)' : 'var(--color-text-muted)',
                               }}
@@ -662,7 +674,8 @@ export default function MyProfile() {
                                     border: 'none',
                                     color: 'var(--color-text-secondary)',
                                     cursor: 'pointer',
-                                    padding: 3,
+                                    padding: 4,
+                                    display: 'flex',
                                   }}
                                 >
                                   <CopyOutlined style={{ fontSize: 11 }} />
@@ -680,9 +693,8 @@ export default function MyProfile() {
                                     border: 'none',
                                     color: 'var(--color-primary)',
                                     cursor: 'pointer',
-                                    padding: 3,
+                                    padding: 4,
                                     display: 'flex',
-                                    alignItems: 'center',
                                   }}
                                 >
                                   <ExportOutlined style={{ fontSize: 11 }} />
@@ -690,22 +702,18 @@ export default function MyProfile() {
                               </Tooltip>
                             </>
                           ) : (
-                            <Tooltip title="Link not provided yet">
-                              <span
-                                style={{
-                                  fontSize: 10,
-                                  color: 'var(--color-text-muted)',
-                                  padding: '2px 6px',
-                                  borderRadius: 4,
-                                  background: isDark
-                                    ? 'rgba(255,255,255,0.04)'
-                                    : 'rgba(0,0,0,0.04)',
-                                  fontFamily: 'var(--term-font, monospace)',
-                                }}
-                              >
-                                + LINK
-                              </span>
-                            </Tooltip>
+                            <span
+                              style={{
+                                fontSize: 9,
+                                color: 'var(--color-text-muted)',
+                                padding: '2px 6px',
+                                borderRadius: 4,
+                                background: isDark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.04)',
+                                fontFamily: 'var(--term-font, monospace)',
+                              }}
+                            >
+                              + LINK
+                            </span>
                           )}
                         </div>
                       </div>
@@ -720,12 +728,13 @@ export default function MyProfile() {
               style={{
                 background: 'var(--color-bg-container)',
                 border: isDark ? '1px solid var(--term-border)' : '1.5px solid var(--color-border)',
-                borderRadius: 16,
-                padding: 24,
+                borderRadius: isMobile ? 16 : 20,
+                padding: isMobile ? 18 : 24,
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'space-between',
                 gap: 20,
+                boxShadow: isDark ? '0 4px 20px rgba(0,0,0,0.5)' : '0 4px 16px rgba(0,0,0,0.02)',
               }}
             >
               <div>
@@ -734,7 +743,7 @@ export default function MyProfile() {
                     display: 'flex',
                     alignItems: 'center',
                     gap: 8,
-                    fontSize: 12,
+                    fontSize: 11,
                     fontWeight: 700,
                     color: 'var(--color-primary)',
                     fontFamily: 'var(--term-font, monospace)',
@@ -755,7 +764,7 @@ export default function MyProfile() {
                     {
                       icon: <SafetyCertificateOutlined />,
                       label: 'AUTHORIZATION LEVEL',
-                      val: `${profile?.role?.toUpperCase() || 'USER'} (ELEVATED ACCESS)`,
+                      val: `${profile?.role?.toUpperCase() || 'USER'} (LEVEL 0)`,
                     },
                     {
                       icon: <IdcardOutlined />,
@@ -767,26 +776,28 @@ export default function MyProfile() {
                       key={row.label}
                       style={{
                         display: 'flex',
-                        alignItems: 'center',
+                        flexDirection: isMobile ? 'column' : 'row',
+                        alignItems: isMobile ? 'flex-start' : 'center',
                         justifyContent: 'space-between',
-                        padding: '12px 16px',
+                        padding: '12px 14px',
                         borderRadius: 10,
                         background: 'var(--color-bg-hover)',
                         border: '1px solid var(--color-border)',
+                        gap: isMobile ? 6 : 10,
                       }}
                     >
                       <div
                         style={{
                           display: 'flex',
                           alignItems: 'center',
-                          gap: 10,
+                          gap: 8,
                           color: 'var(--color-primary)',
                         }}
                       >
                         {row.icon}
                         <span
                           style={{
-                            fontSize: 11,
+                            fontSize: 10,
                             color: 'var(--color-text-secondary)',
                             fontFamily: 'var(--term-font, monospace)',
                           }}
@@ -794,13 +805,22 @@ export default function MyProfile() {
                           {row.label}
                         </span>
                       </div>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                      <div
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: isMobile ? 'space-between' : 'flex-end',
+                          gap: 8,
+                          width: isMobile ? '100%' : 'auto',
+                        }}
+                      >
                         <span
                           style={{
-                            fontSize: 12,
+                            fontSize: 11,
                             fontWeight: 600,
                             color: 'var(--color-primary)',
                             fontFamily: 'var(--term-font, monospace)',
+                            wordBreak: 'break-all',
                           }}
                         >
                           {row.val}
@@ -831,11 +851,12 @@ export default function MyProfile() {
 
               <div
                 style={{
-                  fontSize: 11,
+                  fontSize: 10,
                   color: 'var(--color-text-muted)',
                   borderTop: '1px solid var(--color-border)',
                   paddingTop: 12,
                   fontFamily: 'var(--term-font, monospace)',
+                  lineHeight: 1.4,
                 }}
               >
                 &gt; Cryptographic verification: Critical attributes are locked to session token

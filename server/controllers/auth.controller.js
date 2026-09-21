@@ -33,6 +33,7 @@ function sendTokens(res, { accessToken, refreshToken, deviceId }) {
 }
 
 function toProfileUser(user) {
+  console.log(user);
   return {
     _id: user._id,
     id: user._id,

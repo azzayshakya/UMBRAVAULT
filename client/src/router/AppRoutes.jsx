@@ -37,13 +37,13 @@ const AppRoutes = () => {
       <Routes>
         <Route element={<AuthLayout />}>
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/signup" element={<SignupPage />} />
-          <Route path="/about-us" element={<AboutUsPage />} />
+          {/* <Route path="/signup" element={<SignupPage />} />
+          <Route path="/about-us" element={<AboutUsPage />} /> */}
         </Route>
-        <Route path="/signup" element={<SignupPage />} />
+        {/* <Route path="/signup" element={<SignupPage />} />
         <Route path="/unauthorized" element={<Unauthorized />} />
 
-        <Route path="/role" element={<UserManagementPage />} />
+        <Route path="/role" element={<UserManagementPage />} /> */}
 
         {/* Everything inside this Route shares the MainLayout */}
         <Route element={<MainLayout userRole={user?.role ?? undefined} />}>

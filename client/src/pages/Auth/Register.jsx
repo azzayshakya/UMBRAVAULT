@@ -12,6 +12,7 @@ import { CreateAccount } from '@devStack/apiServices/accounts-auth-apis'
 import { handleApiError } from '@devStack/apiServices/utils/handle-api-error'
 import PageHeader from '@devStack/components/PageHeader'
 import Loader from '@devStack/components/spinners/Loader'
+import { useIsMobile } from '@devStack/hooks/useIsMobile'
 import { useTheme } from '@devStack/store/theme/hooks/useTheme'
 import { Theme } from '@devStack/store/theme/utils/theme-constants'
 import { Form, Input, Button, message } from 'antd'
@@ -23,6 +24,7 @@ const SignupPage = () => {
 
   const { resolvedTheme } = useTheme()
   const isDark = resolvedTheme === Theme.DARK
+  const isMobile = useIsMobile()
 
   const onFinish = async (values) => {
     setLoading(true)
@@ -44,9 +46,6 @@ const SignupPage = () => {
   // Purely token-driven theme mapping
   const tokens = {
     ambientWrapper: '',
-    // isDark
-    //   ? 'radial-gradient(ellipse at top left, rgba(57, 255, 106, 0.08) 0%, transparent 60%), radial-gradient(ellipse at bottom right, rgba(28, 138, 69, 0.12) 0%, transparent 70%)'
-    //   : 'rsdfadial-gradient(ellipse at 10% 20%, var(--primitive-green-100) 0%, transparent 45%), radial-gradient(ellipse at 90% 10%, var(--primitive-gray-200) 0%, transparent 50%), radial-gradient(ellipse at 80% 90%, var(--primitive-green-50) 0%, transparent 50%)',
     outerCardBg: isDark
       ? 'rgba(6, 18, 10, 0.85)'
       : 'linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(238, 244, 240, 0.75) 100%)',
@@ -59,7 +58,6 @@ const SignupPage = () => {
     rightHeroBg: isDark
       ? 'linear-gradient(160deg, #06120a 0%, #030905 100%)'
       : 'linear-gradient(160deg, var(--primitive-gray-900) 0%, var(--primitive-gray-950) 100%)',
-    // Exact button palette aligned with your variables
     buttonBg: isDark ? 'rgba(57, 255, 106, 0.12)' : 'var(--color-primary)',
     buttonBorder: isDark ? '1px solid var(--term-border-strong)' : '1px solid var(--color-primary)',
     buttonText: isDark ? 'var(--term-green)' : '#ffffff',
@@ -68,14 +66,14 @@ const SignupPage = () => {
   }
 
   const modernInputStyle = {
-    height: 48,
+    height: isMobile ? 44 : 48,
     borderRadius: 24,
     background: tokens.inputBg,
     border: tokens.inputBorder,
     color: 'var(--color-text)',
     fontFamily: 'var(--term-font, monospace)',
     fontSize: 13,
-    padding: '0 18px',
+    padding: '0 16px',
     transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
   }
 
@@ -88,14 +86,15 @@ const SignupPage = () => {
     >
       <div
         style={{
-          minHeight: 'calc(100vh - 200px)',
+          minHeight: isMobile ? 'auto' : 'calc(100vh - 200px)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          // padding: '24px 16px',
+          padding: isMobile ? '12px 0' : '24px 16px',
           background: tokens.ambientWrapper,
           borderRadius: 16,
           position: 'relative',
+          width: '100%',
         }}
       >
         {/* Main Split Floating Canvas */}
@@ -103,44 +102,54 @@ const SignupPage = () => {
           style={{
             width: '100%',
             maxWidth: 1040,
-            borderRadius: 32,
+            borderRadius: isMobile ? 20 : 32,
             background: tokens.outerCardBg,
             backdropFilter: 'blur(20px)',
             WebkitBackdropFilter: 'blur(20px)',
             border: tokens.outerCardBorder,
             boxShadow: tokens.outerCardShadow,
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))',
+            gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fit, minmax(360px, 1fr))',
             overflow: 'hidden',
-            padding: 18,
-            gap: 18,
+            padding: isMobile ? 12 : 18,
+            gap: isMobile ? 14 : 18,
           }}
         >
           {/* Left Column: Form Controls */}
           <div
             style={{
-              padding: '36px 32px',
+              padding: isMobile ? '20px 14px' : '36px 32px',
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'center',
+              width: '100%',
+              boxSizing: 'border-box',
             }}
           >
             {/* Header / Brand Mark */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 28 }}>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 10,
+                marginBottom: isMobile ? 20 : 28,
+              }}
+            >
               <div
                 style={{
-                  width: 38,
-                  height: 38,
-                  borderRadius: 12,
+                  width: 36,
+                  height: 36,
+                  borderRadius: 10,
                   background: isDark ? 'rgba(57, 255, 106, 0.12)' : 'var(--primitive-green-50)',
                   border: `1px solid ${isDark ? 'var(--term-border)' : 'var(--primitive-green-300)'}`,
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   color: 'var(--color-primary)',
-                  fontSize: 16,
+                  fontSize: 15,
                   fontWeight: 800,
                   fontFamily: 'monospace',
+                  flexShrink: 0,
                 }}
               >
                 <CheckCircleFilled />
@@ -148,8 +157,8 @@ const SignupPage = () => {
               <div>
                 <span
                   style={{
-                    fontSize: 11,
-                    letterSpacing: 1.5,
+                    fontSize: 10,
+                    letterSpacing: 1.2,
                     textTransform: 'uppercase',
                     color: 'var(--color-primary)',
                     fontWeight: 700,
@@ -163,20 +172,20 @@ const SignupPage = () => {
 
             <h2
               style={{
-                fontSize: 30,
+                fontSize: isMobile ? 22 : 30,
                 fontWeight: 800,
                 color: 'var(--color-text)',
                 margin: 0,
-                letterSpacing: -0.8,
-                lineHeight: 1.15,
+                letterSpacing: -0.6,
+                lineHeight: 1.2,
               }}
             >
               Create an account
             </h2>
             <p
               style={{
-                margin: '8px 0 28px',
-                fontSize: 13,
+                margin: '8px 0 20px',
+                fontSize: isMobile ? 12 : 13,
                 color: 'var(--color-text-secondary)',
                 lineHeight: 1.5,
               }}
@@ -197,7 +206,7 @@ const SignupPage = () => {
                 label={
                   <span
                     style={{
-                      fontSize: 11,
+                      fontSize: 10,
                       fontWeight: 700,
                       color: 'var(--color-text-secondary)',
                       letterSpacing: 0.8,
@@ -212,14 +221,14 @@ const SignupPage = () => {
                   { required: true, message: 'Please enter account display name' },
                   { min: 2, message: 'Name must have at least 2 characters' },
                 ]}
-                style={{ marginBottom: 16 }}
+                style={{ marginBottom: 14 }}
               >
                 <Input
                   prefix={
                     <UserOutlined
                       style={{
                         color: 'var(--color-primary)',
-                        marginRight: 8,
+                        marginRight: 6,
                       }}
                     />
                   }
@@ -233,7 +242,7 @@ const SignupPage = () => {
                 label={
                   <span
                     style={{
-                      fontSize: 11,
+                      fontSize: 10,
                       fontWeight: 700,
                       color: 'var(--color-text-secondary)',
                       letterSpacing: 0.8,
@@ -248,14 +257,14 @@ const SignupPage = () => {
                   { required: true, message: 'Please enter registered email' },
                   { type: 'email', message: 'Please enter a valid email address' },
                 ]}
-                style={{ marginBottom: 16 }}
+                style={{ marginBottom: 14 }}
               >
                 <Input
                   prefix={
                     <MailOutlined
                       style={{
                         color: 'var(--color-primary)',
-                        marginRight: 8,
+                        marginRight: 6,
                       }}
                     />
                   }
@@ -269,7 +278,7 @@ const SignupPage = () => {
                 label={
                   <span
                     style={{
-                      fontSize: 11,
+                      fontSize: 10,
                       fontWeight: 700,
                       color: 'var(--color-text-secondary)',
                       letterSpacing: 0.8,
@@ -284,14 +293,14 @@ const SignupPage = () => {
                   { required: true, message: 'Please specify account password' },
                   { min: 8, message: 'Password must be at least 8 characters' },
                 ]}
-                style={{ marginBottom: 28 }}
+                style={{ marginBottom: isMobile ? 20 : 28 }}
               >
                 <Input.Password
                   prefix={
                     <LockOutlined
                       style={{
                         color: 'var(--color-primary)',
-                        marginRight: 8,
+                        marginRight: 6,
                       }}
                     />
                   }
@@ -300,18 +309,18 @@ const SignupPage = () => {
                 />
               </Form.Item>
 
-              {/* Themed Pill Submit Button */}
+              {/* Themed Submit Button */}
               <Button
                 htmlType="submit"
                 block
                 disabled={loading}
                 style={{
-                  height: 48,
+                  height: isMobile ? 44 : 48,
                   borderRadius: 24,
                   background: loading ? 'var(--color-bg-hover)' : tokens.buttonBg,
                   border: tokens.buttonBorder,
                   color: loading ? 'var(--color-text-muted)' : tokens.buttonText,
-                  fontSize: 13,
+                  fontSize: 12,
                   fontWeight: 700,
                   fontFamily: 'monospace',
                   letterSpacing: 1,
@@ -327,7 +336,7 @@ const SignupPage = () => {
               >
                 {loading ? (
                   <Loader
-                    size={16}
+                    size={15}
                     color="var(--color-primary)"
                     label="PROVISIONING..."
                     labelColor="var(--color-primary)"
@@ -335,7 +344,7 @@ const SignupPage = () => {
                 ) : (
                   <>
                     <span>Create Account</span>
-                    <ArrowRightOutlined style={{ fontSize: 12 }} />
+                    <ArrowRightOutlined style={{ fontSize: 11 }} />
                   </>
                 )}
               </Button>
@@ -343,24 +352,25 @@ const SignupPage = () => {
 
             <div
               style={{
-                marginTop: 20,
+                marginTop: 18,
                 textAlign: 'center',
-                fontSize: 11,
+                fontSize: 10,
                 color: 'var(--color-text-muted)',
                 fontFamily: 'var(--term-font, monospace)',
+                lineHeight: 1.4,
               }}
             >
               &gt; Sessions protected via HMAC-SHA256 token rotation.
             </div>
           </div>
 
-          {/* Right Column: Hero Visual Card with Matching Themed Accent */}
+          {/* Right Column: Hero Visual Card */}
           <div
             style={{
-              borderRadius: 26,
+              borderRadius: isMobile ? 18 : 26,
               background: tokens.rightHeroBg,
               color: 'var(--term-text)',
-              padding: '40px 36px',
+              padding: isMobile ? '24px 20px' : '40px 36px',
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'space-between',
@@ -369,6 +379,7 @@ const SignupPage = () => {
               border: isDark
                 ? '1px solid var(--term-border)'
                 : '1px solid var(--primitive-gray-800)',
+              boxSizing: 'border-box',
             }}
           >
             {/* Ambient Background Decorative Grid / Radial Sweep */}
@@ -377,8 +388,8 @@ const SignupPage = () => {
                 position: 'absolute',
                 top: -60,
                 right: -60,
-                width: 260,
-                height: 260,
+                width: isMobile ? 180 : 260,
+                height: isMobile ? 180 : 260,
                 borderRadius: '50%',
                 background: isDark
                   ? 'radial-gradient(circle, rgba(57, 255, 106, 0.18) 0%, transparent 70%)'
@@ -391,14 +402,15 @@ const SignupPage = () => {
             <div
               style={{
                 position: 'absolute',
-                bottom: 120,
-                right: 28,
-                opacity: 0.14,
+                bottom: isMobile ? 60 : 120,
+                right: 18,
+                opacity: 0.12,
                 color: 'var(--color-primary)',
-                fontSize: 180,
+                fontSize: isMobile ? 120 : 180,
                 lineHeight: 0.8,
                 pointerEvents: 'none',
                 fontFamily: 'monospace',
+                userSelect: 'none',
               }}
             >
               ✱
@@ -411,14 +423,14 @@ const SignupPage = () => {
                   display: 'inline-flex',
                   alignItems: 'center',
                   gap: 6,
-                  padding: '5px 12px',
-                  borderRadius: 16,
+                  padding: '4px 10px',
+                  borderRadius: 14,
                   background: isDark ? 'rgba(57, 255, 106, 0.08)' : 'rgba(255, 255, 255, 0.1)',
                   border: `1px solid ${isDark ? 'var(--term-border)' : 'rgba(255, 255, 255, 0.15)'}`,
-                  fontSize: 11,
+                  fontSize: 10,
                   color: isDark ? 'var(--term-green)' : 'var(--primitive-green-300)',
                   fontWeight: 600,
-                  marginBottom: 20,
+                  marginBottom: 16,
                   fontFamily: 'monospace',
                 }}
               >
@@ -427,12 +439,12 @@ const SignupPage = () => {
 
               <h3
                 style={{
-                  fontSize: 30,
+                  fontSize: isMobile ? 22 : 30,
                   fontWeight: 800,
                   color: '#ffffff',
                   lineHeight: 1.25,
-                  margin: '0 0 16px',
-                  letterSpacing: -0.6,
+                  margin: '0 0 12px',
+                  letterSpacing: -0.5,
                 }}
               >
                 What engineers &amp; architects say.
@@ -440,10 +452,10 @@ const SignupPage = () => {
 
               <div
                 style={{
-                  fontSize: 36,
+                  fontSize: isMobile ? 28 : 36,
                   color: isDark ? 'var(--term-green)' : 'var(--primitive-green-400)',
                   lineHeight: 1,
-                  marginBottom: 4,
+                  marginBottom: 2,
                   fontFamily: 'monospace',
                 }}
               >
@@ -452,7 +464,7 @@ const SignupPage = () => {
 
               <p
                 style={{
-                  fontSize: 14,
+                  fontSize: isMobile ? 13 : 14,
                   lineHeight: 1.6,
                   color: 'var(--term-text-muted)',
                   margin: 0,
@@ -463,11 +475,11 @@ const SignupPage = () => {
                 one unified portal simplifies developer onboarding tenfold.
               </p>
 
-              <div style={{ marginTop: 22 }}>
-                <div style={{ fontWeight: 700, fontSize: 14, color: '#ffffff' }}>Mas Parjono</div>
+              <div style={{ marginTop: 18 }}>
+                <div style={{ fontWeight: 700, fontSize: 13, color: '#ffffff' }}>Mas Parjono</div>
                 <div
                   style={{
-                    fontSize: 12,
+                    fontSize: 11,
                     color: 'var(--term-text-muted)',
                     marginTop: 2,
                     fontFamily: 'monospace',
@@ -478,13 +490,13 @@ const SignupPage = () => {
               </div>
 
               {/* Themed Slider Control Arrows */}
-              <div style={{ display: 'flex', gap: 8, marginTop: 20 }}>
+              <div style={{ display: 'flex', gap: 8, marginTop: 16 }}>
                 <button
                   type="button"
                   style={{
-                    width: 36,
-                    height: 36,
-                    borderRadius: 10,
+                    width: 32,
+                    height: 32,
+                    borderRadius: 8,
                     border: isDark
                       ? '1px solid var(--term-border)'
                       : '1px solid rgba(255, 255, 255, 0.2)',
@@ -497,14 +509,14 @@ const SignupPage = () => {
                     transition: 'all 0.15s ease',
                   }}
                 >
-                  <ArrowLeftOutlined style={{ fontSize: 12 }} />
+                  <ArrowLeftOutlined style={{ fontSize: 11 }} />
                 </button>
                 <button
                   type="button"
                   style={{
-                    width: 36,
-                    height: 36,
-                    borderRadius: 10,
+                    width: 32,
+                    height: 32,
+                    borderRadius: 8,
                     border: isDark
                       ? '1px solid var(--term-border)'
                       : '1px solid rgba(255, 255, 255, 0.2)',
@@ -517,7 +529,7 @@ const SignupPage = () => {
                     transition: 'all 0.15s ease',
                   }}
                 >
-                  <ArrowRightOutlined style={{ fontSize: 12 }} />
+                  <ArrowRightOutlined style={{ fontSize: 11 }} />
                 </button>
               </div>
             </div>
@@ -527,11 +539,11 @@ const SignupPage = () => {
               style={{
                 position: 'relative',
                 zIndex: 2,
-                marginTop: 36,
+                marginTop: isMobile ? 24 : 36,
                 background: isDark ? 'var(--term-bg-panel)' : 'var(--primitive-white)',
                 color: isDark ? 'var(--term-text)' : 'var(--color-text)',
-                borderRadius: 20,
-                padding: '16px 20px',
+                borderRadius: 16,
+                padding: isMobile ? '12px 14px' : '16px 20px',
                 boxShadow: isDark
                   ? '0 16px 36px rgba(0, 0, 0, 0.7), var(--term-glow)'
                   : '0 16px 36px rgba(0, 0, 0, 0.15)',
@@ -539,26 +551,30 @@ const SignupPage = () => {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
-                gap: 12,
+                gap: 10,
               }}
             >
-              <div>
+              <div style={{ flex: 1, minWidth: 0 }}>
                 <div
                   style={{
-                    fontSize: 13,
+                    fontSize: 12,
                     fontWeight: 700,
                     color: 'var(--color-primary)',
                     letterSpacing: 0.3,
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
                   }}
                 >
                   Instant Role Inheritance
                 </div>
                 <div
                   style={{
-                    fontSize: 11,
+                    fontSize: 10,
                     color: 'var(--color-text-secondary)',
                     marginTop: 2,
                     fontFamily: 'monospace',
+                    lineHeight: 1.3,
                   }}
                 >
                   New users automatically receive isolated workspaces.
@@ -566,7 +582,7 @@ const SignupPage = () => {
               </div>
 
               {/* Stacked Avatar Rings */}
-              <div style={{ display: 'flex', alignItems: 'center' }}>
+              <div style={{ display: 'flex', alignItems: 'center', flexShrink: 0 }}>
                 {[
                   'var(--primitive-green-500)',
                   'var(--primitive-green-600)',
@@ -575,8 +591,8 @@ const SignupPage = () => {
                   <div
                     key={i}
                     style={{
-                      width: 26,
-                      height: 26,
+                      width: 24,
+                      height: 24,
                       borderRadius: '50%',
                       background: bg,
                       border: `2px solid ${isDark ? '#06120a' : '#ffffff'}`,
@@ -584,7 +600,7 @@ const SignupPage = () => {
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      fontSize: 10,
+                      fontSize: 9,
                       color: '#ffffff',
                     }}
                   >

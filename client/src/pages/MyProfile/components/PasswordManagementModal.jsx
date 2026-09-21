@@ -1,4 +1,13 @@
 import {
+  KeyOutlined,
+  MailOutlined,
+  CheckCircleOutlined,
+  LockOutlined,
+  ArrowLeftOutlined,
+  SafetyCertificateOutlined,
+  LoadingOutlined,
+} from '@ant-design/icons'
+import {
   updatePassword,
   requestPasswordReset,
   verifyRecoveryOtp,
@@ -15,13 +24,12 @@ export const PasswordManagementModal = ({ open, onClose, userEmail = '' }) => {
   const [loading, setLoading] = useState(false)
   const [feedback, setFeedback] = useState({ type: null, text: '' })
 
-  // ── Tab 1: Rotate Password States ──
+  // ── Tab 1: Change Password States ──
   const [currentPassword, setCurrentPassword] = useState('')
   const [newPassword, setNewPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
 
-  // ── Tab 2: Recovery Pipeline States ──
-  // Step 1: 'EMAIL_DISPATCH' -> Step 2: 'VERIFY_OTP' -> Step 3: 'NEW_PASSWORD'
+  // ── Tab 2: Forgot Password Recovery Pipeline States ──
   const [recoveryStep, setRecoveryStep] = useState('EMAIL_DISPATCH')
   const [recoveryEmail, setRecoveryEmail] = useState(userEmail)
   const [recoveryCode, setRecoveryCode] = useState('')
@@ -31,6 +39,7 @@ export const PasswordManagementModal = ({ open, onClose, userEmail = '' }) => {
 
   const { resolvedTheme } = useTheme()
   const isDark = resolvedTheme === Theme.DARK
+
   const resetForm = () => {
     setCurrentPassword('')
     setNewPassword('')
@@ -48,7 +57,7 @@ export const PasswordManagementModal = ({ open, onClose, userEmail = '' }) => {
     onClose()
   }
 
-  // ── 1. Rotate Secret (Change Password) ──
+  // ── 1. Change Password ──
   const handleChangePassword = async (e) => {
     e.preventDefault()
     setFeedback({ type: null, text: '' })
@@ -56,34 +65,33 @@ export const PasswordManagementModal = ({ open, onClose, userEmail = '' }) => {
     if (!currentPassword || !newPassword || !confirmPassword) {
       setFeedback({
         type: 'error',
-        text: 'ERR: All parameters are required for credential re-hash.',
+        text: 'All fields are required to update your password.',
       })
       return
     }
     if (newPassword !== confirmPassword) {
-      setFeedback({ type: 'error', text: 'ERR: Key mismatch. Target strings do not match.' })
+      setFeedback({ type: 'error', text: 'New password and confirmation do not match.' })
       return
     }
     if (newPassword.length < 8) {
       setFeedback({
         type: 'error',
-        text: 'ERR: Entropy failure. Password must be >= 8 characters.',
+        text: 'Password must be at least 8 characters long.',
       })
       return
     }
 
     setLoading(true)
     try {
-      // Calls POST /api/auth/change-password
       await updatePassword({ currentPassword, newPassword, confirmPassword })
-      setFeedback({ type: 'success', text: 'ACK: Credentials upgraded. Cipher rotation complete.' })
+      setFeedback({ type: 'success', text: 'Password updated successfully.' })
       message.success('Password updated successfully')
       setTimeout(() => {
         handleClose()
       }, 1200)
     } catch (err) {
-      const errMsg = err?.response?.data?.message || err?.message || 'Access verification failed.'
-      setFeedback({ type: 'error', text: `ERR: ${errMsg}` })
+      const errMsg = err?.response?.data?.message || err?.message || 'Failed to update password.'
+      setFeedback({ type: 'error', text: errMsg })
     } finally {
       setLoading(false)
     }
@@ -96,19 +104,22 @@ export const PasswordManagementModal = ({ open, onClose, userEmail = '' }) => {
 
     const targetEmail = (recoveryEmail || userEmail).trim()
     if (!targetEmail) {
-      setFeedback({ type: 'error', text: 'ERR: Missing destination email node.' })
+      setFeedback({ type: 'error', text: 'Please enter a valid email address.' })
       return
     }
 
     setLoading(true)
     try {
-      // Calls POST /api/auth/otp/send
       await requestPasswordReset({ email: targetEmail })
-      setFeedback({ type: 'success', text: `ACK: 6-digit payload dispatched to ${targetEmail}` })
+      setFeedback({
+        type: 'success',
+        text: `A 6-digit verification code was sent to ${targetEmail}`,
+      })
       setRecoveryStep('VERIFY_OTP')
     } catch (err) {
-      const errMsg = err?.response?.data?.message || err?.message || 'Dispatch routing failed.'
-      setFeedback({ type: 'error', text: `ERR: ${errMsg}` })
+      const errMsg =
+        err?.response?.data?.message || err?.message || 'Could not send verification code.'
+      setFeedback({ type: 'error', text: errMsg })
     } finally {
       setLoading(false)
     }
@@ -120,24 +131,24 @@ export const PasswordManagementModal = ({ open, onClose, userEmail = '' }) => {
     setFeedback({ type: null, text: '' })
 
     if (!recoveryCode || recoveryCode.length !== 6) {
-      setFeedback({ type: 'error', text: 'ERR: Verification code must be exactly 6 digits.' })
+      setFeedback({ type: 'error', text: 'Please enter the complete 6-digit verification code.' })
       return
     }
 
     setLoading(true)
     try {
-      // Calls POST /api/auth/forgot-password/verify-code
       const res = await verifyRecoveryOtp({
         email: (recoveryEmail || userEmail).trim(),
         code: recoveryCode.trim(),
       })
       const token = res?.data?.resetToken || res?.resetToken
       setResetToken(token)
-      setFeedback({ type: 'success', text: 'ACK: Code confirmed. Reset token initialized.' })
+      setFeedback({ type: 'success', text: 'Code verified. You can now set your new password.' })
       setRecoveryStep('NEW_PASSWORD')
     } catch (err) {
-      const errMsg = err?.response?.data?.message || err?.message || 'Verification failed.'
-      setFeedback({ type: 'error', text: `ERR: ${errMsg}` })
+      const errMsg =
+        err?.response?.data?.message || err?.message || 'Invalid or expired verification code.'
+      setFeedback({ type: 'error', text: errMsg })
     } finally {
       setLoading(false)
     }
@@ -149,91 +160,92 @@ export const PasswordManagementModal = ({ open, onClose, userEmail = '' }) => {
     setFeedback({ type: null, text: '' })
 
     if (!recoveryNewPassword || !recoveryConfirmPassword) {
-      setFeedback({ type: 'error', text: 'ERR: Both password strings are required.' })
+      setFeedback({ type: 'error', text: 'Please fill in both password fields.' })
       return
     }
     if (recoveryNewPassword !== recoveryConfirmPassword) {
-      setFeedback({ type: 'error', text: 'ERR: Key mismatch. Target strings do not match.' })
+      setFeedback({ type: 'error', text: 'Passwords do not match.' })
       return
     }
     if (recoveryNewPassword.length < 8) {
-      setFeedback({ type: 'error', text: 'ERR: Password must be at least 8 characters.' })
+      setFeedback({ type: 'error', text: 'Password must be at least 8 characters long.' })
       return
     }
 
     setLoading(true)
     try {
-      // Calls POST /api/auth/reset-password
       await executePasswordReset({
         resetToken,
         newPassword: recoveryNewPassword,
         confirmPassword: recoveryConfirmPassword,
       })
-      setFeedback({ type: 'success', text: 'ACK: Password updated. Sessions revoked.' })
+      setFeedback({
+        type: 'success',
+        text: 'Password reset successfully. Other sessions logged out.',
+      })
       message.success('Password reset successfully')
       setTimeout(() => {
         handleClose()
       }, 1200)
     } catch (err) {
-      const errMsg = err?.response?.data?.message || err?.message || 'Reset execution failed.'
-      setFeedback({ type: 'error', text: `ERR: ${errMsg}` })
+      const errMsg = err?.response?.data?.message || err?.message || 'Failed to reset password.'
+      setFeedback({ type: 'error', text: errMsg })
     } finally {
       setLoading(false)
     }
   }
 
-  // Inline styling tokens
+  // Modern UI Style Definitions
   const inputStyle = {
     width: '100%',
     boxSizing: 'border-box',
-    // backgroundColor: 'var(--term-bg-panel, #0a0f0d)',
-    // color: 'var(--color-text, #e6edf3)',
-    // border: '1px solid var(--color-border, #30363d)',
-    // borderRadius: '4px',
     outline: 'none',
-    fontFamily: 'var(--term-font, monospace)',
-    padding: '8px 12px',
-
-    background: 'var(--color-bg-container)',
-    border: isDark ? '1px solid var(--term-border)' : '1px solid var(--color-border)',
-    color: 'var(--color-text)',
-    borderRadius: 'var(--radius, 8px)',
+    padding: '10px 14px',
+    background: 'var(--color-bg-container, #ffffff)',
+    border: isDark
+      ? '1px solid var(--term-border, #243527)'
+      : '1px solid var(--color-border, #d9d9d9)',
+    color: 'var(--color-text, #111827)',
+    borderRadius: '8px',
+    fontSize: '13px',
+    transition: 'border-color 0.2s, box-shadow 0.2s',
   }
 
   const labelStyle = {
-    display: 'block',
-    color: 'var(--color-text-muted, #8b949e)',
-    textTransform: 'uppercase',
-    fontSize: '10px',
-    letterSpacing: '0.5px',
-    marginBottom: '4px',
-    fontFamily: 'var(--term-font, monospace)',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '6px',
+    color: 'var(--color-text-secondary, #6b7280)',
+    fontSize: '12px',
+    fontWeight: 600,
+    marginBottom: '6px',
   }
 
   return (
     <TerminalModal
       open={open}
       onClose={handleClose}
-      title="SECURITY_CORE // CREDENTIALS"
-      prompt="sec-ops@umbra-vault:~#"
+      title="Security & Password Settings"
+      prompt="account@security:~"
       width={520}
     >
       <div
         style={{
           display: 'flex',
           flexDirection: 'column',
-          gap: '16px',
-          fontFamily: 'var(--term-font, monospace)',
-          fontSize: '12px',
+          gap: '20px',
+          fontSize: '13px',
         }}
       >
-        {/* Tab Switcher */}
+        {/* Modern Tab Bar */}
         <div
           style={{
             display: 'flex',
-            gap: '12px',
-            borderBottom: '1px solid var(--color-border, #30363d)',
-            paddingBottom: '8px',
+            gap: '8px',
+            borderBottom: isDark
+              ? '1px solid var(--term-border, #243527)'
+              : '1px solid var(--color-border, #e5e7eb)',
+            paddingBottom: '10px',
           }}
         >
           <button
@@ -244,26 +256,31 @@ export const PasswordManagementModal = ({ open, onClose, userEmail = '' }) => {
             }}
             style={{
               cursor: 'pointer',
-              padding: '4px 10px',
-              borderRadius: '3px',
-              fontFamily: 'inherit',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px',
+              padding: '8px 16px',
+              borderRadius: '8px',
               fontWeight: 600,
-              fontSize: '11px',
+              fontSize: '12px',
               border:
                 activeTab === 'change'
-                  ? '1px solid var(--term-green, #39ff6a)'
+                  ? '1px solid var(--color-primary, #10b981)'
                   : '1px solid transparent',
               backgroundColor:
                 activeTab === 'change'
-                  ? 'var(--term-green-dim, rgba(57, 255, 106, 0.12))'
+                  ? isDark
+                    ? 'rgba(57, 255, 106, 0.12)'
+                    : 'rgba(16, 185, 129, 0.08)'
                   : 'transparent',
               color:
                 activeTab === 'change'
-                  ? 'var(--term-green, #39ff6a)'
-                  : 'var(--color-text-muted, #8b949e)',
+                  ? 'var(--color-primary, #10b981)'
+                  : 'var(--color-text-secondary, #6b7280)',
+              transition: 'all 0.15s ease',
             }}
           >
-            [01] ROTATE_SECRET
+            <KeyOutlined /> Change Password
           </button>
           <button
             type="button"
@@ -273,46 +290,63 @@ export const PasswordManagementModal = ({ open, onClose, userEmail = '' }) => {
             }}
             style={{
               cursor: 'pointer',
-              padding: '4px 10px',
-              borderRadius: '3px',
-              fontFamily: 'inherit',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px',
+              padding: '8px 16px',
+              borderRadius: '8px',
               fontWeight: 600,
-              fontSize: '11px',
+              fontSize: '12px',
               border:
                 activeTab === 'forgot'
-                  ? '1px solid var(--term-green, #39ff6a)'
+                  ? '1px solid var(--color-primary, #10b981)'
                   : '1px solid transparent',
               backgroundColor:
                 activeTab === 'forgot'
-                  ? 'var(--term-green-dim, rgba(57, 255, 106, 0.12))'
+                  ? isDark
+                    ? 'rgba(57, 255, 106, 0.12)'
+                    : 'rgba(16, 185, 129, 0.08)'
                   : 'transparent',
               color:
                 activeTab === 'forgot'
-                  ? 'var(--term-green, #39ff6a)'
-                  : 'var(--color-text-muted, #8b949e)',
+                  ? 'var(--color-primary, #10b981)'
+                  : 'var(--color-text-secondary, #6b7280)',
+              transition: 'all 0.15s ease',
             }}
           >
-            [02] RECOVERY_DISPATCH
+            <SafetyCertificateOutlined /> Reset via Email
           </button>
         </div>
 
-        {/* Feedback Telemetry */}
+        {/* Clean Status & Alert Message Box */}
         {feedback.text && (
           <div
             style={{
-              padding: '10px 12px',
-              border: `1px solid ${feedback.type === 'error' ? 'var(--color-error, #ef4444)' : 'var(--term-green, #39ff6a)'}`,
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              padding: '10px 14px',
+              border: `1px solid ${
+                feedback.type === 'error'
+                  ? 'var(--color-error, #ef4444)'
+                  : 'var(--color-primary, #10b981)'
+              }`,
               backgroundColor:
-                feedback.type === 'error' ? 'rgba(239, 68, 68, 0.08)' : 'rgba(57, 255, 106, 0.08)',
+                feedback.type === 'error'
+                  ? 'rgba(239, 68, 68, 0.08)'
+                  : isDark
+                    ? 'rgba(57, 255, 106, 0.08)'
+                    : 'rgba(16, 185, 129, 0.08)',
               color:
                 feedback.type === 'error'
                   ? 'var(--color-error, #ef4444)'
-                  : 'var(--term-green, #39ff6a)',
-              borderRadius: '4px',
-              fontSize: '11px',
+                  : 'var(--color-primary, #10b981)',
+              borderRadius: '8px',
+              fontSize: '12px',
+              fontWeight: 500,
             }}
           >
-            &gt; {feedback.text}
+            {feedback.type === 'error' ? '✕' : <CheckCircleOutlined />} {feedback.text}
           </div>
         )}
 
@@ -320,74 +354,94 @@ export const PasswordManagementModal = ({ open, onClose, userEmail = '' }) => {
         {activeTab === 'change' && (
           <form
             onSubmit={handleChangePassword}
-            style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}
+            style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}
           >
             <div>
-              <label style={labelStyle}>// ACTIVE_CIPHER_KEY (CURRENT PASSWORD)</label>
+              <label style={labelStyle}>
+                <LockOutlined /> Current Password
+              </label>
               <input
                 type="password"
                 value={currentPassword}
                 onChange={(e) => setCurrentPassword(e.target.value)}
-                placeholder="••••••••••••"
+                placeholder="Enter current password"
                 disabled={loading}
                 style={inputStyle}
               />
             </div>
             <div>
-              <label style={labelStyle}>// TARGET_CIPHER_STRING (NEW PASSWORD)</label>
+              <label style={labelStyle}>
+                <KeyOutlined /> New Password
+              </label>
               <input
                 type="password"
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
-                placeholder="min. 8 entropy characters"
+                placeholder="Minimum 8 characters"
                 disabled={loading}
                 style={inputStyle}
               />
             </div>
             <div>
-              <label style={labelStyle}>// CONFIRM_TARGET_CIPHER</label>
+              <label style={labelStyle}>
+                <CheckCircleOutlined /> Confirm New Password
+              </label>
               <input
                 type="password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                placeholder="re-enter new string"
+                placeholder="Re-enter new password"
                 disabled={loading}
                 style={inputStyle}
               />
             </div>
 
             <div
-              style={{ display: 'flex', justifyContent: 'flex-end', gap: '8px', paddingTop: '8px' }}
+              style={{
+                display: 'flex',
+                justifyContent: 'flex-end',
+                gap: '10px',
+                paddingTop: '6px',
+              }}
             >
               <button
                 type="button"
                 onClick={handleClose}
                 disabled={loading}
                 style={{
-                  padding: '6px 14px',
+                  padding: '8px 16px',
                   background: 'transparent',
-                  border: '1px solid var(--color-border, #30363d)',
-                  color: 'var(--color-text-muted, #8b949e)',
-                  borderRadius: '3px',
+                  border: isDark
+                    ? '1px solid var(--term-border, #243527)'
+                    : '1px solid var(--color-border, #d9d9d9)',
+                  color: 'var(--color-text-secondary, #6b7280)',
+                  borderRadius: '8px',
                   cursor: 'pointer',
+                  fontWeight: 600,
+                  fontSize: '12px',
                 }}
               >
-                ABORT
+                Cancel
               </button>
               <button
                 type="submit"
                 disabled={loading}
                 style={{
-                  padding: '6px 16px',
-                  background: 'var(--color-bg-container, #161b22)',
-                  border: '1px solid var(--term-green, #39ff6a)',
-                  color: 'var(--term-green, #39ff6a)',
-                  borderRadius: '3px',
-                  cursor: 'pointer',
+                  padding: '8px 20px',
+                  background: loading ? 'var(--color-bg-hover)' : 'var(--color-primary, #10b981)',
+                  border: '1px solid var(--color-primary, #10b981)',
+                  color: isDark ? 'var(--term-green, #39ff6a)' : '#ffffff',
+                  borderRadius: '8px',
+                  cursor: loading ? 'not-allowed' : 'pointer',
                   fontWeight: 600,
+                  fontSize: '12px',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '8px',
                 }}
               >
-                {loading ? 'EXECUTING_REWRITE...' : 'EXECUTE_UPDATE [↵]'}
+                {loading && <LoadingOutlined />}
+                {loading ? 'Updating Password...' : 'Save New Password'}
               </button>
             </div>
           </form>
@@ -396,25 +450,31 @@ export const PasswordManagementModal = ({ open, onClose, userEmail = '' }) => {
         {/* TAB 2: Forgot Password Multi-step Recovery */}
         {activeTab === 'forgot' && (
           <div>
-            {/* Step 1: Transmit Email */}
+            {/* Step 1: Send Verification Code */}
             {recoveryStep === 'EMAIL_DISPATCH' && (
               <form
                 onSubmit={handleRequestRecoveryOtp}
-                style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}
+                style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}
               >
                 <p
-                  style={{ margin: 0, fontSize: '11px', color: 'var(--color-text-muted, #8b949e)' }}
+                  style={{
+                    margin: 0,
+                    fontSize: '12px',
+                    color: 'var(--color-text-secondary, #6b7280)',
+                    lineHeight: 1.5,
+                  }}
                 >
-                  Phase 1: Enter your identity email address to request a secure 6-digit one-time
-                  authorization code.
+                  Enter your registered email address to receive a secure 6-digit verification code.
                 </p>
                 <div>
-                  <label style={labelStyle}>// IDENTITY_COMM_NODE (EMAIL)</label>
+                  <label style={labelStyle}>
+                    <MailOutlined /> Email Address
+                  </label>
                   <input
                     type="email"
                     value={recoveryEmail}
                     onChange={(e) => setRecoveryEmail(e.target.value)}
-                    placeholder="operator@network.internal"
+                    placeholder="user@example.com"
                     disabled={loading}
                     style={inputStyle}
                   />
@@ -423,8 +483,8 @@ export const PasswordManagementModal = ({ open, onClose, userEmail = '' }) => {
                   style={{
                     display: 'flex',
                     justifyContent: 'flex-end',
-                    gap: '8px',
-                    paddingTop: '8px',
+                    gap: '10px',
+                    paddingTop: '6px',
                   }}
                 >
                   <button
@@ -432,48 +492,64 @@ export const PasswordManagementModal = ({ open, onClose, userEmail = '' }) => {
                     onClick={handleClose}
                     disabled={loading}
                     style={{
-                      padding: '6px 14px',
+                      padding: '8px 16px',
                       background: 'transparent',
-                      border: '1px solid var(--color-border, #30363d)',
-                      color: 'var(--color-text-muted, #8b949e)',
-                      borderRadius: '3px',
+                      border: isDark
+                        ? '1px solid var(--term-border, #243527)'
+                        : '1px solid var(--color-border, #d9d9d9)',
+                      color: 'var(--color-text-secondary, #6b7280)',
+                      borderRadius: '8px',
                       cursor: 'pointer',
+                      fontWeight: 600,
+                      fontSize: '12px',
                     }}
                   >
-                    ABORT
+                    Cancel
                   </button>
                   <button
                     type="submit"
                     disabled={loading}
                     style={{
-                      padding: '6px 16px',
-                      background: 'var(--color-bg-container, #161b22)',
-                      border: '1px solid #f59e0b',
-                      color: '#f59e0b',
-                      borderRadius: '3px',
-                      cursor: 'pointer',
+                      padding: '8px 20px',
+                      background: 'var(--color-primary, #10b981)',
+                      border: '1px solid var(--color-primary, #10b981)',
+                      color: isDark ? 'var(--term-green, #39ff6a)' : '#ffffff',
+                      borderRadius: '8px',
+                      cursor: loading ? 'not-allowed' : 'pointer',
                       fontWeight: 600,
+                      fontSize: '12px',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '8px',
                     }}
                   >
-                    {loading ? 'DISPATCHING...' : 'DISPATCH_CODE [↵]'}
+                    {loading && <LoadingOutlined />}
+                    {loading ? 'Sending Code...' : 'Send Verification Code'}
                   </button>
                 </div>
               </form>
             )}
 
-            {/* Step 2: Input 6-Digit OTP */}
+            {/* Step 2: Input 6-Digit Code */}
             {recoveryStep === 'VERIFY_OTP' && (
               <form
                 onSubmit={handleVerifyOtp}
-                style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}
+                style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}
               >
                 <p
-                  style={{ margin: 0, fontSize: '11px', color: 'var(--color-text-muted, #8b949e)' }}
+                  style={{
+                    margin: 0,
+                    fontSize: '12px',
+                    color: 'var(--color-text-secondary, #6b7280)',
+                    lineHeight: 1.5,
+                  }}
                 >
-                  Phase 2: Enter the 6-digit OTP dispatched to your endpoint.
+                  Please enter the 6-digit code sent to your inbox.
                 </p>
                 <div>
-                  <label style={labelStyle}>// 6-DIGIT_ONE_TIME_CIPHER</label>
+                  <label style={labelStyle}>
+                    <SafetyCertificateOutlined /> 6-Digit Verification Code
+                  </label>
                   <input
                     type="text"
                     maxLength={6}
@@ -483,9 +559,10 @@ export const PasswordManagementModal = ({ open, onClose, userEmail = '' }) => {
                     disabled={loading}
                     style={{
                       ...inputStyle,
-                      letterSpacing: '4px',
+                      letterSpacing: '6px',
                       textAlign: 'center',
-                      fontSize: '16px',
+                      fontSize: '18px',
+                      fontWeight: 700,
                     }}
                   />
                 </div>
@@ -494,7 +571,7 @@ export const PasswordManagementModal = ({ open, onClose, userEmail = '' }) => {
                     display: 'flex',
                     justifyContent: 'space-between',
                     alignItems: 'center',
-                    paddingTop: '8px',
+                    paddingTop: '6px',
                   }}
                 >
                   <button
@@ -504,61 +581,78 @@ export const PasswordManagementModal = ({ open, onClose, userEmail = '' }) => {
                     style={{
                       background: 'none',
                       border: 'none',
-                      color: 'var(--color-text-muted, #8b949e)',
+                      color: 'var(--color-text-secondary, #6b7280)',
                       cursor: 'pointer',
-                      fontSize: '11px',
+                      fontSize: '12px',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '4px',
                     }}
                   >
-                    &lt; RE-ENTER EMAIL
+                    <ArrowLeftOutlined /> Change Email
                   </button>
                   <button
                     type="submit"
                     disabled={loading}
                     style={{
-                      padding: '6px 16px',
-                      background: 'var(--color-bg-container, #161b22)',
-                      border: '1px solid var(--term-green, #39ff6a)',
-                      color: 'var(--term-green, #39ff6a)',
-                      borderRadius: '3px',
-                      cursor: 'pointer',
+                      padding: '8px 20px',
+                      background: 'var(--color-primary, #10b981)',
+                      border: '1px solid var(--color-primary, #10b981)',
+                      color: isDark ? 'var(--term-green, #39ff6a)' : '#ffffff',
+                      borderRadius: '8px',
+                      cursor: loading ? 'not-allowed' : 'pointer',
                       fontWeight: 600,
+                      fontSize: '12px',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '8px',
                     }}
                   >
-                    {loading ? 'VALIDATING...' : 'VERIFY_CODE [↵]'}
+                    {loading && <LoadingOutlined />}
+                    {loading ? 'Verifying...' : 'Verify Code'}
                   </button>
                 </div>
               </form>
             )}
 
-            {/* Step 3: Write New Password */}
+            {/* Step 3: Set New Password */}
             {recoveryStep === 'NEW_PASSWORD' && (
               <form
                 onSubmit={handleResetPassword}
-                style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}
+                style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}
               >
                 <p
-                  style={{ margin: 0, fontSize: '11px', color: 'var(--color-text-muted, #8b949e)' }}
+                  style={{
+                    margin: 0,
+                    fontSize: '12px',
+                    color: 'var(--color-text-secondary, #6b7280)',
+                    lineHeight: 1.5,
+                  }}
                 >
-                  Phase 3: Cryptographic verification confirmed. Set your new access credentials.
+                  Identity confirmed. Enter your new password below.
                 </p>
                 <div>
-                  <label style={labelStyle}>// NEW_TARGET_CIPHER</label>
+                  <label style={labelStyle}>
+                    <LockOutlined /> New Password
+                  </label>
                   <input
                     type="password"
                     value={recoveryNewPassword}
                     onChange={(e) => setRecoveryNewPassword(e.target.value)}
-                    placeholder="min. 8 characters"
+                    placeholder="Minimum 8 characters"
                     disabled={loading}
                     style={inputStyle}
                   />
                 </div>
                 <div>
-                  <label style={labelStyle}>// CONFIRM_NEW_TARGET_CIPHER</label>
+                  <label style={labelStyle}>
+                    <CheckCircleOutlined /> Confirm New Password
+                  </label>
                   <input
                     type="password"
                     value={recoveryConfirmPassword}
                     onChange={(e) => setRecoveryConfirmPassword(e.target.value)}
-                    placeholder="re-enter new string"
+                    placeholder="Re-enter your new password"
                     disabled={loading}
                     style={inputStyle}
                   />
@@ -567,24 +661,29 @@ export const PasswordManagementModal = ({ open, onClose, userEmail = '' }) => {
                   style={{
                     display: 'flex',
                     justifyContent: 'flex-end',
-                    gap: '8px',
-                    paddingTop: '8px',
+                    gap: '10px',
+                    paddingTop: '6px',
                   }}
                 >
                   <button
                     type="submit"
                     disabled={loading}
                     style={{
-                      padding: '6px 16px',
-                      background: 'var(--color-bg-container, #161b22)',
-                      border: '1px solid var(--term-green, #39ff6a)',
-                      color: 'var(--term-green, #39ff6a)',
-                      borderRadius: '3px',
-                      cursor: 'pointer',
+                      padding: '8px 20px',
+                      background: 'var(--color-primary, #10b981)',
+                      border: '1px solid var(--color-primary, #10b981)',
+                      color: isDark ? 'var(--term-green, #39ff6a)' : '#ffffff',
+                      borderRadius: '8px',
+                      cursor: loading ? 'not-allowed' : 'pointer',
                       fontWeight: 600,
+                      fontSize: '12px',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '8px',
                     }}
                   >
-                    {loading ? 'COMMITTING...' : 'COMMIT_NEW_SECRET [↵]'}
+                    {loading && <LoadingOutlined />}
+                    {loading ? 'Saving...' : 'Reset Password'}
                   </button>
                 </div>
               </form>
