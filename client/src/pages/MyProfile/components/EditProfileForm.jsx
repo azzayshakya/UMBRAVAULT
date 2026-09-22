@@ -5,6 +5,11 @@ import {
   PlusOutlined,
   CloseOutlined,
   CameraOutlined,
+  LinkedinOutlined,
+  GithubOutlined,
+  TwitterOutlined,
+  InstagramOutlined,
+  CodeOutlined,
 } from '@ant-design/icons'
 import Loader from '@devStack/components/spinners/Loader'
 import { useTheme } from '@devStack/store/theme/hooks/useTheme'
@@ -14,13 +19,60 @@ import { useState, useMemo } from 'react'
 
 import { AvatarUploadModal } from './AvatarUploadModal'
 
+const PLATFORM_CONFIGS = [
+  {
+    key: 'linkedin',
+    label: 'LINKEDIN',
+    placeholder: 'https://linkedin.com/in/username',
+    icon: <LinkedinOutlined style={{ color: 'var(--color-primary)' }} />,
+  },
+  {
+    key: 'github',
+    label: 'GITHUB',
+    placeholder: 'https://github.com/username',
+    icon: <GithubOutlined style={{ color: 'var(--color-primary)' }} />,
+  },
+  {
+    key: 'leetcode',
+    label: 'LEETCODE',
+    placeholder: 'https://leetcode.com/u/username',
+    icon: <CodeOutlined style={{ color: 'var(--color-primary)' }} />,
+  },
+  {
+    key: 'twitter',
+    label: 'TWITTER / X',
+    placeholder: 'https://x.com/username',
+    icon: <TwitterOutlined style={{ color: 'var(--color-primary)' }} />,
+  },
+  {
+    key: 'instagram',
+    label: 'INSTAGRAM',
+    placeholder: 'https://instagram.com/username',
+    icon: <InstagramOutlined style={{ color: 'var(--color-primary)' }} />,
+  },
+]
+
+// Convert incoming array [{ platform: 'github', url: '...' }] into keyed map { github: '...' }
+const buildProfileMap = (profilesList = []) => {
+  const map = {}
+  PLATFORM_CONFIGS.forEach(({ key }) => {
+    const entry = profilesList.find((p) => p.platform?.toLowerCase() === key)
+    map[key] = entry?.url || ''
+  })
+  return map
+}
+
 export const EditProfileForm = ({ initialValues, onSubmit, onCancel, submitting }) => {
   const [form] = Form.useForm()
 
   const { resolvedTheme } = useTheme()
   const isDark = resolvedTheme === Theme.DARK
 
-  // Track editable form values in real-time
+  const initialProfilesMap = useMemo(
+    () => buildProfileMap(initialValues?.profiles || []),
+    [initialValues?.profiles]
+  )
+
   const watchedValues = Form.useWatch([], form)
 
   const [avatarUrl, setAvatarUrl] = useState(
@@ -31,19 +83,17 @@ export const EditProfileForm = ({ initialValues, onSubmit, onCancel, submitting 
   const [newTagInput, setNewTagInput] = useState('')
   const [showTagInput, setShowTagInput] = useState(false)
 
-  // Verify whether any field, the avatar, or interests array has changed
   const isDirty = useMemo(() => {
-    // 1. Check avatar URL
+    // 1. Avatar check
     const originalAvatar = initialValues?.avatar || '/images/global/my-profile.jpg'
     if (avatarUrl !== originalAvatar) return true
 
-    // 2. Check interests tags array
+    // 2. Interests check
     const originalInterests = initialValues?.interests || []
     if (interests.length !== originalInterests.length) return true
-    const interestsChanged = interests.some((tag, idx) => tag !== originalInterests[idx])
-    if (interestsChanged) return true
+    if (interests.some((tag, idx) => tag !== originalInterests[idx])) return true
 
-    // 3. Check Form text fields
+    // 3. Basic text fields
     const currentName = (watchedValues?.name ?? initialValues?.name ?? '').trim()
     const originalName = (initialValues?.name ?? '').trim()
     if (currentName !== originalName) return true
@@ -56,8 +106,16 @@ export const EditProfileForm = ({ initialValues, onSubmit, onCancel, submitting 
     const originalBio = (initialValues?.bio ?? '').trim()
     if (currentBio !== originalBio) return true
 
+    // 4. Social & Coding profile URLs
+    const profilesChanged = PLATFORM_CONFIGS.some(({ key }) => {
+      const currentUrl = (watchedValues?.profiles?.[key] ?? initialProfilesMap[key] ?? '').trim()
+      const originalUrl = (initialProfilesMap[key] ?? '').trim()
+      return currentUrl !== originalUrl
+    })
+    if (profilesChanged) return true
+
     return false
-  }, [watchedValues, avatarUrl, interests, initialValues])
+  }, [watchedValues, avatarUrl, interests, initialValues, initialProfilesMap])
 
   const handleRemoveInterest = (tagToRemove) => {
     setInterests(interests.filter((tag) => tag !== tagToRemove))
@@ -72,10 +130,18 @@ export const EditProfileForm = ({ initialValues, onSubmit, onCancel, submitting 
   }
 
   const handleFinish = (values) => {
+    // Transform form keyed object back into array format expected by backend:
+    // [{ platform: 'github', url: '...' }]
+    const formattedProfiles = PLATFORM_CONFIGS.map(({ key }) => ({
+      platform: key,
+      url: (values.profiles?.[key] || '').trim(),
+    })).filter((item) => Boolean(item.url))
+
     onSubmit({
       ...values,
       avatar: avatarUrl,
       interests,
+      profiles: formattedProfiles,
     })
   }
 
@@ -95,7 +161,10 @@ export const EditProfileForm = ({ initialValues, onSubmit, onCancel, submitting 
       <Form
         form={form}
         layout="vertical"
-        initialValues={initialValues}
+        initialValues={{
+          ...initialValues,
+          profiles: initialProfilesMap,
+        }}
         onFinish={handleFinish}
         requiredMark={false}
         style={{ width: '100%' }}
@@ -160,7 +229,7 @@ export const EditProfileForm = ({ initialValues, onSubmit, onCancel, submitting 
           </div>
         </div>
 
-        {/* Inputs Grid */}
+        {/* Basic Inputs Grid */}
         <div
           style={{
             display: 'grid',
@@ -223,6 +292,49 @@ export const EditProfileForm = ({ initialValues, onSubmit, onCancel, submitting 
         >
           <Input.TextArea rows={3} style={inputStyle} />
         </Form.Item>
+
+        {/* Coding & Social Profiles Section */}
+        <div style={{ marginBottom: 24 }}>
+          <div
+            style={{
+              color: 'var(--color-primary)',
+              fontSize: 12,
+              fontWeight: 600,
+              marginBottom: 12,
+              letterSpacing: '0.05em',
+            }}
+          >
+            SOCIAL & CODING PROFILES
+          </div>
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+              gap: 16,
+            }}
+          >
+            {PLATFORM_CONFIGS.map((platform) => (
+              <Form.Item
+                key={platform.key}
+                name={['profiles', platform.key]}
+                label={
+                  <span style={{ color: 'var(--color-primary)', fontSize: 11 }}>
+                    {platform.label}
+                  </span>
+                }
+                rules={[{ type: 'url', message: 'Enter a valid URL (https://...)' }]}
+                style={{ marginBottom: 0 }}
+              >
+                <Input
+                  prefix={platform.icon}
+                  placeholder={platform.placeholder}
+                  style={inputStyle}
+                  allowClear
+                />
+              </Form.Item>
+            ))}
+          </div>
+        </div>
 
         {/* Dynamic Tags/Interests */}
         <div style={{ marginBottom: 24 }}>

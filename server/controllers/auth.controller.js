@@ -33,7 +33,6 @@ function sendTokens(res, { accessToken, refreshToken, deviceId }) {
 }
 
 function toProfileUser(user) {
-  console.log(user);
   return {
     _id: user._id,
     id: user._id,
@@ -47,11 +46,11 @@ function toProfileUser(user) {
     phone: user.phone || "",
     bio: user.bio || "",
     interests: user.interests || [],
+    profiles: user.profiles || [], // <-- Exposed in profile & session responses
     createdAt: user.createdAt,
     updatedAt: user.updatedAt,
   };
 }
-
 function getAccessTokenTtlSeconds(req) {
   const rawToken =
     req.headers.authorization?.split(" ")[1] || req.cookies?.accessToken;
@@ -193,20 +192,38 @@ const getMyProfile = async (req, res) => {
     );
 };
 
-// PUT or PATCH /api/v1/auth/profile - Updates strictly the authenticated caller's profile
 const updateMyProfile = async (req, res) => {
-  const { name, phone, bio, interests, avatar } = req.body;
+  const { name, phone, bio, interests, avatar, profiles } = req.body;
 
   const updatePayload = {};
   if (name !== undefined) updatePayload.name = name.trim();
   if (phone !== undefined) updatePayload.phone = phone.trim();
   if (bio !== undefined) updatePayload.bio = bio.trim();
+  if (avatar !== undefined) updatePayload.avatar = avatar.trim();
+
   if (interests !== undefined && Array.isArray(interests)) {
     updatePayload.interests = interests
       .map((item) => String(item).trim())
       .filter(Boolean);
   }
-  if (avatar !== undefined) updatePayload.avatar = avatar.trim();
+
+  if (profiles !== undefined && Array.isArray(profiles)) {
+    const allowedPlatforms = [
+      "linkedin",
+      "leetcode",
+      "github",
+      "twitter",
+      "instagram",
+    ];
+
+    updatePayload.profiles = profiles
+      .filter((p) => p && typeof p === "object" && p.platform && p.url)
+      .map((p) => ({
+        platform: String(p.platform).trim().toLowerCase(),
+        url: String(p.url).trim(),
+      }))
+      .filter((p) => allowedPlatforms.includes(p.platform) && p.url.length > 0);
+  }
 
   const user = await User.findByIdAndUpdate(req.user.id, updatePayload, {
     new: true,
@@ -219,7 +236,11 @@ const updateMyProfile = async (req, res) => {
   return res
     .status(200)
     .json(
-      ApiResponse(200, toProfileUser(user), "Profile updated successfully"),
+      ApiResponse(
+        200,
+        { user: toProfileUser(user) },
+        "Profile updated successfully",
+      ),
     );
 };
 

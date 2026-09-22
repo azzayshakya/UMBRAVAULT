@@ -21,7 +21,6 @@ import {
   FileTextOutlined,
   InfoCircleOutlined,
   KeyOutlined,
-  // ShieldCheckOutlined,
   ThunderboltOutlined,
   ClusterOutlined,
 } from '@ant-design/icons'
@@ -33,7 +32,7 @@ import { useIsMobile } from '@devStack/hooks/useIsMobile'
 import { useTheme } from '@devStack/store/theme/hooks/useTheme'
 import { Theme } from '@devStack/store/theme/utils/theme-constants'
 import { Tag, Tooltip, message } from 'antd'
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 
 import { EditProfileForm } from './components/EditProfileForm'
 import { PasswordManagementModal } from './components/PasswordManagementModal'
@@ -44,43 +43,45 @@ const SOCIAL_NETWORKS = [
     key: 'github',
     label: 'GitHub',
     icon: <GithubOutlined />,
-    field: 'github',
     brandColor: '#38bdf8',
-    formatUrl: (u) => `https://github.com/${u}`,
   },
   {
     key: 'leetcode',
     label: 'LeetCode',
     icon: <CodeOutlined />,
-    field: 'leetcode',
     brandColor: '#f59e0b',
-    formatUrl: (u) => `https://leetcode.com/${u}`,
   },
   {
     key: 'linkedin',
     label: 'LinkedIn',
     icon: <LinkedinOutlined />,
-    field: 'linkedin',
     brandColor: '#0ea5e9',
-    formatUrl: (u) => `https://linkedin.com/in/${u}`,
   },
   {
     key: 'twitter',
     label: 'X / Twitter',
     icon: <TwitterOutlined />,
-    field: 'twitter',
     brandColor: '#a78bfa',
-    formatUrl: (u) => `https://twitter.com/${u}`,
   },
   {
     key: 'instagram',
     label: 'Instagram',
     icon: <InstagramOutlined />,
-    field: 'instagram',
     brandColor: '#ec4899',
-    formatUrl: (u) => `https://instagram.com/${u}`,
   },
 ]
+
+// Extract username/handle or clean path from URL for compact UI display
+const extractHandle = (url) => {
+  if (!url) return ''
+  try {
+    const parsed = new URL(url.startsWith('http') ? url : `https://${url}`)
+    const parts = parsed.pathname.split('/').filter(Boolean)
+    return parts[parts.length - 1] || parsed.hostname
+  } catch {
+    return url.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '')
+  }
+}
 
 export default function MyProfile() {
   const [isEditing, setIsEditing] = useState(false)
@@ -91,9 +92,22 @@ export default function MyProfile() {
   const isDark = resolvedTheme === Theme.DARK
   const isMobile = useIsMobile()
 
+  // Map the profiles array [{ platform: 'linkedin', url: '...' }] to an accessible lookup object
+  const profileUrlMap = useMemo(() => {
+    const map = {}
+    if (Array.isArray(profile?.profiles)) {
+      profile.profiles.forEach((p) => {
+        if (p?.platform && p?.url) {
+          map[p.platform.toLowerCase()] = p.url
+        }
+      })
+    }
+    return map
+  }, [profile?.profiles])
+
   const handleUpdate = async (formData) => {
     const res = await updateProfile(formData)
-    if (res?.success) {
+    if (res?.success || res?.status === 200) {
       setIsEditing(false)
     }
   }
@@ -101,21 +115,20 @@ export default function MyProfile() {
   const copyToClipboard = (text, label) => {
     if (!text) return
     navigator.clipboard.writeText(text)
-    message.success(`${label} copied to clipboard`)
+    message.success(`${label} link copied to clipboard`)
   }
 
-  const handlePlatformClick = (platform, handle) => {
-    if (!handle) {
+  const handlePlatformClick = (platform, targetUrl) => {
+    if (!targetUrl) {
       message.info({
         content: `${platform.label} link not configured. Tap 'Edit Profile' to link account.`,
         icon: <InfoCircleOutlined style={{ color: 'var(--color-primary)' }} />,
       })
       return
     }
-    window.open(platform.formatUrl(handle), '_blank', 'noopener,noreferrer')
+    const safeUrl = targetUrl.startsWith('http') ? targetUrl : `https://${targetUrl}`
+    window.open(safeUrl, '_blank', 'noopener,noreferrer')
   }
-
-  const userSocialLinks = profile?.socialLinks || {}
 
   return (
     <PageHeader
@@ -133,7 +146,6 @@ export default function MyProfile() {
               width: isMobile ? '100%' : 'auto',
             }}
           >
-            {/* Security / Password Action Button */}
             <button
               type="button"
               onClick={() => setIsPasswordModalOpen(true)}
@@ -160,7 +172,6 @@ export default function MyProfile() {
               <span>SECURITY_KEY</span>
             </button>
 
-            {/* Primary Edit Profile Button */}
             <button
               type="button"
               onClick={() => setIsEditing(true)}
@@ -211,7 +222,7 @@ export default function MyProfile() {
         /* 2. Error Fallback */
         <EmptyState variant="error" description={error} actionText="RETRY" onAction={refetch} />
       ) : isEditing ? (
-        /* 3. Modern Edit Mode */
+        /* 3. Edit Mode */
         <div
           style={{
             background: 'var(--color-bg-container)',
@@ -455,7 +466,7 @@ export default function MyProfile() {
             />
           </div>
 
-          {/* Split Bento Layout */}
+          {/* Bento Layout */}
           <div
             style={{
               display: 'grid',
@@ -584,13 +595,14 @@ export default function MyProfile() {
                   }}
                 >
                   {SOCIAL_NETWORKS.map((network) => {
-                    const handle = userSocialLinks[network.field]
-                    const hasLink = Boolean(handle)
+                    const targetUrl = profileUrlMap[network.key]
+                    const hasLink = Boolean(targetUrl)
+                    const displayHandle = extractHandle(targetUrl)
 
                     return (
                       <div
                         key={network.key}
-                        onClick={() => handlePlatformClick(network, handle)}
+                        onClick={() => handlePlatformClick(network, targetUrl)}
                         style={{
                           display: 'flex',
                           alignItems: 'center',
@@ -652,7 +664,7 @@ export default function MyProfile() {
                                 textOverflow: 'ellipsis',
                               }}
                             >
-                              {hasLink ? `@${handle}` : 'NOT LINKED'}
+                              {hasLink ? `@${displayHandle}` : 'NOT LINKED'}
                             </div>
                           </div>
                         </div>
@@ -662,12 +674,12 @@ export default function MyProfile() {
                         >
                           {hasLink ? (
                             <>
-                              <Tooltip title="Copy Handle">
+                              <Tooltip title={`Copy ${network.label} URL`}>
                                 <button
                                   type="button"
                                   onClick={(e) => {
                                     e.stopPropagation()
-                                    copyToClipboard(handle, network.label)
+                                    copyToClipboard(targetUrl, network.label)
                                   }}
                                   style={{
                                     background: 'transparent',
@@ -686,7 +698,7 @@ export default function MyProfile() {
                                   type="button"
                                   onClick={(e) => {
                                     e.stopPropagation()
-                                    handlePlatformClick(network, handle)
+                                    handlePlatformClick(network, targetUrl)
                                   }}
                                   style={{
                                     background: 'transparent',

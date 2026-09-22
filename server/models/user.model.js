@@ -72,6 +72,22 @@ const userSchema = new mongoose.Schema(
       type: [String],
       default: [],
     },
+    profiles: [
+      {
+        platform: {
+          type: String,
+          required: true,
+          enum: ["linkedin", "leetcode", "github", "twitter", "instagram"],
+          lowercase: true,
+          trim: true,
+        },
+        url: {
+          type: String,
+          required: true,
+          trim: true,
+        },
+      },
+    ],
   },
   { timestamps: true },
 );
