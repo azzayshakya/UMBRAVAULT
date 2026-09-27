@@ -10,7 +10,7 @@ import { io } from 'socket.io-client'
 
 const { Text } = Typography
 
-const NOTIFICATION_URL = 'http://localhost:5002'
+const NOTIFICATION_URL = 'https://notificaion-service.onrender.com'
 
 export default function NotificationBell({ userId, appId = 'umbra-vault' }) {
   const [open, setOpen] = useState(false)
