@@ -1,0 +1,75 @@
+{
+  "name": "Umbra Vault",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint src devStack",
+    "lint:fix": "eslint src --fix",
+    "format": "prettier --write src devStack",
+    "format:check": "prettier --check src",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:run": "vitest run",
+    "test:coverage": "vitest run --coverage"
+  },
+  "dependencies": {
+    "@hookform/resolvers": "^5.4.0",
+    "@reduxjs/toolkit": "^2.12.0",
+    "@tailwindcss/vite": "^4.3.1",
+    "antd": "^6.4.4",
+    "axios": "^1.18.1",
+    "compression": "^1.8.1",
+    "express-async-errors": "^3.1.1",
+    "helmet": "^8.3.0",
+    "jwt-decode": "^4.0.0",
+    "lucide-react": "^1.25.0",
+    "react": "^19.2.6",
+    "react-dom": "^19.2.6",
+    "react-hook-form": "^7.76.1",
+    "react-redux": "^9.3.0",
+    "react-router-dom": "^7.16.0",
+    "tailwindcss": "^4.3.1",
+    "zod": "^4.4.3",
+    "zustand": "^5.0.14"
+  },
+  "lint-staged": {
+    "src/**/*.{js,jsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "src/**/*.{css,html}": [
+      "prettier --write"
+    ]
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.1",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.1",
+    "eslint": "^9.39.4",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-import-resolver-alias": "^1.1.2",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-react-refresh": "^0.5.2",
+    "globals": "^17.6.0",
+    "jsdom": "^29.1.1",
+    "lint-staged": "^16.4.0",
+    "msw": "^2.14.6",
+    "prettier": "^3.8.3",
+    "vite": "^8.0.12",
+    "vitest": "^4.1.7"
+  }
+}

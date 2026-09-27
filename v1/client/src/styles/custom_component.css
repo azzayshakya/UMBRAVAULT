@@ -1,0 +1,293 @@
+/* ─── Shared frame (card + modal inner both use this) ──────────────────── */
+
+.terminal-frame {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border: 1px solid var(--term-border);
+  border-radius: var(--term-radius);
+  box-shadow: var(--color-glow);
+  font-family: var(--term-font);
+  color: var(--color-secondary-hover);
+}
+
+.terminal-frame__corner {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  z-index: 3;
+  pointer-events: none;
+  animation: term-corner-pulse 3s ease-in-out infinite;
+}
+
+.terminal-frame__corner--tl {
+  top: -1px;
+  left: -1px;
+  border-top: 2px solid var(--color-primary);
+  border-left: 2px solid var(--color-primary);
+}
+
+.terminal-frame__corner--tr {
+  top: -1px;
+  right: -1px;
+  border-top: 2px solid var(--color-primary);
+  border-right: 2px solid var(--color-primary);
+}
+
+.terminal-frame__corner--bl {
+  bottom: -1px;
+  left: -1px;
+  border-bottom: 2px solid var(--color-primary);
+  border-left: 2px solid var(--color-primary);
+}
+
+.terminal-frame__corner--br {
+  bottom: -1px;
+  right: -1px;
+  border-bottom: 2px solid var(--color-primary);
+  border-right: 2px solid var(--color-primary);
+}
+
+.terminal-frame__scanlines {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0) 0,
+    rgba(0, 0, 0, 0) 2px,
+    rgba(57, 255, 106, 0.035) 3px
+  );
+  mix-blend-mode: overlay;
+}
+
+.terminal-frame__beam {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(to right, transparent, var(--color-primary), transparent);
+  animation: term-scan-sweep 6s linear infinite;
+}
+
+.terminal-frame__header {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--term-border);
+}
+
+.terminal-frame__prompt {
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+  color: var(--color-primary);
+  letter-spacing: 0.4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.terminal-frame__cursor {
+  margin-left: 4px;
+  color: var(--color-primary);
+  animation: term-blink 1s steps(1) infinite;
+}
+
+.terminal-frame__title-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.terminal-frame__title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-primary);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.terminal-frame__dots {
+  display: flex;
+  gap: 5px;
+  flex-shrink: 0;
+}
+
+.terminal-frame__dots span {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  border: 1px solid var(--color-primary);
+}
+
+.terminal-frame__close {
+  flex-shrink: 0;
+  font-family: var(--term-font);
+  font-size: 11px;
+  letter-spacing: 0.5px;
+  color: var(--color-primary);
+  background: transparent;
+  border: 1px solid var(--term-border);
+  border-radius: 4px;
+  padding: 3px 8px;
+  cursor: pointer;
+  transition:
+    color 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.terminal-frame__close:hover {
+  color: var(--color-primary);
+  border-color: var(--color-border-secondary);
+}
+
+.terminal-frame__body {
+  position: relative;
+  z-index: 2;
+  padding: 18px;
+  font-size: 13px;
+  line-height: 1.75;
+}
+
+.terminal-frame__footer {
+  position: relative;
+  z-index: 2;
+  border-top: 1px solid var(--term-border);
+  padding: 12px 18px;
+}
+
+/* ─── TerminalCard ───────────────────────────────────────────────────────── */
+
+.terminal-card {
+  width: 100%;
+  max-width: var(--term-card-max-width, 520px);
+}
+
+@media (max-width: 480px) {
+  .terminal-card .terminal-frame__header,
+  .terminal-card .terminal-frame__body,
+  .terminal-card .terminal-frame__footer {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+}
+
+/* ─── TerminalModal (antd Modal overrides) ──────────────────────────────── */
+
+.terminal-modal .ant-modal-content {
+  /* background: transparent; */
+  box-shadow: none;
+  padding: 0;
+}
+.terminal-modal .ant-modal-container {
+  /* background: transparent; */
+}
+
+.terminal-modal .ant-modal-body {
+  padding: 0;
+}
+
+.terminal-modal .ant-modal-mask {
+  background: rgba(1, 6, 3, 0.78);
+  backdrop-filter: blur(2px);
+}
+
+.terminal-modal__inner {
+  animation: term-fade-in 0.22s ease-out;
+}
+
+/* ============================================================
+   THEME-AWARE HACKER TABLE CSS
+   ============================================================ */
+/* Table Header */
+.hacker-table .ant-table-thead > tr > th {
+  background: var(--color-primary-light) !important;
+  color: var(--color-primary) !important;
+  border-bottom: 1px solid var(--color-border) !important;
+  font-family: var(--term-font);
+  font-size: 11px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-weight: 700;
+  padding: 13px 12px !important;
+  /* border: 2px red solid; */
+}
+
+/* Body Cells */
+.hacker-table .ant-table-tbody > tr > td {
+  background: transparent !important;
+  border-bottom: 1px solid var(--color-border) !important;
+  color: var(--color-text-secondary) !important;
+  font-size: 12px;
+
+  /* padding: 8px 12px !important; */
+}
+
+/* Row Hover */
+.hacker-table .ant-table-tbody > tr:hover > td {
+  background: var(--color-bg-hover) !important;
+}
+
+/* Fixed Right Columns (Actions Column Support) */
+.hacker-table .ant-table-cell-fix-right,
+.hacker-table .ant-table-cell-fix-left {
+  background: var(--color-bg-container) !important;
+}
+
+.hacker-table .ant-table-tbody > tr:hover .ant-table-cell-fix-right,
+.hacker-table .ant-table-tbody > tr:hover .ant-table-cell-fix-left {
+  background: var(--color-bg-hover) !important;
+}
+
+/* Pagination Styling */
+.hacker-table .ant-pagination-item,
+.hacker-table .ant-pagination-prev .ant-pagination-item-link,
+.hacker-table .ant-pagination-next .ant-pagination-item-link,
+.hacker-table .ant-pagination-jump-prev .ant-pagination-item-link-icon,
+.hacker-table .ant-pagination-jump-next .ant-pagination-item-link-icon {
+  background: var(--color-bg-container) !important;
+  border: 1px solid var(--color-border) !important;
+  color: var(--color-text-secondary) !important;
+  border-radius: var(--radius-sm, 6px);
+}
+
+.hacker-table .ant-pagination-item-active {
+  background: var(--color-primary-light) !important;
+  border-color: var(--color-primary) !important;
+}
+
+.hacker-table .ant-pagination-item-active a {
+  color: var(--color-primary) !important;
+  font-weight: 700;
+}
+
+.hacker-table .ant-pagination-options .ant-select-selector {
+  background: var(--color-bg-container) !important;
+  border: 1px solid var(--color-border) !important;
+  color: var(--color-text) !important;
+  border-radius: var(--radius-sm, 6px);
+}
+
+/* Outer Card Container Overrides (Light vs Dark) */
+[data-scheme='light'] .hacker-table-wrapper {
+  background: var(--color-bg-container) !important;
+  border: 1px solid var(--color-border) !important;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+}
+
+[data-scheme='dark'] .hacker-table-wrapper {
+  background: rgba(6, 18, 10, 0.4) !important;
+  border: 1px solid var(--term-border) !important;
+}

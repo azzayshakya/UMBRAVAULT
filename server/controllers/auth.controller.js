@@ -12,6 +12,7 @@ const ApiError = require("../utils/apiError");
 const ApiResponse = require("../utils/apiResponse");
 const logger = require("../utils/logger");
 const generateUniqueUsername = require("../utils/generateUniqueUsername");
+const { sendNotification } = require("../services/notification.client");
 
 const refreshCookieOptions = {
   httpOnly: true,
@@ -34,8 +35,7 @@ function sendTokens(res, { accessToken, refreshToken, deviceId }) {
 
 function toProfileUser(user) {
   return {
-    _id: user._id,
-    id: user._id,
+    userId: user._id,
     name: user.name,
     email: user.email,
     username: user.username,
@@ -46,17 +46,20 @@ function toProfileUser(user) {
     phone: user.phone || "",
     bio: user.bio || "",
     interests: user.interests || [],
-    profiles: user.profiles || [], // <-- Exposed in profile & session responses
+    profiles: user.profiles || [],
     createdAt: user.createdAt,
     updatedAt: user.updatedAt,
   };
 }
+
 function getAccessTokenTtlSeconds(req) {
   const rawToken =
     req.headers.authorization?.split(" ")[1] || req.cookies?.accessToken;
   const decoded = jwt.decode(rawToken);
   return decoded?.exp ? decoded.exp - Math.floor(Date.now() / 1000) : 900;
 }
+
+// ── Auth Endpoints ───────────────────────────────────────────────────
 
 const signup = async (req, res) => {
   const { name, email, password } = req.body;
@@ -109,6 +112,26 @@ const signup = async (req, res) => {
   const tokens = await generateTokenPair(user, deviceId);
   const { accessToken, refreshToken } = sendTokens(res, tokens);
 
+  // 🔔 Trigger ACCOUNT_CREATED Notification
+  const formattedDate = new Date().toLocaleString("en-US", {
+    dateStyle: "medium",
+    timeStyle: "short",
+  });
+
+  sendNotification({
+    userId: user._id,
+    appId: "umbra-vault",
+    templateKey: "ACCOUNT_CREATED",
+    params: {
+      name: user.name || user.username || "User",
+      date: formattedDate,
+    },
+    metadata: {
+      action: "user_signup",
+      deviceId,
+    },
+  });
+
   logger.info(`New signup: ${user.email}`);
   return res
     .status(201)
@@ -137,6 +160,26 @@ const login = async (req, res) => {
   const finalDeviceId = deviceId || `device_${Date.now()}`;
   const tokens = await generateTokenPair(user, finalDeviceId);
   const { accessToken, refreshToken } = sendTokens(res, tokens);
+
+  // 🔔 Trigger DEVICE_LOGIN Notification
+  const loginTime = new Date().toLocaleString("en-US", {
+    dateStyle: "medium",
+    timeStyle: "short",
+  });
+
+  sendNotification({
+    userId: user._id,
+    appId: "umbra-vault",
+    templateKey: "DEVICE_LOGIN",
+    params: {
+      deviceId: finalDeviceId,
+      dateTime: loginTime,
+    },
+    metadata: {
+      action: "user_login",
+      ip: req.ip,
+    },
+  });
 
   logger.info(`Login: ${user.email} (device: ${finalDeviceId})`);
   return res.status(200).json(
@@ -176,10 +219,11 @@ const refreshToken = async (req, res) => {
     );
 };
 
-// GET /api/v1/auth/profile - Fetches strictly the authenticated caller's profile
 const getMyProfile = async (req, res) => {
   const user = await User.findById(req.user.id);
   if (!user) throw ApiError.notFound("User not found");
+
+  // Removed redundant greeting notification dispatch to prevent spam
 
   return res
     .status(200)
@@ -250,7 +294,6 @@ const requestOtp = async (req, res) => {
   const { email, purpose } = req.body;
   const user = await User.findOne({ email });
 
-  // Prevent account enumeration: generic response if account does not exist
   if (!user && purpose === "forgot-password") {
     return res
       .status(200)
@@ -263,7 +306,6 @@ const requestOtp = async (req, res) => {
       );
   }
 
-  // Idempotency: skip re-issuing if already verified
   if (purpose === "verify-email" && user?.isEmailVerified) {
     return res
       .status(200)
@@ -303,7 +345,6 @@ const verifyEmail = async (req, res) => {
   const user = await User.findOne({ email });
   if (!user) throw ApiError.notFound("User not found");
 
-  // Idempotent success response
   if (user.isEmailVerified) {
     return res
       .status(200)
@@ -338,7 +379,7 @@ const verifyEmail = async (req, res) => {
     );
 };
 
-// ── Forgot Password ───────────────────────────────────────────────────
+// ── Forgot Password & Reset ──────────────────────────────────────────
 
 const verifyForgotPasswordOtp = async (req, res) => {
   const { email, code } = req.body;
@@ -380,7 +421,26 @@ const resetPassword = async (req, res) => {
   });
   sendMail({ to: user.email, ...mailData }).catch(() => {});
 
-  // Clear cookies as all sessions are revoked
+  // 🔔 Trigger PASSWORD_UPDATED Notification
+  const formattedDate = new Date().toLocaleString("en-US", {
+    dateStyle: "medium",
+    timeStyle: "short",
+  });
+
+  sendNotification({
+    userId: user._id,
+    appId: "umbra-vault",
+    templateKey: "PASSWORD_UPDATED",
+    params: {
+      date: formattedDate,
+      device: "via Email Reset",
+      ip: req.ip || "Unknown IP",
+    },
+    metadata: {
+      method: "email_reset",
+    },
+  });
+
   res.clearCookie("refreshToken", { path: refreshCookieOptions.path });
   res.clearCookie("deviceId", { path: refreshCookieOptions.path });
 
@@ -400,7 +460,8 @@ const resetPassword = async (req, res) => {
 
 const changePassword = async (req, res) => {
   const { currentPassword, newPassword } = req.body;
-  const deviceId = req.cookies?.deviceId || req.body?.deviceId;
+  const deviceId =
+    req.cookies?.deviceId || req.body?.deviceId || "Unknown Device";
 
   const user = await User.findById(req.user.id).select("+password");
   if (!user) throw ApiError.notFound("User not found");
@@ -424,6 +485,26 @@ const changePassword = async (req, res) => {
   });
   sendMail({ to: user.email, ...mailData }).catch(() => {});
 
+  // 🔔 Trigger PASSWORD_UPDATED Notification
+  const formattedDate = new Date().toLocaleString("en-US", {
+    dateStyle: "medium",
+    timeStyle: "short",
+  });
+
+  sendNotification({
+    userId: user._id,
+    appId: "umbra-vault",
+    templateKey: "PASSWORD_UPDATED",
+    params: {
+      date: formattedDate,
+      device: deviceId,
+      ip: req.ip || "Unknown IP",
+    },
+    metadata: {
+      method: "direct_change",
+    },
+  });
+
   logger.info(`Password changed directly for user: ${user._id}`);
   return res
     .status(200)
@@ -436,7 +517,6 @@ const logout = async (req, res) => {
 
   const ttlSeconds = getAccessTokenTtlSeconds(req);
   await tokenService.blacklistAccessToken(jti, ttlSeconds);
-
   await tokenService.revokeSession(id, deviceId);
 
   res.clearCookie("refreshToken", { path: refreshCookieOptions.path });

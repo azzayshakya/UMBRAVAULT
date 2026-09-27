@@ -1,9 +1,12 @@
 import { MoonOutlined, SunOutlined, MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons'
 import HeaderUserProfile from '@devStack/components/userProfile/HeaderUserProfile'
 import { useIsMobile } from '@devStack/hooks/useIsMobile'
+import { useAuth } from '@devStack/store/hooks/useAuth'
 import { useTheme } from '@devStack/store/theme/hooks/useTheme'
 import { Theme } from '@devStack/store/theme/utils/theme-constants'
 import { Breadcrumb, Layout } from 'antd'
+
+import NotificationBell from './NotificationBell'
 
 const { Header } = Layout
 
@@ -14,12 +17,14 @@ export default function AdminHeaderComponent({
   breadcrumbItems,
 }) {
   const isMobile = useIsMobile()
-  const { resolvedTheme } = useTheme()
+  const { resolvedTheme, toggleTheme } = useTheme()
   const isDark = resolvedTheme === Theme.DARK
-  const { toggleTheme } = useTheme()
+
   const handleToggleTheme = () => {
     toggleTheme()
   }
+  const { user } = useAuth()
+  const currentUserId = user?.userId
 
   return (
     <div>
@@ -62,6 +67,10 @@ export default function AdminHeaderComponent({
         )}
 
         <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 10 }}>
+          {/* Notification Bell */}
+          {currentUserId && <NotificationBell userId={currentUserId} appId="umbra-vault" />}
+
+          {/* Theme Switcher Button */}
           <button
             onClick={handleToggleTheme}
             aria-label="Toggle theme"
@@ -84,6 +93,7 @@ export default function AdminHeaderComponent({
           >
             {isDark ? <SunOutlined /> : <MoonOutlined />}
           </button>
+
           <HeaderUserProfile />
         </div>
       </Header>

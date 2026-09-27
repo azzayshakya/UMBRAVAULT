@@ -1,0 +1,92 @@
+import { MoonOutlined, SunOutlined, MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons'
+import HeaderUserProfile from '@devStack/components/userProfile/HeaderUserProfile'
+import { useIsMobile } from '@devStack/hooks/useIsMobile'
+import { useTheme } from '@devStack/store/theme/hooks/useTheme'
+import { Theme } from '@devStack/store/theme/utils/theme-constants'
+import { Breadcrumb, Layout } from 'antd'
+
+const { Header } = Layout
+
+export default function AdminHeaderComponent({
+  colorBgContainer,
+  setCollapsed,
+  collapsed,
+  breadcrumbItems,
+}) {
+  const isMobile = useIsMobile()
+  const { resolvedTheme } = useTheme()
+  const isDark = resolvedTheme === Theme.DARK
+  const { toggleTheme } = useTheme()
+  const handleToggleTheme = () => {
+    toggleTheme()
+  }
+
+  return (
+    <div>
+      <Header
+        style={{
+          padding: '0 24px',
+          background: colorBgContainer,
+          display: 'flex',
+          alignItems: 'center',
+          gap: 16,
+          borderBottom: '2px solid var(--color-border-default)',
+          position: 'sticky',
+          top: 0,
+          zIndex: 1,
+        }}
+      >
+        <div
+          style={{
+            fontSize: 18,
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+          }}
+          onClick={() => setCollapsed(!collapsed)}
+        >
+          {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+        </div>
+
+        {isMobile ? undefined : (
+          <>
+            <span style={{ color: 'var(--color-primary, var(--color-primary))' }}>
+              &nbsp;&nbsp;{'>_'}
+            </span>
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              {breadcrumbItems.length > 0 && (
+                <Breadcrumb items={breadcrumbItems} style={{ margin: 0 }} />
+              )}
+            </div>
+          </>
+        )}
+
+        <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 10 }}>
+          <button
+            onClick={handleToggleTheme}
+            aria-label="Toggle theme"
+            style={{
+              width: 36,
+              height: 36,
+              borderRadius: 8,
+              border: '1px solid var(--color-border-default)',
+              background: 'var(--toggle-bg)',
+              color: 'var(--toggle-icon-color)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: 'pointer',
+              fontSize: 16,
+              transition: 'background 0.2s ease',
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.background = 'var(--toggle-bg-hover)')}
+            onMouseLeave={(e) => (e.currentTarget.style.background = 'var(--toggle-bg)')}
+          >
+            {isDark ? <SunOutlined /> : <MoonOutlined />}
+          </button>
+          <HeaderUserProfile />
+        </div>
+      </Header>
+    </div>
+  )
+}

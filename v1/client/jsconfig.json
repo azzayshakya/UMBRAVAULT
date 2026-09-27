@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+    "paths": { "@/*": ["./src/*"], "@devStack/*": ["./devStack/*"] },
+    "jsx": "react-jsx",
+    "moduleResolution": "bundler"
+  },
+  "include": ["src", "devStack"]
+}

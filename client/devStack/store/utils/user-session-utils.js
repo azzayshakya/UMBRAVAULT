@@ -18,7 +18,9 @@ const getUserSessionLocally = () => {
 const setUserSessionLocally = (userSession) => {
   const { user = {}, accessToken, refreshToken, deviceId } = userSession
   const existing = getUserSessionLocally()
+  console.log('userrrrrrrrrsdfasdfasd', user)
   const sessionToSave = {
+    userId: user.userId,
     name: user.name,
     username: user.username,
     email: user.email,
